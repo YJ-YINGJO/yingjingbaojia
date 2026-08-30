@@ -846,6 +846,25 @@
             font-size: 18px;
         }
 
+        /* ★ 货币名称样式（仅用于报价计算中心） */
+        .currency-name {
+            font-size: 0.72em;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-right: 2px;
+        }
+.suggest-currency-name {
+    font-size: 0.8em;   /* 调整大小，比如 1.2em 比正常稍大 */
+    font-weight: 700;   /* 加粗，700 为粗体 */
+}
+        /* PDF 中的货币名称 */
+        .currency-name-pdf {
+            font-size: 0.8em;
+            font-weight: 400;
+            color: #4a5a6e;
+            margin-right: 2px;
+        }
+
         .profit-analysis {
             background: #f5faff;
             border-radius: var(--radius-md);
@@ -871,10 +890,11 @@
             display: flex;
             flex-direction: column;
             background: var(--card);
-            padding: 8px 14px;
+            padding: 8px 10px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-light);
             transition: all var(--transition);
+            min-width: 0;
         }
         .profit-item:hover {
             border-color: var(--border);
@@ -885,12 +905,19 @@
             color: var(--text-secondary);
             font-weight: 500;
             letter-spacing: 0.2px;
+            white-space: nowrap;
         }
         .profit-item .pvalue {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             color: var(--text);
             margin-top: 1px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .profit-item .pvalue .currency-name {
+            font-size: 0.7em;
         }
         .profit-item .pvalue.positive {
             color: var(--success);
@@ -1250,7 +1277,7 @@
             font-size: 11px;
         }
 
-        /* ===== PDF模板（修正：图片在页脚横线上方1mm居中） ===== */
+        /* ===== PDF模板 ===== */
         #quotation-template {
             display: none;
             width: 210mm;
@@ -1425,34 +1452,32 @@
             border-top: none;
             line-height: 1.5;
         }
-        /* ★ 新增：产品图片容器，位于页脚横线上方 1mm，居中 ★ */
-#quotation-template .product-image-footer {
-    position: absolute;
-    bottom: calc(100% + 1mm);
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    line-height: 0;
-    pointer-events: none;
-}
-#quotation-template .product-image-footer img {
-    max-width: 120px;
-    height: auto;
-    display: inline-block;
-    border-radius: 4px;
-}
-#quotation-template .footer {
-    position: relative;
-    margin-top: 8px;
-    border-top: 1px solid #d9e2ef;
-    padding-top: 8px;
-    font-size: 9.5px;
-    color: #6a7a8e;
-    text-align: center;
-    clear: both;
-    display: block;
-}
-        /* 旧的产品图片样式已移除，不影响新容器 */
+        #quotation-template .product-image-footer {
+            position: absolute;
+            bottom: calc(100% + 1mm);
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            line-height: 0;
+            pointer-events: none;
+        }
+        #quotation-template .product-image-footer img {
+            max-width: 120px;
+            height: auto;
+            display: inline-block;
+            border-radius: 4px;
+        }
+        #quotation-template .footer {
+            position: relative;
+            margin-top: 8px;
+            border-top: 1px solid #d9e2ef;
+            padding-top: 8px;
+            font-size: 9.5px;
+            color: #6a7a8e;
+            text-align: center;
+            clear: both;
+            display: block;
+        }
         .template-visible {
             display: block !important;
             position: fixed;
@@ -2175,7 +2200,7 @@
                     </div>
                     <div class="col-half">
                         <div class="info-group">
-                            <label>🖼️ 实物图</label>
+                            <label>🖼️ 产品图</label>
                             <div class="file-upload-wrap" id="imageUploadWrap">
                                 <div class="custom-file"><span class="file-btn">选择</span><input type="file" id="imageUpload" accept="image/*" /></div>
                                 <span class="file-name" id="imageFileName">未选择</span>
@@ -2480,7 +2505,7 @@
 
                 <div class="settings-panel" id="tab-display">
                     <div class="setting-row">
-                        <div class="setting-group"><label>小数位数</label><select id="setDecimalPlaces"><option value="2">2 位</option><option value="3" selected>3 位</option><option value="4">4 位</option></select></div>
+                        <div class="setting-group"><label>小数位数</label><select id="setDecimalPlaces"><option value="1">1 位</option><option value="2">2 位</option><option value="3" selected>3 位</option><option value="4">4 位</option></select></div>
                         <div class="setting-group"><label>字体大小</label><select id="setFontSize"><option value="14">小</option><option value="15" selected>中</option><option value="17">大</option></select></div>
                     </div>
                     <div class="setting-row">
@@ -2526,30 +2551,54 @@
                     </div>
                 </div>
 
+                <!-- ★ 安全面板 - 已增加修改密码和删除密码功能 ★ -->
                 <div class="settings-panel" id="tab-security">
-                    <div class="security-status-bar">
-                        <span class="label">🔐 安全状态：</span>
-                        <span class="status" id="securityStatusDisplay">—</span>
-                        <span style="font-size:12px;color:var(--text-muted);" id="securityStatusDetail">登录保护</span>
-                    </div>
+                    <!-- 设置/修改密码（原有） -->
                     <div class="setting-row">
                         <div class="setting-group full">
-                            <label>🔑 登录密码 <span class="hint">（设置后需要登录才能使用系统）</span></label>
-                            <input type="password" id="setLoginPassword" placeholder="设置或修改登录密码" autocomplete="new-password" />
-                            <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">密码用于登录验证，请妥善保管。</div>
+                            <label>🔑 设置登录密码 <span class="hint">（首次设置或重置密码）</span></label>
+                            <input type="password" id="setLoginPassword" placeholder="输入新密码（留空则不修改）" autocomplete="new-password" />
+                            <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">密码用于登录验证，请妥善保管。留空则不修改密码。</div>
                         </div>
                     </div>
+
+                    <!-- ★ 新增：修改密码（需要验证旧密码） -->
+                    <div class="setting-row" style="margin-top:4px;">
+                        <div class="setting-group full">
+                            <label>🔄 修改密码 <span class="hint">（需要验证当前密码）</span></label>
+                            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+                                <input type="password" id="oldPasswordInput" placeholder="当前密码" style="flex:1;min-width:120px;padding:6px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--card);" />
+                                <input type="password" id="newPasswordInput" placeholder="新密码（至少6位）" style="flex:1;min-width:120px;padding:6px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--card);" />
+                                <input type="password" id="confirmPasswordInput" placeholder="确认新密码" style="flex:1;min-width:120px;padding:6px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--card);" />
+                                <button class="btn-action" id="changePasswordBtn" style="background:var(--primary-light);color:#fff;border:none;padding:6px 20px;border-radius:var(--radius-full);font-weight:600;cursor:pointer;transition:all var(--transition);white-space:nowrap;font-size:13px;">修改密码</button>
+                            </div>
+                            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">修改密码需要验证当前密码，新密码至少6位。</div>
+                        </div>
+                    </div>
+
+                    <!-- ★ 新增：删除密码 -->
                     <div class="setting-row">
-                        <div class="setting-group">
-                            <label>⏱️ 自动注销（分钟）</label>
-                            <input type="number" id="setLogoutTimeout" value="30" min="0" max="120" />
-                            <div style="font-size:11px;color:var(--text-muted);">0 表示永不自动注销</div>
-                        </div>
-                        <div class="setting-group" style="justify-content:center;">
-                            <div style="font-size:12px;color:var(--text-secondary);padding-top:20px;">✅ 已启用登录保护</div>
+                        <div class="setting-group full">
+                            <label>🔓 删除密码 <span class="hint">（取消登录保护）</span></label>
+                            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;align-items:center;">
+                                <input type="password" id="deletePasswordInput" placeholder="当前密码" style="flex:1;min-width:150px;padding:6px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--card);" />
+                                <button class="btn-action" id="deletePasswordBtn" style="background:var(--danger);color:#fff;border:none;padding:6px 20px;border-radius:var(--radius-full);font-weight:600;cursor:pointer;transition:all var(--transition);white-space:nowrap;font-size:13px;">删除密码</button>
+                            </div>
+                            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">删除后系统将不再需要密码登录，所有数据仍保留。操作需验证当前密码。</div>
                         </div>
                     </div>
-                    <div style="margin-top:10px;font-size:12px;color:var(--text-muted);background:#f4f8fe;padding:8px 16px;border-radius:var(--radius-sm);">🔐 安全功能：登录密码保护 · 自动注销 · 操作审计日志（系统自动记录）</div>
+
+                    <!-- 自动注销 -->
+<div class="setting-row">
+    <div class="setting-group full">
+        <label>⏱️ 自动注销（分钟）</label>
+        <input type="number" id="setLogoutTimeout" value="30" min="0" max="120" />
+        <div style="font-size:11px;color:var(--text-muted);">0 表示永不自动注销</div>
+    </div>
+</div>
+
+                    <!-- 底部提示 -->
+                    <div style="margin-top:10px;font-size:12px;color:var(--text-muted);background:#f4f8fe;padding:8px 16px;border-radius:var(--radius-sm);">🔐 安全功能：登录密码保护 · 修改/删除密码 · 自动注销 · 操作审计日志（系统自动记录）</div>
                 </div>
 
                 <div class="settings-panel" id="tab-data">
@@ -2582,44 +2631,43 @@
         </div>
     </div>
 
-    <!-- ===== PDF模板（修正：图片在页脚横线上方1mm且不移动横线） ===== -->
-<div id="quotation-template">
-    <div class="header">
-        <div class="header-left">
-            <div class="logo-wrap" id="pdfLogoContainer"></div>
-            <div class="company" id="pdfCompanyName">慈利赢景工艺品厂</div>
+    <!-- ===== PDF模板 ===== -->
+    <div id="quotation-template">
+        <div class="header">
+            <div class="header-left">
+                <div class="logo-wrap" id="pdfLogoContainer"></div>
+                <div class="company" id="pdfCompanyName">慈利赢景工艺品厂</div>
+            </div>
+            <div class="title">QUOTATION</div>
         </div>
-        <div class="title">QUOTATION</div>
-    </div>
-    <div class="info-grid">
-        <div class="item"><span class="label">地址：</span><span id="pdfCompanyAddress">—</span></div>
-        <div class="item"><span class="label">电话：</span><span id="pdfCompanyPhone">—</span></div>
-        <div class="item"><span class="label">联系人：</span><span id="pdfCompanyContact">—</span></div>
-        <div class="item"><span class="label">报价日期：</span><span id="pdfDate">—</span></div>
-        <div class="item"><span class="label">报价单号：</span><span id="pdfQuoteNo">—</span></div>
-        <div class="item"><span class="label">有效期：</span><span id="pdfValidity">—</span></div>
-    </div>
-    <div style="margin:8px 0 4px 0;font-weight:600;color:#1a3a5c;">客户信息</div>
-    <div class="info-grid" style="margin-top:0;">
-        <div class="item"><span class="label">客户名称：</span><span id="pdfCustomerName">—</span></div>
-        <div class="item"><span class="label">联系人：</span><span id="pdfCustomerContact">—</span></div>
-        <div class="item"><span class="label">电话：</span><span id="pdfCustomerPhone">—</span></div>
-        <div class="item"><span class="label">地址：</span><span id="pdfCustomerAddress">—</span></div>
-    </div>
-    <div class="part-detail-title">📋 材料明细（人民币）</div>
-    <table class="part-detail-table" id="pdfPartTable"><thead><tr><th>部件名称</th><th>规格</th><th>单价 (¥)</th></tr></thead><tbody id="pdfPartBody"></tbody></table>
-    <table class="quote-table" id="pdfQuoteTable"><thead id="pdfQuoteThead"></thead><tbody id="pdfQuoteTbody"></tbody><tfoot id="pdfQuoteTfoot"></tfoot></table>
-    <div style="display:flex;align-items:center;margin-top:100px;flex-wrap:wrap;gap:12px;">
-        <div style="display:inline-block;"><span style="font-weight:600;">付款方式：</span><span id="pdfPayment">—</span> &nbsp;|&nbsp; <span style="font-weight:600;">交货期：</span><span id="pdfDelivery">—</span></div>
-    </div>
-    <div class="terms"><div class="line"><span class="label">备注：</span><span id="pdfRemarks">—</span></div></div>
+        <div class="info-grid">
+            <div class="item"><span class="label">地址：</span><span id="pdfCompanyAddress">—</span></div>
+            <div class="item"><span class="label">电话：</span><span id="pdfCompanyPhone">—</span></div>
+            <div class="item"><span class="label">联系人：</span><span id="pdfCompanyContact">—</span></div>
+            <div class="item"><span class="label">报价日期：</span><span id="pdfDate">—</span></div>
+            <div class="item"><span class="label">报价单号：</span><span id="pdfQuoteNo">—</span></div>
+            <div class="item"><span class="label">有效期：</span><span id="pdfValidity">—</span></div>
+        </div>
+        <div style="margin:8px 0 4px 0;font-weight:600;color:#1a3a5c;">客户信息</div>
+        <div class="info-grid" style="margin-top:0;">
+            <div class="item"><span class="label">客户名称：</span><span id="pdfCustomerName">—</span></div>
+            <div class="item"><span class="label">联系人：</span><span id="pdfCustomerContact">—</span></div>
+            <div class="item"><span class="label">电话：</span><span id="pdfCustomerPhone">—</span></div>
+            <div class="item"><span class="label">地址：</span><span id="pdfCustomerAddress">—</span></div>
+        </div>
+        <div class="part-detail-title">📋 材料明细（人民币）</div>
+        <table class="part-detail-table" id="pdfPartTable"><thead><tr><th>部件名称</th><th>规格</th><th>单价</th></tr></thead><tbody id="pdfPartBody"></tbody></table>
+        <table class="quote-table" id="pdfQuoteTable"><thead id="pdfQuoteThead"></thead><tbody id="pdfQuoteTbody"></tbody><tfoot id="pdfQuoteTfoot"></tfoot></table>
+        <div style="display:flex;align-items:center;margin-top:100px;flex-wrap:wrap;gap:12px;">
+            <div style="display:inline-block;"><span style="font-weight:600;">付款方式：</span><span id="pdfPayment">—</span> &nbsp;|&nbsp; <span style="font-weight:600;">交货期：</span><span id="pdfDelivery">—</span></div>
+        </div>
+        <div class="terms"><div class="line"><span class="label">备注：</span><span id="pdfRemarks">—</span></div></div>
 
-    <div class="footer">
-        <!-- ★ 图片容器位于页脚内部，不占用高度 ★ -->
-        <div class="product-image-footer" id="pdfProductImageContainer" style="display:none;"></div>
-        本报价单为系统生成，最终解释权归 <span id="pdfCompanyNameFooter">赢景</span> 所有。
+        <div class="footer">
+            <div class="product-image-footer" id="pdfProductImageContainer" style="display:none;"></div>
+            本报价单为系统生成，最终解释权归 <span id="pdfCompanyNameFooter">赢景</span> 所有。
+        </div>
     </div>
-</div>
 
     <script>
         (function() {
@@ -2897,26 +2945,38 @@
             }
 
             function updateLockUI() {
-                const btn = $('lockBtn');
-                if (!btn) return;
-                if (isLoggedIn) {
-                    btn.textContent = '退出登录';
-                    btn.classList.remove('locked');
-                } else {
-                    btn.textContent = '登录';
-                    btn.classList.add('locked');
-                }
-                const statusDisplay = $('securityStatusDisplay');
-                if (statusDisplay) {
-                    if (isLoggedIn) {
-                        statusDisplay.textContent = '🔐 已登录';
-                        statusDisplay.className = 'status secure';
-                    } else {
-                        statusDisplay.textContent = '🔒 未登录';
-                        statusDisplay.className = 'status insecure';
-                    }
-                }
-            }
+    const btn = $('lockBtn');
+    if (!btn) return;
+    if (isLoggedIn) {
+        btn.textContent = '退出登录';
+        btn.classList.remove('locked');
+    } else {
+        btn.textContent = '登录';
+        btn.classList.add('locked');
+    }
+    const statusDisplay = $('securityStatusDisplay');
+    if (statusDisplay) {
+        if (isLoggedIn) {
+            statusDisplay.textContent = '🔐 已登录';
+            statusDisplay.className = 'status secure';
+        } else {
+            statusDisplay.textContent = '🔒 未登录';
+            statusDisplay.className = 'status insecure';
+        }
+    }
+
+    const protectionStatus = $('loginProtectionStatus');
+    if (protectionStatus) {
+        const hasPassword = securityData.passwordHash && securityData.passwordHash.length > 0;
+        if (hasPassword) {
+            protectionStatus.textContent = '✅ 已启用登录保护';
+            protectionStatus.style.color = 'var(--success)';
+        } else {
+            protectionStatus.textContent = '🔓 未启用登录保护（开放模式）';
+            protectionStatus.style.color = 'var(--warning)';
+        }
+    }
+}
 
             function requireLogin() {
                 if (isLoggedIn) return true;
@@ -3111,6 +3171,23 @@
                 if (!isFinite(value)) return '—';
                 if (decimals === 0) return Math.round(value).toLocaleString('zh-CN');
                 return value.toFixed(decimals);
+            }
+
+            // ============================================================
+            // ★ 货币名称/符号辅助函数
+            // ============================================================
+            function getCurrencyInfo(code) {
+                const config = CURRENCY_CONFIG.find(c => c.code === code);
+                if (config) return config;
+                return { code: 'CNY', name: '人民币', symbol: '¥', decimals: 2 };
+            }
+
+            function getCurrencyName(code) {
+                return getCurrencyInfo(code).name;
+            }
+
+            function getCurrencySymbol(code) {
+                return getCurrencyInfo(code).symbol;
             }
 
             // ============================================================
@@ -3414,6 +3491,7 @@
             function updateSummary() {
                 let unitPrice = 0;
                 partRows.forEach(p => { unitPrice += (p.price || 0); });
+                // 部件材料成本固定用人民币显示，不显示货币名称
                 partSummary.textContent = '单件材料成本：' + fmtMoney(unitPrice) + ' ¥';
                 calcAndRender();
             }
@@ -3514,14 +3592,14 @@
                     productImagePreview.src = compressed;
                     productImagePreview.style.display = 'block';
                     removeImageBtn.style.display = 'inline-block';
-                    showToast('✅ 实物图片已上传', 'success');
-                    addAuditLog('上传实物图', '产品实物图');
+                    showToast('✅ 产品图片已上传', 'success');
+                    addAuditLog('上传产品图', '产品实物图');
                     localStorage.setItem('quote_image_data_saved', compressed);
                 } catch (err) { showToast('处理失败', 'error'); }
             });
 
             // ============================================================
-            // 核心计算
+            // ★★★ 核心计算（修复：汇率不可用时自动切换为人民币） ★★★
             // ============================================================
             function calcAndRender() {
                 resetLogoutTimer();
@@ -3535,9 +3613,14 @@
                 const overhead = parseFloat(overheadCost.value) || 0;
                 const taxRate = parseFloat(invoiceType.value) || 0;
                 const taxIncluded = isTaxIncluded.value === 'yes';
-                const settleCur = settlementCurrency.value || 'CNY';
+                let settleCur = settlementCurrency.value || 'CNY';
                 const settings = loadSettings();
                 const places = settings.decimalPlaces || 3;
+
+                // ★ 获取货币名称和符号（仅用于报价计算中心和PDF）
+                let curInfo = getCurrencyInfo(settleCur);
+                let currencyName = curInfo.name;
+                let settleSymbol = curInfo.symbol;
 
                 if (unitPrice <= 0 || totalQty <= 0) {
                     const dash = '—';
@@ -3569,17 +3652,19 @@
                 const unitProfitCNY = totalProfitCNY / totalQty;
                 const marginRate = (totalProfitCNY / totalSalesNoTaxCNY) * 100;
 
-                let settleSymbol = '¥';
                 let exchangeRate = 1;
+                // ★ 修复：汇率不可用时强制切换为人民币
                 if (settleCur !== 'CNY') {
-                    const curCfg = CURRENCY_CONFIG.find(c => c.code === settleCur);
-                    if (curCfg) settleSymbol = curCfg.symbol;
                     if (exchangeRates && exchangeRates[settleCur]) {
                         exchangeRate = exchangeRates[settleCur];
                     } else {
-                        showToast('⚠️ 汇率不可用，暂时按人民币显示', 'warning');
+                        showToast('⚠️ 汇率不可用，已切换为人民币显示', 'warning');
+                        // ★ 强制切换为人民币
                         settlementCurrency.value = 'CNY';
-                        settleSymbol = '¥';
+                        settleCur = 'CNY';
+                        const fallbackInfo = getCurrencyInfo('CNY');
+                        currencyName = fallbackInfo.name;
+                        settleSymbol = fallbackInfo.symbol;
                         exchangeRate = 1;
                     }
                 }
@@ -3596,6 +3681,9 @@
                 const totalSales = displayTotal;
                 const totalSalesLabel = taxIncluded ? '💵 总销售额（含税）' : '💵 总销售额（不含税）';
 
+                // ★ 报价计算中心显示：货币名称 + 符号 + 金额
+                const currencyNameHtml = `<span class="currency-name">${currencyName}</span>`;
+
                 if (taxIncluded) {
                     heroPriceWithTax.className = 'number tax';
                     heroPriceWithTax.style.fontSize = '32px';
@@ -3611,38 +3699,43 @@
                     heroPriceWithTax.style.fontSize = '20px';
                     heroPriceWithTax.style.color = 'var(--text-muted)';
                 }
-                heroPriceNoTax.innerHTML = fmtMoney(priceNoTax) + ' <span class="cur">' + settleSymbol + '</span>';
-                heroPriceWithTax.innerHTML = fmtMoney(priceWithTax) + ' <span class="cur">' + settleSymbol + '</span>';
+                heroPriceNoTax.innerHTML = fmtMoney(priceNoTax) + ' ' + currencyNameHtml + ' <span class="cur">' + settleSymbol +
+                    '</span>';
+                heroPriceWithTax.innerHTML = fmtMoney(priceWithTax) + ' ' + currencyNameHtml + ' <span class="cur">' +
+                    settleSymbol + '</span>';
 
                 if (taxIncluded) {
                     heroTaxInfo.className = 'number tax-highlight';
-                    heroTaxInfo.innerHTML = taxRate + '% / ' + fmtMoney(taxAmount) + ' <span class="cur">' + settleSymbol +
-                        '</span>';
+                    heroTaxInfo.innerHTML = taxRate + '% / ' + fmtMoney(taxAmount) + ' ' + currencyNameHtml + ' <span class="cur">' +
+                        settleSymbol + '</span>';
                 } else {
                     heroTaxInfo.className = 'number no-tax-highlight';
-                    heroTaxInfo.innerHTML = taxRate + '% / ' + fmtMoney(taxAmount) + ' <span class="cur">' + settleSymbol +
-                        '</span>';
+                    heroTaxInfo.innerHTML = taxRate + '% / ' + fmtMoney(taxAmount) + ' ' + currencyNameHtml + ' <span class="cur">' +
+                        settleSymbol + '</span>';
                 }
 
                 heroLabelNoTax.textContent = taxIncluded ? '💰 不含税单价' : '💰 不含税单价 (报价)';
                 heroLabelWithTax.textContent = taxIncluded ? '💰 含税单价 (报价)' : '💰 含税单价';
 
                 paTotalSalesLabel.textContent = totalSalesLabel;
-                paUnitProfit.textContent = fmtMoney(unitProfit) + ' ' + settleSymbol;
-                paUnitProfit.className = 'pvalue ' + (unitProfit > 0.005 * exchangeRate ? 'positive' : unitProfit < -0.005 *
+
+                // ★ 盈亏分析价格同样显示货币名称
+                const setPValue = (el, val, cls = '') => {
+                    if (val === '—' || val === undefined || !isFinite(val)) { el.textContent = '—'; return; }
+                    el.innerHTML = fmtMoney(val) + ' ' + currencyNameHtml + ' ' + settleSymbol;
+                    if (cls) el.className = 'pvalue ' + cls;
+                    else el.className = 'pvalue';
+                };
+                setPValue(paUnitProfit, unitProfit, unitProfit > 0.005 * exchangeRate ? 'positive' : unitProfit < -0.005 *
                     exchangeRate ? 'negative' : 'neutral');
                 paMarginRate.textContent = (isFinite(marginRate) ? marginRate.toFixed(2) : '—') + '%';
                 paMarginRate.className = 'pvalue ' + (marginRate > 10 ? 'positive' : marginRate > 0 ? 'neutral' :
                 'negative');
-                paTotalProfit.textContent = fmtMoney(totalProfit) + ' ' + settleSymbol;
-                paTotalProfit.className = 'pvalue ' + (totalProfit > 0.005 * exchangeRate ? 'positive' : totalProfit <
+                setPValue(paTotalProfit, totalProfit, totalProfit > 0.005 * exchangeRate ? 'positive' : totalProfit <
                     -0.005 * exchangeRate ? 'negative' : 'neutral');
-                paUnitCost.textContent = fmtMoney(unitCost) + ' ' + settleSymbol;
-                paUnitCost.className = 'pvalue';
-                paTotalSales.textContent = fmtMoney(totalSales) + ' ' + settleSymbol;
-                paTotalSales.className = 'pvalue';
-                paTotalCost.textContent = fmtMoney(totalCost) + ' ' + settleSymbol;
-                paTotalCost.className = 'pvalue';
+                setPValue(paUnitCost, unitCost);
+                setPValue(paTotalSales, totalSales);
+                setPValue(paTotalCost, totalCost);
 
                 let statusText, statusClass;
                 if (unitProfit > 0.005 * exchangeRate) { statusText = '✅ 盈利';
@@ -3652,6 +3745,7 @@
                 statusBadge.textContent = statusText;
                 statusBadge.className = 'status-badge ' + statusClass;
 
+                // ★ 建议报价
                 const target = parseFloat(targetMargin.value);
                 if (!isNaN(target) && target > 0 && target < 100 && unitTotalCost > 0) {
                     const suggestedNoTaxCNY = unitTotalCost / (1 - target / 100);
@@ -3664,8 +3758,8 @@
                     }
                     const suggestedDisplay = suggestedDisplayCNY * exchangeRate;
                     if (isFinite(suggestedDisplay) && suggestedDisplay > 0) {
-                        let priceText = settleSymbol + ' ' + suggestedDisplay.toFixed(places);
-                        suggestPrice.textContent = priceText;
+let priceText = '<span class="suggest-currency-name">' + currencyName + '</span> ' + settleSymbol + ' ' + suggestedDisplay.toFixed(places);
+suggestPrice.innerHTML = priceText;
                         const markupRateVal = ((suggestedDisplay / unitCost - 1) * 100);
                         if (isFinite(markupRateVal) && markupRateVal > 0.01) {
                             suggestMarkup.textContent = '(加价率 ' + markupRateVal.toFixed(1) + '%)';
@@ -3724,6 +3818,7 @@
                     marginRate,
                     settleCurrency: settleCur,
                     settleSymbol: settleSymbol,
+                    currencyName: currencyName,
                     exchangeRate: exchangeRate,
                     priceNoTax,
                     priceWithTax,
@@ -3753,13 +3848,14 @@
             applySuggestBtn.addEventListener('click', function() {
                 if (!requireLogin()) return;
                 const suggestPriceEl = $('suggestPrice');
-                const suggestText = suggestPriceEl.textContent.trim();
-                const priceMatch = suggestText.match(/[\d.]+/);
+                // ★ 使用更稳健的数字提取
+                const suggestHtml = suggestPriceEl.innerHTML;
+                const priceMatch = suggestHtml.match(/(\d+\.?\d*)/);
                 if (!priceMatch) {
                     showToast('建议报价无效，请先设置目标毛利率', 'warning');
                     return;
                 }
-                const suggestedPrice = parseFloat(priceMatch[0]);
+                const suggestedPrice = parseFloat(priceMatch[1]);
                 if (!suggestedPrice || suggestedPrice <= 0) {
                     showToast('建议报价无效，请检查目标毛利率', 'warning');
                     return;
@@ -3830,7 +3926,7 @@
                     customerAddress: data.customerAddress,
                     productName: data.productName,
                     parts: data.parts,
-                    unitPrice: data.unitPrice,
+                    unitPrice: data.unitPrice,        // 人民币单价
                     totalMaterialCost: data.totalMaterialCost,
                     totalQty: data.totalQty,
                     markup: data.markup,
@@ -3838,9 +3934,9 @@
                     overhead: data.overhead,
                     fixedTotal: data.fixedTotal,
                     unitTotalCost: data.unitTotalCost,
-                    totalCost: data.totalCostCNY,
+                    totalCost: data.totalCostCNY,     // 人民币总成本
                     taxRate: data.taxRate,
-                    priceNoTax: data.priceNoTaxCNY,
+                    priceNoTax: data.priceNoTaxCNY,   // 人民币不含税单价
                     priceWithTax: data.priceWithTaxCNY,
                     taxAmount: data.taxAmountCNY,
                     totalSalesNoTax: data.totalSalesNoTaxCNY,
@@ -3860,8 +3956,9 @@
                     displayTotal: data.taxIncluded ? data.totalSalesWithTaxCNY : data.totalSalesNoTaxCNY,
                     statusText: data.statusText,
                     statusClass: data.statusClass,
-                    settleCurrency: data.settleCurrency,
+                    settleCurrency: data.settleCurrency, // 仅记录，显示时仍然用人民币
                     settleSymbol: data.settleSymbol,
+                    currencyName: data.currencyName,
                     exchangeRate: data.exchangeRate
                 };
                 list.push(record);
@@ -3891,6 +3988,7 @@
                 statProfit.textContent = profitCount;
                 statLoss.textContent = lossCount;
                 statAvgMargin.textContent = total > 0 ? (totalMargin / total).toFixed(1) + '%' : '0%';
+                // 总销售额用人民币显示（原样）
                 statTotalRevenue.innerHTML = '¥ ' + (totalRevenue ? totalRevenue.toFixed(0) : '0');
             }
 
@@ -3919,8 +4017,10 @@
                     const product = escapeHtml(item.productName || '—');
                     const hasImg = !!(item.imageData && item.imageData.length > 100);
                     let imgHtml = `<span class="hist-no-img">无</span>`;
-                    if (hasImg) imgHtml = `<img src="${item.imageData}" class="hist-thumb" alt="实物图" />`;
+                    if (hasImg) imgHtml = `<img src="${item.imageData}" class="hist-thumb" alt="产品图" />`;
                     const customer = escapeHtml(item.customerName || '—');
+
+                    // 历史记录始终显示人民币，不带货币名称
                     const unitCost = fmtMoney(item.unitPrice);
                     const unitQuote = fmtMoney(item.displayPrice !== undefined ? item.displayPrice : item
                         .priceWithTax);
@@ -3935,11 +4035,11 @@
                         <td>${product}</td>
                         <td>${imgHtml}</td>
                         <td>${customer}</td>
-                        <td>${unitCost} ¥</td>
-                        <td>${unitQuote} ¥</td>
-                        <td>${unitProfit} ¥</td>
+                        <td>¥ ${unitCost}</td>
+                        <td>¥ ${unitQuote}</td>
+                        <td>¥ ${unitProfit}</td>
                         <td>${totalQty}</td>
-                        <td>${totalSales} ¥</td>
+                        <td>¥ ${totalSales}</td>
                         <td>${phone}</td>
                         <td style="white-space:nowrap;text-align:center;">
                             <button class="hist-action-btn pdf-btn" data-id="${item.id}" title="PDF">📄<span class="label">PDF</span></button>
@@ -4013,28 +4113,30 @@
                     { header: '商品', key: 'product', width: 18 },
                     { header: '图片', key: 'image', width: 12 },
                     { header: '客户', key: 'customer', width: 18 },
-                    { header: '单价成本(¥)', key: 'unitCost', width: 14 },
-                    { header: '单价报价(¥)', key: 'unitQuote', width: 14 },
-                    { header: '单价利润(¥)', key: 'unitProfit', width: 14 },
+                    { header: '单价成本(¥)', key: 'unitCost', width: 16 },
+                    { header: '单价报价(¥)', key: 'unitQuote', width: 16 },
+                    { header: '单价利润(¥)', key: 'unitProfit', width: 16 },
                     { header: '总数量', key: 'qty', width: 10 },
-                    { header: '总销售额(¥)', key: 'totalSales', width: 16 },
+                    { header: '总销售额(¥)', key: 'totalSales', width: 18 },
                     { header: '电话', key: 'phone', width: 16 }
                 ];
                 const headerRow = worksheet.getRow(1);
                 headerRow.font = { bold: true };
                 headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
+                // 导出人民币金额
                 const row = worksheet.addRow({
                     time: new Date(record.timestamp).toLocaleString('zh-CN'),
                     quoteNo: record.quoteNo || '—',
                     product: record.productName || '',
                     image: '',
                     customer: record.customerName || '',
-                    unitCost: record.unitPrice || 0,
-                    unitQuote: record.displayPrice !== undefined ? record.displayPrice : record.priceWithTax || 0,
-                    unitProfit: record.unitProfit || 0,
+                    unitCost: fmtMoney(record.unitPrice),
+                    unitQuote: fmtMoney(record.displayPrice !== undefined ? record.displayPrice : record
+                        .priceWithTax),
+                    unitProfit: fmtMoney(record.unitProfit),
                     qty: record.totalQty || 0,
-                    totalSales: record.displayTotal !== undefined ? record.displayTotal : record.totalSalesWithTax ||
-                        0,
+                    totalSales: fmtMoney(record.displayTotal !== undefined ? record.displayTotal : record
+                        .totalSalesWithTax),
                     phone: record.customerPhone || ''
                 });
                 row.alignment = { horizontal: 'center', vertical: 'middle' };
@@ -4059,31 +4161,39 @@
                 addAuditLog('导出单条Excel', '客户: ' + record.customerName);
             }
 
-            function exportHistoryItemPdf(id) {
+            // ★★★ 修复：添加 async/await ★★★
+            async function exportHistoryItemPdf(id) {
                 if (!requireLogin()) return;
                 const list = getHistory();
                 const record = list.find(item => item.id === id);
                 if (!record) { showToast('未找到该记录', 'error'); return; }
+                // PDF导出使用记录中存储的货币信息（结算货币），但历史记录保存的是人民币值，需要重新计算显示
+                // 我们使用记录中保存的汇率和货币信息进行转换
                 const pdfRecord = {
                     ...record,
                     settleCurrency: record.settleCurrency || 'CNY',
                     settleSymbol: record.settleSymbol || '¥',
+                    currencyName: record.currencyName || '人民币',
                     exchangeRate: record.exchangeRate || 1
                 };
+                // 重新计算显示金额（根据记录的汇率和货币）
                 if (pdfRecord.settleCurrency !== 'CNY' && exchangeRates && exchangeRates[pdfRecord.settleCurrency]) {
-                    pdfRecord.exchangeRate = exchangeRates[pdfRecord.settleCurrency];
-                    pdfRecord.settleSymbol = CURRENCY_CONFIG.find(c => c.code === pdfRecord.settleCurrency)?.symbol ||
-                        record.settleSymbol || '¥';
+                    // 使用记录时的汇率，但为了准确性，我们直接用记录中保存的汇率
+                    // 如果记录中没有保存汇率，则使用当前汇率
+                    if (!pdfRecord.exchangeRate || pdfRecord.exchangeRate === 1) {
+                        pdfRecord.exchangeRate = exchangeRates[pdfRecord.settleCurrency] || 1;
+                    }
                 } else {
                     pdfRecord.settleCurrency = 'CNY';
                     pdfRecord.settleSymbol = '¥';
+                    pdfRecord.currencyName = '人民币';
                     pdfRecord.exchangeRate = 1;
                 }
-                buildPdfFromRecord(pdfRecord);
+                await buildPdfFromRecord(pdfRecord);
                 addAuditLog('导出PDF', '客户: ' + record.customerName);
             }
 
-            // ★★★ 核心修复：buildPdfFromRecord 优化版 ★★★
+            // ★★★ PDF生成（含货币名称） ★★★
             async function buildPdfFromRecord(record) {
                 const now = new Date(record.timestamp || Date.now());
                 const taxIncluded = record.taxIncluded !== undefined ? record.taxIncluded : true;
@@ -4091,9 +4201,11 @@
                 const settings = loadSettings();
                 const settleCur = record.settleCurrency || 'CNY';
                 const settleSym = record.settleSymbol || '¥';
+                const curName = record.currencyName || getCurrencyName(settleCur);
                 const exchangeRate = record.exchangeRate || 1;
                 const places = settings.decimalPlaces || 3;
 
+                // 将存储的人民币值转换为显示货币
                 const priceNoTax = (record.priceNoTax || 0) * exchangeRate;
                 const priceWithTax = (record.priceWithTax || 0) * exchangeRate;
                 const totalSalesNoTax = (record.totalSalesNoTax || 0) * exchangeRate;
@@ -4126,7 +4238,7 @@
                 parts.forEach(p => {
                     const price = (p.price || 0) * factor * exchangeRate;
                     partHtml +=
-                        `<tr><td>${escapeHtml(p.name||'未命名')}</td><td>${escapeHtml(p.spec||'')}</td><td>${fmtMoney(price)} ${settleSym}</td></tr>`;
+                        `<tr><td>${escapeHtml(p.name||'未命名')}</td><td>${escapeHtml(p.spec||'')}</td><td>${fmtMoney(price)} <span class="currency-name-pdf">${curName}</span> ${settleSym}</td></tr>`;
                 });
                 pdfPartBody.innerHTML = partHtml;
 
@@ -4140,16 +4252,20 @@
 
                 if (showTax) {
                     headers.push('含税单价');
-                    rowCells.push(fmtMoney(priceWithTax) + ' ' + settleSym);
+                    rowCells.push(fmtMoney(priceWithTax) + ' <span class="currency-name-pdf">' + curName + '</span> ' +
+                        settleSym);
                     headers.push('税率');
                     rowCells.push((record.taxRate || 0) + '%');
                     headers.push('含税总价');
-                    rowCells.push(fmtMoney(totalSalesWithTax) + ' ' + settleSym);
+                    rowCells.push(fmtMoney(totalSalesWithTax) + ' <span class="currency-name-pdf">' + curName +
+                        '</span> ' + settleSym);
                 } else {
                     headers.push('不含税单价');
-                    rowCells.push(fmtMoney(priceNoTax) + ' ' + settleSym);
+                    rowCells.push(fmtMoney(priceNoTax) + ' <span class="currency-name-pdf">' + curName + '</span> ' +
+                        settleSym);
                     headers.push('不含税总价');
-                    rowCells.push(fmtMoney(totalSalesNoTax) + ' ' + settleSym);
+                    rowCells.push(fmtMoney(totalSalesNoTax) + ' <span class="currency-name-pdf">' + curName +
+                        '</span> ' + settleSym);
                 }
 
                 let theadHtml = '<tr>';
@@ -4169,7 +4285,9 @@
                     <td colspan="${colSpan}" style="text-align:right;padding:6px 16px 6px 10px;position:relative;vertical-align:middle;overflow:visible;">
                         <div style="display:inline-block;position:relative;padding:3px 0;vertical-align:middle;">
                             <span style="font-weight:700;font-size:12px;color:#1a3a5c;">${totalLabel}：</span>
-                            <span style="font-weight:700;font-size:14px;color:#1a3a5c;margin-left:4px;">${settleSym}${fmtMoney(totalDisplay)}</span>`;
+                            <span style="font-weight:700;font-size:14px;color:#1a3a5c;margin-left:4px;">
+                                <span class="currency-name-pdf">${curName}</span> ${settleSym}${fmtMoney(totalDisplay)}
+                            </span>`;
                 const sealToUse = currentSealData || record.sealData;
                 if (sealToUse) {
                     tfootHtml += `
@@ -4186,7 +4304,6 @@
                         `<img src="${logoToUse}" style="max-height:50px;max-width:90px;width:auto;height:auto;object-fit:contain;display:block;" />`;
                 } else { pdfLogoContainer.innerHTML = ''; }
 
-                // ★ 产品图片填充到新容器 ★
                 if (record.imageData) {
                     pdfProductImageContainer.innerHTML =
                         `<img src="${record.imageData}" style="width:120px; height:auto; border-radius:4px; display:inline-block;" />`;
@@ -4196,18 +4313,14 @@
                     pdfProductImageContainer.style.display = 'none';
                 }
 
-                // ★★★ 核心：强制显示模板并等待渲染 ★★★
                 const template = document.getElementById('quotation-template');
                 template.style.display = 'block';
                 template.classList.add('template-visible');
                 document.body.appendChild(template);
 
-                // 等待一帧让样式生效
                 await new Promise(resolve => requestAnimationFrame(resolve));
-                // 额外等待 200ms 让布局稳定
                 await new Promise(resolve => setTimeout(resolve, 200));
 
-                // 等待所有图片加载完成
                 const images = template.querySelectorAll('img');
                 await Promise.all(Array.from(images).map(img => {
                     if (img.complete && img.naturalWidth > 0) return Promise.resolve();
@@ -4216,7 +4329,6 @@
                         img.onerror = resolve;
                     });
                 }));
-                // 再等 100ms 确保渲染完成
                 await new Promise(resolve => setTimeout(resolve, 100));
 
                 try {
@@ -4248,7 +4360,8 @@
                 }
             }
 
-            function exportPDF() {
+            // ★★★ 修复：添加 async/await ★★★
+            async function exportPDF() {
                 if (!requireLogin()) return;
                 const data = calcAndRender();
                 if (!data || data.unitPrice <= 0 || data.totalQty <= 0) {
@@ -4299,9 +4412,10 @@
                     statusClass: data.statusClass,
                     settleCurrency: data.settleCurrency,
                     settleSymbol: data.settleSymbol,
+                    currencyName: data.currencyName || getCurrencyName(data.settleCurrency || 'CNY'),
                     exchangeRate: data.exchangeRate
                 };
-                buildPdfFromRecord(record);
+                await buildPdfFromRecord(record);
                 addAuditLog('导出当前PDF', '商品: ' + data.productName);
             }
 
@@ -4320,12 +4434,12 @@
                     { header: '商品名称', key: 'product', width: 18 },
                     { header: '图片', key: 'image', width: 12 },
                     { header: '总件数', key: 'qty', width: 10 },
-                    { header: '不含税单价(¥)', key: 'priceNoTax', width: 14 },
+                    { header: '不含税单价(¥)', key: 'priceNoTax', width: 16 },
                     { header: '税率', key: 'taxRate', width: 10 },
-                    { header: '含税单价(¥)', key: 'priceWithTax', width: 14 },
-                    { header: '总价(¥)', key: 'total', width: 16 },
-                    { header: '总成本(¥)', key: 'totalCost', width: 16 },
-                    { header: '总利润(¥)', key: 'profit', width: 12 },
+                    { header: '含税单价(¥)', key: 'priceWithTax', width: 16 },
+                    { header: '总价(¥)', key: 'total', width: 18 },
+                    { header: '总成本(¥)', key: 'totalCost', width: 18 },
+                    { header: '总利润(¥)', key: 'profit', width: 16 },
                     { header: '毛利率(%)', key: 'margin', width: 12 }
                 ];
                 const headerRow = worksheet.getRow(1);
@@ -4333,18 +4447,19 @@
                 headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
                 const taxIncluded = data.taxIncluded;
                 const displayTotal = taxIncluded ? data.totalSalesWithTaxCNY : data.totalSalesNoTaxCNY;
+                // 导出人民币金额
                 const row = worksheet.addRow({
                     customer: data.customerName,
                     phone: data.customerPhone,
                     product: data.productName,
                     image: '',
                     qty: data.totalQty,
-                    priceNoTax: data.priceNoTaxCNY,
+                    priceNoTax: fmtMoney(data.priceNoTaxCNY),
                     taxRate: data.taxRate + '%',
-                    priceWithTax: data.priceWithTaxCNY,
-                    total: displayTotal,
-                    totalCost: data.totalCostCNY,
-                    profit: data.totalProfitCNY,
+                    priceWithTax: fmtMoney(data.priceWithTaxCNY),
+                    total: fmtMoney(displayTotal),
+                    totalCost: fmtMoney(data.totalCostCNY),
+                    profit: fmtMoney(data.totalProfitCNY),
                     margin: (data.marginRate || 0).toFixed(2) + '%'
                 });
                 row.alignment = { horizontal: 'center', vertical: 'middle' };
@@ -4379,11 +4494,11 @@
                     { header: '商品', key: 'product', width: 18 },
                     { header: '图片', key: 'image', width: 12 },
                     { header: '客户', key: 'customer', width: 18 },
-                    { header: '单价成本(¥)', key: 'unitCost', width: 14 },
-                    { header: '单价报价(¥)', key: 'unitQuote', width: 14 },
-                    { header: '单价利润(¥)', key: 'unitProfit', width: 14 },
+                    { header: '单价成本(¥)', key: 'unitCost', width: 16 },
+                    { header: '单价报价(¥)', key: 'unitQuote', width: 16 },
+                    { header: '单价利润(¥)', key: 'unitProfit', width: 16 },
                     { header: '总数量', key: 'qty', width: 10 },
-                    { header: '总销售额(¥)', key: 'totalSales', width: 16 },
+                    { header: '总销售额(¥)', key: 'totalSales', width: 18 },
                     { header: '电话', key: 'phone', width: 16 }
                 ];
                 const headerRow = worksheet.getRow(1);
@@ -4397,12 +4512,13 @@
                         product: item.productName || '',
                         image: '',
                         customer: item.customerName || '',
-                        unitCost: item.unitPrice || 0,
-                        unitQuote: item.displayPrice !== undefined ? item.displayPrice : item.priceWithTax || 0,
-                        unitProfit: item.unitProfit || 0,
+                        unitCost: fmtMoney(item.unitPrice),
+                        unitQuote: fmtMoney(item.displayPrice !== undefined ? item.displayPrice : item
+                            .priceWithTax),
+                        unitProfit: fmtMoney(item.unitProfit),
                         qty: item.totalQty || 0,
-                        totalSales: item.displayTotal !== undefined ? item.displayTotal : item.totalSalesWithTax ||
-                            0,
+                        totalSales: fmtMoney(item.displayTotal !== undefined ? item.displayTotal : item
+                            .totalSalesWithTax),
                         phone: item.customerPhone || ''
                     });
                     row.alignment = { horizontal: 'center', vertical: 'middle' };
@@ -4687,6 +4803,72 @@
             }
 
             // ============================================================
+            // ★ 密码管理功能（修改 / 删除）
+            // ============================================================
+
+            $('changePasswordBtn').addEventListener('click', function() {
+                const oldPw = $('oldPasswordInput').value;
+                const newPw = $('newPasswordInput').value;
+                const confirmPw = $('confirmPasswordInput').value;
+
+                if (!oldPw || !newPw || !confirmPw) {
+                    showToast('请填写完整信息', 'warning');
+                    return;
+                }
+                if (newPw !== confirmPw) {
+                    showToast('新密码和确认密码不一致', 'warning');
+                    return;
+                }
+                if (newPw.length < 6) {
+                    showToast('新密码至少6位', 'warning');
+                    return;
+                }
+
+                if (securityData.passwordHash && !verifyPassword(oldPw, securityData.passwordHash)) {
+                    showToast('当前密码错误', 'error');
+                    return;
+                }
+
+                securityData.passwordHash = hashPassword(newPw);
+                saveSecurityData(securityData);
+                showToast('✅ 密码已修改', 'success');
+                addAuditLog('修改密码', '密码已更新');
+
+                $('oldPasswordInput').value = '';
+                $('newPasswordInput').value = '';
+                $('confirmPasswordInput').value = '';
+            });
+
+            $('deletePasswordBtn').addEventListener('click', function() {
+                const pw = $('deletePasswordInput').value;
+                if (!pw) {
+                    showToast('请输入当前密码', 'warning');
+                    return;
+                }
+                if (!verifyPassword(pw, securityData.passwordHash)) {
+                    showToast('当前密码错误', 'error');
+                    return;
+                }
+                if (confirm('确定要删除登录密码吗？删除后系统将不再需要密码，任何人都可以访问。')) {
+                    if (confirm('再次确认：删除密码？')) {
+                        securityData.passwordHash = '';
+                        saveSecurityData(securityData);
+                        showToast('✅ 密码已删除，系统已切换到开放模式', 'success');
+                        addAuditLog('删除密码', '密码已删除，系统开放');
+                        $('deletePasswordInput').value = '';
+
+                        if ($('loginOverlay').classList.contains('active')) {
+                            isLoggedIn = true;
+                            securityData.isLoggedIn = true;
+                            hideLogin();
+                            showToast('✅ 已自动登录', 'success');
+                        }
+                        updateLockUI();
+                    }
+                }
+            });
+
+            // ============================================================
             // 设置对话框
             // ============================================================
             const panelMap = {
@@ -4849,10 +5031,10 @@
                     { header: '商品名称', key: 'productName', width: 18 },
                     { header: '图片', key: 'hasImage', width: 8 },
                     { header: '总件数', key: 'totalQty', width: 10 },
-                    { header: '单价成本(¥)', key: 'unitPrice', width: 14 },
-                    { header: '单价报价(¥)', key: 'displayPrice', width: 14 },
-                    { header: '总销售额(¥)', key: 'displayTotal', width: 16 },
-                    { header: '总利润(¥)', key: 'totalProfit', width: 14 },
+                    { header: '单价成本(¥)', key: 'unitPrice', width: 16 },
+                    { header: '单价报价(¥)', key: 'displayPrice', width: 16 },
+                    { header: '总销售额(¥)', key: 'displayTotal', width: 18 },
+                    { header: '总利润(¥)', key: 'totalProfit', width: 16 },
                     { header: '毛利率(%)', key: 'marginRate', width: 12 },
                     { header: '结算货币', key: 'settleCurrency', width: 12 },
                     { header: '备注', key: 'remarks', width: 20 }
@@ -4871,12 +5053,12 @@
                         productName: item.productName || '',
                         hasImage: item.imageData ? '有' : '无',
                         totalQty: item.totalQty || 0,
-                        unitPrice: item.unitPrice || 0,
-                        displayPrice: item.displayPrice !== undefined ? item.displayPrice : item.priceWithTax ||
-                            0,
-                        displayTotal: item.displayTotal !== undefined ? item.displayTotal : item
-                            .totalSalesWithTax || 0,
-                        totalProfit: item.totalProfit || 0,
+                        unitPrice: fmtMoney(item.unitPrice),
+                        displayPrice: fmtMoney(item.displayPrice !== undefined ? item.displayPrice : item
+                            .priceWithTax),
+                        displayTotal: fmtMoney(item.displayTotal !== undefined ? item.displayTotal : item
+                            .totalSalesWithTax),
+                        totalProfit: fmtMoney(item.totalProfit),
                         marginRate: item.marginRate || 0,
                         settleCurrency: item.settleCurrency || 'CNY',
                         remarks: item.remarks || ''
@@ -4984,16 +5166,16 @@
                                     else if (header === '图片') obj.hasImage = cell.text;
                                     else if (header === '总件数') obj.totalQty = parseFloat(
                                         cell.text) || 0;
-                                    else if (header === '单价成本(¥)') obj.unitPrice =
-                                        parseFloat(cell.text) || 0;
-                                    else if (header === '单价报价(¥)') obj.displayPrice =
-                                        parseFloat(cell.text) || 0;
-                                    else if (header === '总销售额(¥)') obj.displayTotal =
-                                        parseFloat(cell.text) || 0;
-                                    else if (header === '总利润(¥)') obj.totalProfit =
-                                        parseFloat(cell.text) || 0;
-                                    else if (header === '毛利率(%)') obj.marginRate =
-                                        parseFloat(cell.text) || 0;
+                                    else if (header === '单价成本(¥)') obj.unitPrice = parseFloat(
+                                            cell.text) || 0;
+                                    else if (header === '单价报价(¥)') obj.displayPrice = parseFloat(
+                                            cell.text) || 0;
+                                    else if (header === '总销售额(¥)') obj.displayTotal = parseFloat(
+                                            cell.text) || 0;
+                                    else if (header === '总利润(¥)') obj.totalProfit = parseFloat(
+                                            cell.text) || 0;
+                                    else if (header === '毛利率(%)') obj.marginRate = parseFloat(
+                                            cell.text) || 0;
                                     else if (header === '结算货币') obj.settleCurrency = cell
                                         .text || 'CNY';
                                     else if (header === '备注') obj.remarks = cell.text;
@@ -5202,7 +5384,7 @@
             });
 
             // ============================================================
-            // 汇率加载
+            // 汇率加载（启动时自动拉取，有6小时缓存）
             // ============================================================
             fetchExchangeRates(false).then(success => {
                 if (!success) showToast('⚠️ 汇率加载失败，部分货币可能无法换算', 'warning');
