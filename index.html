@@ -2294,8 +2294,8 @@
                     <!-- 报价显示 -->
                     <div class="price-hero" id="priceHero">
                         <div class="item"><div class="label" id="heroLabelNoTax">💰 不含税单价</div><div class="number no-tax" id="heroPriceNoTax">0.000 <span class="cur">¥</span></div></div>
-                        <div class="item"><div class="label" id="heroLabelWithTax">🧾 含税单价</div><div class="number tax" id="heroPriceWithTax">0.000 <span class="cur">¥</span></div></div>
-                        <div class="item"><div class="label">📋 税率 / 税额</div><div class="number" id="heroTaxInfo" style="font-size:17px;">13% / 0.000 <span class="cur">¥</span></div></div>
+                        <div class="item"><div class="label" id="heroLabelWithTax">💰 含税单价</div><div class="number tax" id="heroPriceWithTax">0.000 <span class="cur">¥</span></div></div>
+                        <div class="item"><div class="label">💰 税率 / 税额</div><div class="number" id="heroTaxInfo" style="font-size:17px;">13% / 0.000 <span class="cur">¥</span></div></div>
                     </div>
 
                     <!-- 盈亏分析 -->
@@ -2305,12 +2305,12 @@
                             <span id="statusBadge" class="status-badge profit">✅ 盈利</span>
                         </div>
                         <div class="profit-grid" id="profitGrid">
-                            <div class="profit-item"><span class="plabel">💵 单位毛利</span><span class="pvalue" id="paUnitProfit">—</span></div>
-                            <div class="profit-item"><span class="plabel">📊 毛利率</span><span class="pvalue" id="paMarginRate">—</span></div>
+                            <div class="profit-item"><span class="plabel">💰 单位毛利</span><span class="pvalue" id="paUnitProfit">—</span></div>
+                            <div class="profit-item"><span class="plabel">💰 毛利率</span><span class="pvalue" id="paMarginRate">—</span></div>
                             <div class="profit-item"><span class="plabel">💰 总利润</span><span class="pvalue" id="paTotalProfit">—</span></div>
-                            <div class="profit-item"><span class="plabel">🧾 单位总成本</span><span class="pvalue" id="paUnitCost">—</span></div>
-                            <div class="profit-item"><span class="plabel" id="paTotalSalesLabel">📈 总销售额</span><span class="pvalue" id="paTotalSales">—</span></div>
-                            <div class="profit-item"><span class="plabel">📋 总成本</span><span class="pvalue" id="paTotalCost">—</span></div>
+                            <div class="profit-item"><span class="plabel">💵 单位总成本</span><span class="pvalue" id="paUnitCost">—</span></div>
+                            <div class="profit-item"><span class="plabel" id="paTotalSalesLabel">💵 总销售额</span><span class="pvalue" id="paTotalSales">—</span></div>
+                            <div class="profit-item"><span class="plabel">💵 总成本</span><span class="pvalue" id="paTotalCost">—</span></div>
                         </div>
 
                         <!-- 建议报价 -->
@@ -3594,7 +3594,7 @@
                 const unitProfit = unitProfitCNY * exchangeRate;
                 const unitCost = unitTotalCost * exchangeRate;
                 const totalSales = displayTotal;
-                const totalSalesLabel = taxIncluded ? '📈 总销售额（含税）' : '📈 总销售额（不含税）';
+                const totalSalesLabel = taxIncluded ? '💵 总销售额（含税）' : '💵 总销售额（不含税）';
 
                 if (taxIncluded) {
                     heroPriceWithTax.className = 'number tax';
@@ -3625,7 +3625,7 @@
                 }
 
                 heroLabelNoTax.textContent = taxIncluded ? '💰 不含税单价' : '💰 不含税单价 (报价)';
-                heroLabelWithTax.textContent = taxIncluded ? '🧾 含税单价 (报价)' : '🧾 含税单价';
+                heroLabelWithTax.textContent = taxIncluded ? '💰 含税单价 (报价)' : '💰 含税单价';
 
                 paTotalSalesLabel.textContent = totalSalesLabel;
                 paUnitProfit.textContent = fmtMoney(unitProfit) + ' ' + settleSymbol;
