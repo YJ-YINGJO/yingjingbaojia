@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-    <title>赢景产品报价系统 · 安全登录版 V2.0</title>
+    <title>赢景产品报价系统 · 安全登录版 V3.0</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
@@ -82,8 +82,6 @@
             background: var(--primary-gradient);
             opacity: 0.6;
         }
-
-        /* ===== 头部 ===== */
         .header-title {
             background: var(--primary-gradient);
             border-radius: var(--radius-md);
@@ -195,7 +193,6 @@
             background: rgba(255, 255, 255, 0.25);
             transform: rotate(60deg) scale(1.04);
         }
-
         .subtitle {
             color: var(--text-secondary);
             font-size: 13px;
@@ -208,8 +205,6 @@
             padding: 8px 16px;
             font-weight: 450;
         }
-
-        /* ===== 统计卡片 ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -266,10 +261,6 @@
             font-weight: 500;
             letter-spacing: 0.3px;
         }
-
-        /* ================================================================
-                 模块卡片通用样式
-               ================================================================ */
         .module-card {
             background: var(--card);
             border-radius: var(--radius-md);
@@ -324,8 +315,6 @@
             align-items: center;
             gap: 8px;
         }
-
-        /* ===== 模块1：公司+客户信息 ===== */
         .module-company-customer .module-body {
             padding-bottom: 14px;
         }
@@ -419,8 +408,6 @@
             color: var(--primary-light);
             transform: translateY(-1px);
         }
-
-        /* 公司信息特殊两列布局 */
         .company-info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -429,8 +416,6 @@
         .company-info-grid .info-group {
             grid-column: span 1;
         }
-
-        /* ===== 模块2：产品信息（含部件） ===== */
         .module-product .module-body {
             padding-bottom: 14px;
         }
@@ -531,8 +516,6 @@
             background: #ffe0e0;
             transform: scale(1.04);
         }
-
-        /* 部件清单 - 隔行显示 */
         .part-wrap {
             margin-top: 6px;
             border-top: 1px solid var(--border-light);
@@ -604,7 +587,6 @@
             color: var(--text);
             font-size: 13px;
         }
-
         .part-table-wrap {
             border: 1px solid var(--border);
             border-radius: var(--radius-sm);
@@ -634,7 +616,6 @@
         .part-list tr:last-child td {
             border-bottom: none;
         }
-        /* 隔行背景 */
         .part-list tbody tr:nth-child(even) {
             background: #f8faff;
         }
@@ -654,7 +635,6 @@
             outline: none;
             box-shadow: 0 0 0 3px rgba(42, 125, 225, 0.08);
         }
-        /* 操作列宽度加大，确保一行显示 */
         .part-list .part-actions {
             text-align: center;
             white-space: nowrap;
@@ -708,8 +688,6 @@
             border-style: solid;
             transform: translateY(-1px);
         }
-
-        /* ===== 模块3：报价计算中心 ===== */
         .module-calc .module-header {
             background: linear-gradient(135deg, #e8f0fe, #f4faff);
             border-bottom: 2px solid #c8dbe8;
@@ -724,8 +702,6 @@
             margin-bottom: 16px;
             border: 1px solid var(--border-light);
         }
-
-        /* === 报价参数使用 Grid 布局，完美对齐 === */
         .param-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -765,12 +741,9 @@
         .param-grid .param-item select:hover {
             border-color: #b8cde0;
         }
-        /* 税率占两列 */
         .param-grid .span-2 {
             grid-column: span 2;
         }
-
-        /* 自定义下拉箭头（统一） */
         .param-grid .param-item select {
             appearance: none;
             -webkit-appearance: none;
@@ -782,7 +755,6 @@
             font-weight: 500;
             cursor: pointer;
         }
-
         .calc-results {
             display: flex;
             flex-direction: column;
@@ -845,26 +817,22 @@
             color: var(--text-muted);
             font-size: 18px;
         }
-
-        /* ★ 货币名称样式（仅用于报价计算中心） */
         .currency-name {
             font-size: 0.72em;
             font-weight: 400;
             color: var(--text-secondary);
             margin-right: 2px;
         }
-.suggest-currency-name {
-    font-size: 0.8em;   /* 调整大小，比如 1.2em 比正常稍大 */
-    font-weight: 700;   /* 加粗，700 为粗体 */
-}
-        /* PDF 中的货币名称 */
+        .suggest-currency-name {
+            font-size: 0.8em;
+            font-weight: 700;
+        }
         .currency-name-pdf {
             font-size: 0.8em;
             font-weight: 400;
             color: #4a5a6e;
             margin-right: 2px;
         }
-
         .profit-analysis {
             background: #f5faff;
             border-radius: var(--radius-md);
@@ -948,7 +916,6 @@
             background: #fdf0d8;
             color: var(--warning);
         }
-
         .suggest-row {
             display: flex;
             align-items: center;
@@ -1027,7 +994,6 @@
             background: #145a31;
             transform: translateY(-1px);
         }
-
         .action-row {
             display: flex;
             gap: 12px;
@@ -1079,8 +1045,6 @@
         .btn-excel:hover {
             background: #124a8a;
         }
-
-        /* ===== 模块：交易条款（独立） ===== */
         .module-terms .module-body {
             padding-bottom: 14px;
         }
@@ -1127,8 +1091,6 @@
             min-height: 60px;
             background: #fafdff;
         }
-
-        /* ===== 模块4：历史记录 ===== */
         .module-history .module-body {
             padding-bottom: 14px;
         }
@@ -1155,24 +1117,42 @@
         }
         .history-header .actions {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             flex-wrap: wrap;
         }
-        .history-header .actions button {
-            background: transparent;
-            border: 1.5px solid var(--border);
-            padding: 3px 14px;
+        .history-header .actions .btn-action {
+            padding: 6px 18px;
+            border: none;
             border-radius: var(--radius-full);
             font-size: 12px;
+            font-weight: 600;
             cursor: pointer;
             transition: all var(--transition);
-            font-weight: 500;
-            color: var(--text-secondary);
+            background: var(--primary-light);
+            color: #fff;
+            box-shadow: var(--shadow-sm);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
         }
-        .history-header .actions button:hover {
-            background: #eef3fa;
-            border-color: #b0c4db;
-            transform: translateY(-1px);
+        .history-header .actions .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            background: #1a5fb0;
+        }
+        .history-header .actions .btn-action.danger {
+            background: var(--danger);
+        }
+        .history-header .actions .btn-action.danger:hover {
+            background: #8f2a2a;
+        }
+        .history-header .actions .btn-action.export {
+            background: #1a5fb0;
+        }
+        .history-header .actions .btn-action.export:hover {
+            background: #124a8a;
         }
         .table-wrap {
             overflow-x: auto;
@@ -1191,19 +1171,25 @@
             color: var(--text-secondary);
             font-weight: 600;
             padding: 8px 10px;
-            text-align: left;
             border-bottom: 2px solid var(--border);
             white-space: nowrap;
             font-size: 11px;
             letter-spacing: 0.4px;
             text-transform: uppercase;
+            text-align: center;
         }
         .table-wrap td {
-            padding: 8px 10px;
+            padding: 6px 10px;
             border-bottom: 1px solid var(--border-light);
             color: var(--text);
             vertical-align: middle;
             font-size: 12.5px;
+        }
+        .table-wrap td.align-left {
+            text-align: left;
+        }
+        .table-wrap td.align-center {
+            text-align: center;
         }
         .table-wrap tr:hover td {
             background: #f8faff;
@@ -1218,21 +1204,26 @@
             text-align: center;
             padding: 8px 0 4px 0;
         }
-        .load-more-row button {
-            background: transparent;
-            border: 1.5px solid var(--border);
-            padding: 4px 24px;
+        .load-more-row .btn-load-more {
+            background: var(--primary-light);
+            border: none;
+            padding: 6px 28px;
             border-radius: var(--radius-full);
             font-size: 12px;
+            font-weight: 600;
+            color: #fff;
             cursor: pointer;
             transition: all var(--transition);
-            color: var(--text-secondary);
-            font-weight: 500;
+            box-shadow: var(--shadow-sm);
+            letter-spacing: 0.3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
-        .load-more-row button:hover {
-            background: #eef3fa;
-            border-color: #b0c4db;
-            transform: translateY(-1px);
+        .load-more-row .btn-load-more:hover {
+            background: #1a5fb0;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
         .hist-action-btn {
             background: transparent;
@@ -1271,13 +1262,13 @@
             border: 1px solid #dce5ef;
             background: #fff;
             display: block;
+            margin: 0 auto;
         }
         .hist-no-img {
             color: var(--text-muted);
             font-size: 11px;
         }
 
-        /* ===== PDF模板 ===== */
         #quotation-template {
             display: none;
             width: 210mm;
@@ -1492,7 +1483,6 @@
             margin: 0 auto;
         }
 
-        /* ===== Toast ===== */
         .custom-toast {
             position: fixed;
             bottom: 30px;
@@ -1523,7 +1513,6 @@
             background: var(--warning);
         }
 
-        /* ===== 设置模态框 ===== */
         .settings-overlay {
             position: fixed;
             top: 0;
@@ -1870,7 +1859,6 @@
             box-shadow: 0 0 0 2px #fff, 0 0 0 4px #333;
         }
 
-        /* ===== 登录遮罩 ===== */
         #loginOverlay {
             position: fixed;
             top: 0;
@@ -1955,7 +1943,6 @@
             display: none;
         }
 
-        /* ===== 响应式 ===== */
         @media (max-width: 820px) {
             .stats-grid {
                 grid-template-columns: repeat(3, 1fr);
@@ -2100,10 +2087,10 @@
 </head>
 <body>
     <div class="container" id="appContainer">
-        <!-- ===== 头部 ===== -->
+        <!-- 头部 -->
         <div class="header-title">
             <div class="left">
-                <h1>💻 赢景产品报价系统 <small> V2.0</small>
+                <h1>💻 赢景产品报价系统 <small> V3.0</small>
                     <span class="badge">智能报价</span>
                 </h1>
             </div>
@@ -2114,7 +2101,7 @@
         </div>
         <div class="subtitle">材料明细 · 固定成本自动分摊 · 目标毛利率智能建议 · 结算货币自动换算 · 登录安全保护</div>
 
-        <!-- ===== 统计看板 ===== -->
+        <!-- 统计看板 -->
         <div class="stats-grid" id="statsGrid">
             <div class="stats-card"><span class="num" id="statTotal">0</span><span class="label">总报价单</span></div>
             <div class="stats-card"><span class="num" id="statProfit">0</span><span class="label">盈利单</span></div>
@@ -2123,36 +2110,17 @@
             <div class="stats-card"><span class="num" id="statTotalRevenue">0 <span class="cur">¥</span></span><span class="label">总销售额</span></div>
         </div>
 
-        <!-- ================================================================
-        基本信息
-        ================================================================ -->
+        <!-- 基本信息 -->
         <div class="module-card module-company-customer">
-            <div class="module-header">
-                <h3>🏠 基本信息</h3>
-            </div>
+            <div class="module-header"><h3>🏠 基本信息</h3></div>
             <div class="module-body">
-                <!-- 公司信息 - 左侧公司名称+地址，右侧联系人+电话 -->
                 <div class="section-sub">🏢 公司信息</div>
                 <div class="company-info-grid">
-                    <div class="info-group">
-                        <label>公司名称</label>
-                        <input type="text" id="companyName" value="慈利赢景工艺品厂" />
-                    </div>
-                    <div class="info-group">
-                        <label>联系人</label>
-                        <input type="text" id="companyContact" value="王女士" />
-                    </div>
-                    <div class="info-group">
-                        <label>公司地址</label>
-                        <input type="text" id="companyAddress" value="深圳市宝安区西乡大道258号大益广场2栋十七单元17-3B" />
-                    </div>
-                    <div class="info-group">
-                        <label>公司电话</label>
-                        <input type="text" id="companyPhone" value="+86 18807444885" />
-                    </div>
+                    <div class="info-group"><label>公司名称</label><input type="text" id="companyName" value="慈利赢景工艺品厂" /></div>
+                    <div class="info-group"><label>联系人</label><input type="text" id="companyContact" value="王女士" /></div>
+                    <div class="info-group"><label>公司地址</label><input type="text" id="companyAddress" value="深圳市宝安区西乡大道258号大益广场2栋十七单元17-3B" /></div>
+                    <div class="info-group"><label>公司电话</label><input type="text" id="companyPhone" value="+86 18807444885" /></div>
                 </div>
-
-                <!-- 客户信息 - 地址在左，电话在右 -->
                 <div class="section-sub" style="margin-top:16px;">👤 客户信息</div>
                 <div class="info-grid-2col">
                     <div class="info-group col-full">
@@ -2163,41 +2131,20 @@
                             <button id="deleteCustomerTemplateBtn" style="display:none; padding:3px 12px;">删除</button>
                         </div>
                     </div>
-                    <div class="info-group col-half">
-                        <label>客户名称</label>
-                        <input type="text" id="customerName" placeholder="例：XX科技有限公司" />
-                    </div>
-                    <div class="info-group col-half">
-                        <label>客户联系人</label>
-                        <input type="text" id="customerContact" placeholder="李经理" />
-                    </div>
-                    <div class="info-group col-half">
-                        <label>客户地址</label>
-                        <input type="text" id="customerAddress" placeholder="上海市浦东新区" />
-                    </div>
-                    <div class="info-group col-half">
-                        <label>客户电话</label>
-                        <input type="text" id="customerPhone" placeholder="138-0000-0000" />
-                    </div>
+                    <div class="info-group col-half"><label>客户名称</label><input type="text" id="customerName" placeholder="例：XX科技有限公司" /></div>
+                    <div class="info-group col-half"><label>客户联系人</label><input type="text" id="customerContact" placeholder="李经理" /></div>
+                    <div class="info-group col-half"><label>客户地址</label><input type="text" id="customerAddress" placeholder="上海市浦东新区" /></div>
+                    <div class="info-group col-half"><label>客户电话</label><input type="text" id="customerPhone" placeholder="138-0000-0000" /></div>
                 </div>
             </div>
         </div>
 
-        <!-- ================================================================
-        模块2：产品信息（含部件）
-        ================================================================ -->
+        <!-- 产品信息 -->
         <div class="module-card module-product">
-            <div class="module-header">
-                <h3>📦 产品信息</h3>
-            </div>
+            <div class="module-header"><h3>📦 产品信息</h3></div>
             <div class="module-body">
                 <div class="product-grid">
-                    <div class="col-half">
-                        <div class="info-group">
-                            <label>商品名称</label>
-                            <input type="text" id="productName" value="滴胶贴纸" />
-                        </div>
-                    </div>
+                    <div class="col-half"><div class="info-group"><label>商品名称</label><input type="text" id="productName" value="滴胶贴纸" /></div></div>
                     <div class="col-half">
                         <div class="info-group">
                             <label>🖼️ 产品图</label>
@@ -2212,13 +2159,9 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- 部件清单 -->
                 <div class="part-wrap">
                     <div class="part-header">
-                        <div class="left-group">
-                            <span>🧩 商品原材料部件清单（默认人民币报价）</span>
-                        </div>
+                        <div class="left-group"><span>🧩 商品原材料部件清单（默认人民币报价）</span></div>
                         <div class="right-group">
                             <div class="template-actions" style="flex-wrap:nowrap;">
                                 <label style="font-size:12px; font-weight:600; white-space:nowrap;">💾 产品库：</label>
@@ -2240,95 +2183,30 @@
             </div>
         </div>
 
-        <!-- ================================================================
-        模块3：报价计算中心（参数 + 结果 + 盈亏 + 操作）
-        ================================================================ -->
+        <!-- 报价计算中心 -->
         <div class="module-card module-calc">
-            <div class="module-header">
-                <h3>📊 报价计算中心</h3>
-                <span class="module-badge">实时计算 · 智能建议</span>
-            </div>
+            <div class="module-header"><h3>📊 报价计算中心</h3><span class="module-badge">实时计算 · 智能建议</span></div>
             <div class="module-body">
-                <!-- 报价参数 -->
                 <div class="calc-params">
-                    <div style="font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-                        ⚙️ 报价参数
-                        <span style="font-weight:400; color:var(--text-muted); font-size:11px;"></span>
-                    </div>
-                    <!-- 使用 Grid 布局实现精确对齐 -->
+                    <div style="font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:8px; display:flex; align-items:center; gap:6px;">⚙️ 报价参数</div>
                     <div class="param-grid">
-                        <!-- 第一行：四个字段各占一列 -->
-                        <div class="param-item">
-                            <label>总件数</label>
-                            <input type="number" id="orderQty" value="100" step="1" min="1" />
-                        </div>
-                        <div class="param-item">
-                            <label>加价率 (%)</label>
-                            <input type="number" id="markupRate" value="0.5" step="0.1" min="0" />
-                        </div>
-                        <div class="param-item">
-                            <label>总人力成本 (¥)</label>
-                            <input type="number" id="laborCost" value="5000" step="100" min="0" />
-                        </div>
-                        <div class="param-item">
-                            <label>总运营成本 (¥)</label>
-                            <input type="number" id="overheadCost" value="2000" step="100" min="0" />
-                        </div>
-
-                        <!-- 第二行：报价含税占第一列，税率占第二、三列，结算货币占第四列 -->
-                        <div class="param-item">
-                            <label>报价含税</label>
-                            <select id="isTaxIncluded">
-                                <option value="yes">是（含税价）</option>
-                                <option value="no">否（不含税价）</option>
-                            </select>
-                        </div>
-                        <div class="param-item span-2">
-                            <label>税率</label>
-                            <div class="tax-select-wrap">
-                                <select id="invoiceType" style="width:100%;">
-                                    <option value="13">一般纳税人销售货物、劳务等（13%）</option>
-                                    <option value="9">一般纳税人交通运输、建筑等（9%）</option>
-                                    <option value="6">一般纳税人现代服务、生活服务等（6%）</option>
-                                    <option value="5">简易计税特定项目（5%）</option>
-                                    <option value="3">小规模纳税人（3%）</option>
-                                    <option value="1">小规模纳税人减征（1%）</option>
-                                    <option value="0">出口零税率（0%）</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="param-item">
-                            <label>💱 结算货币</label>
-                            <select id="settlementCurrency" style="width:100%;">
-                                <option value="CNY" selected>人民币 (CNY ¥)</option>
-                                <option value="USD">美元 (USD $)</option>
-                                <option value="EUR">欧元 (EUR €)</option>
-                                <option value="GBP">英镑 (GBP £)</option>
-                                <option value="JPY">日元 (JPY ¥)</option>
-                                <option value="HKD">港币 (HKD HK$)</option>
-                                <option value="KRW">韩元 (KRW ₩)</option>
-                                <option value="AUD">澳元 (AUD A$)</option>
-                                <option value="CAD">加元 (CAD C$)</option>
-                            </select>
-                        </div>
+                        <div class="param-item"><label>总件数</label><input type="number" id="orderQty" value="100" step="1" min="1" /></div>
+                        <div class="param-item"><label>加价率 (%)</label><input type="number" id="markupRate" value="0.5" step="0.1" min="0" /></div>
+                        <div class="param-item"><label>总人力成本 (¥)</label><input type="number" id="laborCost" value="5000" step="100" min="0" /></div>
+                        <div class="param-item"><label>总运营成本 (¥)</label><input type="number" id="overheadCost" value="2000" step="100" min="0" /></div>
+                        <div class="param-item"><label>报价含税</label><select id="isTaxIncluded"><option value="yes">是（含税价）</option><option value="no">否（不含税价）</option></select></div>
+                        <div class="param-item span-2"><label>税率</label><select id="invoiceType" style="width:100%;"><option value="13">一般纳税人销售货物、劳务等（13%）</option><option value="9">一般纳税人交通运输、建筑等（9%）</option><option value="6">一般纳税人现代服务、生活服务等（6%）</option><option value="5">简易计税特定项目（5%）</option><option value="3">小规模纳税人（3%）</option><option value="1">小规模纳税人减征（1%）</option><option value="0">出口零税率（0%）</option></select></div>
+                        <div class="param-item"><label>💱 结算货币</label><select id="settlementCurrency" style="width:100%;"><option value="CNY" selected>人民币 (CNY ¥)</option><option value="USD">美元 (USD $)</option><option value="EUR">欧元 (EUR €)</option><option value="GBP">英镑 (GBP £)</option><option value="JPY">日元 (JPY ¥)</option><option value="HKD">港币 (HKD HK$)</option><option value="KRW">韩元 (KRW ₩)</option><option value="AUD">澳元 (AUD A$)</option><option value="CAD">加元 (CAD C$)</option></select></div>
                     </div>
                 </div>
-
-                <!-- 报价结果 + 盈亏分析 + 建议报价 + 操作按钮 -->
                 <div class="calc-results">
-                    <!-- 报价显示 -->
                     <div class="price-hero" id="priceHero">
                         <div class="item"><div class="label" id="heroLabelNoTax">💰 不含税单价</div><div class="number no-tax" id="heroPriceNoTax">0.000 <span class="cur">¥</span></div></div>
                         <div class="item"><div class="label" id="heroLabelWithTax">💰 含税单价</div><div class="number tax" id="heroPriceWithTax">0.000 <span class="cur">¥</span></div></div>
                         <div class="item"><div class="label">💰 税率 / 税额</div><div class="number" id="heroTaxInfo" style="font-size:17px;">13% / 0.000 <span class="cur">¥</span></div></div>
                     </div>
-
-                    <!-- 盈亏分析 -->
                     <div class="profit-analysis" id="profitAnalysis">
-                        <div class="title">
-                            📈 盈亏分析
-                            <span id="statusBadge" class="status-badge profit">✅ 盈利</span>
-                        </div>
+                        <div class="title">📈 盈亏分析 <span id="statusBadge" class="status-badge profit">✅ 盈利</span></div>
                         <div class="profit-grid" id="profitGrid">
                             <div class="profit-item"><span class="plabel">💰 单位毛利</span><span class="pvalue" id="paUnitProfit">—</span></div>
                             <div class="profit-item"><span class="plabel">💰 毛利率</span><span class="pvalue" id="paMarginRate">—</span></div>
@@ -2337,8 +2215,6 @@
                             <div class="profit-item"><span class="plabel" id="paTotalSalesLabel">💵 总销售额</span><span class="pvalue" id="paTotalSales">—</span></div>
                             <div class="profit-item"><span class="plabel">💵 总成本</span><span class="pvalue" id="paTotalCost">—</span></div>
                         </div>
-
-                        <!-- 建议报价 -->
                         <div class="suggest-row">
                             <label>🎯 目标毛利率 (%)</label>
                             <input type="number" id="targetMargin" value="15" step="0.5" min="0" max="100" />
@@ -2352,8 +2228,6 @@
                             <span class="suggest-detail" id="suggestDetail" style="display:none;"></span>
                         </div>
                     </div>
-
-                    <!-- 操作按钮 -->
                     <div class="action-row">
                         <button class="btn-save" id="saveBtn">💾 保存报价记录</button>
                         <button class="btn-pdf" id="exportPdfBtn">📄 生成 PDF 报价单</button>
@@ -2363,39 +2237,20 @@
             </div>
         </div>
 
-        <!-- ================================================================
-        模块4：交易条款（独立）
-        ================================================================ -->
+        <!-- 交易条款 -->
         <div class="module-card module-terms">
-            <div class="module-header">
-                <h3>📋 交易条款</h3>
-                <span class="module-badge">合同条款</span>
-            </div>
+            <div class="module-header"><h3>📋 交易条款</h3><span class="module-badge">合同条款</span></div>
             <div class="module-body">
                 <div class="terms-grid">
-                    <div class="terms-item">
-                        <label>报价有效期</label>
-                        <input type="text" id="validity" value="7个工作日" />
-                    </div>
-                    <div class="terms-item">
-                        <label>付款方式</label>
-                        <input type="text" id="payment" value="款到发货" />
-                    </div>
-                    <div class="terms-item">
-                        <label>交货期</label>
-                        <input type="text" id="delivery" value="5-7个工作日" />
-                    </div>
-                    <div class="terms-item" style="grid-column: 1 / -1;">
-                        <label>备注</label>
-                        <textarea id="remarks" rows="2" style="resize:vertical; min-height:60px; background:#fafdff;">以上报价不含运费，质保期为12个月。</textarea>
-                    </div>
+                    <div class="terms-item"><label>报价有效期</label><input type="text" id="validity" value="7个工作日" /></div>
+                    <div class="terms-item"><label>付款方式</label><input type="text" id="payment" value="款到发货" /></div>
+                    <div class="terms-item"><label>交货期</label><input type="text" id="delivery" value="5-7个工作日" /></div>
+                    <div class="terms-item" style="grid-column: 1 / -1;"><label>备注</label><textarea id="remarks" rows="2" style="resize:vertical; min-height:60px; background:#fafdff;">以上报价不含运费，质保期为12个月。</textarea></div>
                 </div>
             </div>
         </div>
 
-        <!-- ================================================================
-        模块5：历史记录
-        ================================================================ -->
+        <!-- 历史记录 -->
         <div class="module-card module-history">
             <div class="module-header">
                 <h3>📋 历史报价记录</h3>
@@ -2404,27 +2259,38 @@
             <div class="module-body">
                 <div class="history-header">
                     <div class="left">
-                    <div class="actions">
-                        <button id="exportHistoryBtn">📤 导出历史</button>
-                        <button id="clearHistoryBtn">🗑️ 清空全部</button>
+                        <div class="actions">
+                            <button class="btn-action export" id="exportHistoryBtn">📤 导出历史</button>
+                            <button class="btn-action danger" id="clearHistoryBtn">🗑️ 清空全部</button>
+                        </div>
                     </div>
                 </div>
                 <div class="table-wrap">
                     <table>
                         <thead>
                             <tr>
-                                <th>时间</th><th>单号</th><th>商品</th><th>图片</th><th>客户</th>
-                                <th>单价成本(¥)</th><th>单价报价(¥)</th><th>单价利润(¥)</th><th>总数量</th><th>总销售额(¥)</th><th>电话</th>
-                                <th style="width:100px;">操作</th>
+                                <th class="align-left">时间</th>
+                                <th class="align-left">单号</th>
+                                <th class="align-left">商品</th>
+                                <th class="align-center">图片</th>
+                                <th class="align-left">客户</th>
+                                <th class="align-left">客户联系人</th>
+                                <th class="align-center">单价成本(¥)</th>
+                                <th class="align-center">单价报价(¥)</th>
+                                <th class="align-center">单价利润(¥)</th>
+                                <th class="align-center">总数量</th>
+                                <th class="align-center">总销售额(¥)</th>
+                                <th class="align-left">电话</th>
+                                <th class="align-center" style="width:100px;">操作</th>
                             </tr>
                         </thead>
                         <tbody id="historyBody">
-                            <tr><td colspan="12" class="empty-history">暂无报价记录</td></tr>
+                            <tr><td colspan="13" class="empty-history">暂无报价记录</td></tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="load-more-row" id="loadMoreRow">
-                    <button id="loadMoreBtn">📂 显示更多记录</button>
+                    <button class="btn-load-more" id="loadMoreBtn">📂 显示更多记录</button>
                 </div>
             </div>
         </div>
@@ -2444,6 +2310,7 @@
                     <button class="tab-btn" data-tab="data">📦 数据</button>
                 </div>
 
+                <!-- 公司面板 -->
                 <div class="settings-panel active" id="tab-company">
                     <div class="setting-row"><div class="setting-group full"><label>公司名称</label><input type="text" id="setCompanyName" value="慈利赢景工艺品厂" /></div></div>
                     <div class="setting-row"><div class="setting-group full"><label>公司地址</label><input type="text" id="setCompanyAddress" value="深圳市宝安区西乡大道258号大益广场2栋十七单元17-3B" /></div></div>
@@ -2476,17 +2343,10 @@
                     <div style="margin-top:10px;font-size:12px;color:var(--text-muted);background:#f4f8fe;padding:8px 16px;border-radius:var(--radius-sm);">💡 公司信息将显示在报价单抬头和页脚。Logo和印章为全局固定设置。</div>
                 </div>
 
+                <!-- 默认值面板 -->
                 <div class="settings-panel" id="tab-defaults">
                     <div class="setting-row">
-                        <div class="setting-group"><label>默认税率</label><select id="setDefaultTaxRate">
-                            <option value="13">一般纳税人销售货物、劳务等（13%）</option>
-                            <option value="9">一般纳税人交通运输、建筑等（9%）</option>
-                            <option value="6">一般纳税人现代服务、生活服务等（6%）</option>
-                            <option value="5">简易计税特定项目（5%）</option>
-                            <option value="3">小规模纳税人（3%）</option>
-                            <option value="1">小规模纳税人减征（1%）</option>
-                            <option value="0">出口零税率（0%）</option>
-                        </select></div>
+                        <div class="setting-group"><label>默认税率</label><select id="setDefaultTaxRate"><option value="13">一般纳税人销售货物、劳务等（13%）</option><option value="9">一般纳税人交通运输、建筑等（9%）</option><option value="6">一般纳税人现代服务、生活服务等（6%）</option><option value="5">简易计税特定项目（5%）</option><option value="3">小规模纳税人（3%）</option><option value="1">小规模纳税人减征（1%）</option><option value="0">出口零税率（0%）</option></select></div>
                         <div class="setting-group"><label>报价含税</label><select id="setDefaultTaxIncluded"><option value="yes">是</option><option value="no">否</option></select></div>
                     </div>
                     <div class="setting-row">
@@ -2503,6 +2363,7 @@
                     </div>
                 </div>
 
+                <!-- 显示面板 -->
                 <div class="settings-panel" id="tab-display">
                     <div class="setting-row">
                         <div class="setting-group"><label>小数位数</label><select id="setDecimalPlaces"><option value="1">1 位</option><option value="2">2 位</option><option value="3" selected>3 位</option><option value="4">4 位</option></select></div>
@@ -2523,17 +2384,12 @@
                     </div>
                     <div class="setting-row">
                         <div class="setting-group"><label>卡片阴影</label><select id="setBoxShadow"><option value="none">无</option><option value="light">淡</option><option value="medium" selected>中</option><option value="heavy">重</option></select></div>
-                        <div class="setting-group"><label>布局密度</label>
-                            <select id="setLayoutDensity">
-                                <option value="loose">宽松</option>
-                                <option value="standard" selected>标准</option>
-                                <option value="compact">紧凑</option>
-                            </select>
-                        </div>
+                        <div class="setting-group"><label>布局密度</label><select id="setLayoutDensity"><option value="loose">宽松</option><option value="standard" selected>标准</option><option value="compact">紧凑</option></select></div>
                     </div>
                     <div style="margin-top:10px;font-size:12px;color:var(--text-muted);background:#f4f8fe;padding:8px 16px;border-radius:var(--radius-sm);">💡 调整布局密度可改变表单间距和填充。</div>
                 </div>
 
+                <!-- 存储面板 -->
                 <div class="settings-panel" id="tab-storage">
                     <div class="data-mgmt">
                         <div class="data-row">
@@ -2548,12 +2404,37 @@
                             <div class="info">📤 立即备份到文件夹 <small>将当前所有数据（历史、模板、设置、图片）保存到所选目录</small></div>
                             <button class="btn-action export" id="backupToFolderBtn">💾 备份到文件夹</button>
                         </div>
+                        <div class="data-row" style="flex-wrap:wrap;">
+                            <div class="info" style="flex:1;min-width:140px;">📥 从备份文件导入（JSON）<small>选择之前备份的 .json 文件恢复数据</small></div>
+                            <select id="importBackupMode" style="padding:4px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:12px;background:#fff;cursor:pointer;min-width:120px;">
+                                <option value="replace">🔄 替换（清空后导入）</option>
+                                <option value="merge">📌 合并（追加并去重）</option>
+                            </select>
+                            <button class="btn-action import" id="importBackupBtn">选择文件导入</button>
+                            <input type="file" id="importBackupInput" accept=".json" style="display:none;" />
+                        </div>
                     </div>
                 </div>
 
-                <!-- ★ 安全面板 - 已增加修改密码和删除密码功能 ★ -->
+                <!-- 安全面板 -->
                 <div class="settings-panel" id="tab-security">
-                    <!-- 设置/修改密码（原有） -->
+                    <div class="setting-row" style="margin-bottom:10px;">
+                        <div class="setting-group full">
+                            <div style="background:#f4f8fe;padding:12px 18px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;border:1px solid var(--border-light);">
+                                <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                                    <span style="font-weight:600;font-size:14px;">🔐 密码保护状态</span>
+                                    <span id="loginProtectionStatus" class="status-badge" style="font-size:13px;padding:4px 22px;">检查中...</span>
+                                </div>
+                                <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                                    <span style="font-weight:500;font-size:13px;color:var(--text-secondary);">👤 登录状态</span>
+                                    <span id="securityStatusDisplay" class="status-badge" style="font-size:13px;padding:4px 22px;">检查中...</span>
+                                </div>
+                            </div>
+                            <div style="font-size:12px;color:var(--text-muted);margin-top:6px;padding:0 4px;display:flex;flex-wrap:wrap;gap:4px 16px;">
+                                <span>💡 <span id="passwordStatusHint">系统正在检测密码状态...</span></span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="setting-row">
                         <div class="setting-group full">
                             <label>🔑 设置登录密码 <span class="hint">（首次设置或重置密码）</span></label>
@@ -2561,8 +2442,6 @@
                             <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">密码用于登录验证，请妥善保管。留空则不修改密码。</div>
                         </div>
                     </div>
-
-                    <!-- ★ 新增：修改密码（需要验证旧密码） -->
                     <div class="setting-row" style="margin-top:4px;">
                         <div class="setting-group full">
                             <label>🔄 修改密码 <span class="hint">（需要验证当前密码）</span></label>
@@ -2575,8 +2454,6 @@
                             <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">修改密码需要验证当前密码，新密码至少6位。</div>
                         </div>
                     </div>
-
-                    <!-- ★ 新增：删除密码 -->
                     <div class="setting-row">
                         <div class="setting-group full">
                             <label>🔓 删除密码 <span class="hint">（取消登录保护）</span></label>
@@ -2587,24 +2464,29 @@
                             <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">删除后系统将不再需要密码登录，所有数据仍保留。操作需验证当前密码。</div>
                         </div>
                     </div>
-
-                    <!-- 自动注销 -->
-<div class="setting-row">
-    <div class="setting-group full">
-        <label>⏱️ 自动注销（分钟）</label>
-        <input type="number" id="setLogoutTimeout" value="30" min="0" max="120" />
-        <div style="font-size:11px;color:var(--text-muted);">0 表示永不自动注销</div>
-    </div>
-</div>
-
-                    <!-- 底部提示 -->
+                    <div class="setting-row">
+                        <div class="setting-group full">
+                            <label>⏱️ 自动注销（分钟）</label>
+                            <input type="number" id="setLogoutTimeout" value="30" min="0" max="120" />
+                            <div style="font-size:11px;color:var(--text-muted);">0 表示永不自动注销</div>
+                        </div>
+                    </div>
                     <div style="margin-top:10px;font-size:12px;color:var(--text-muted);background:#f4f8fe;padding:8px 16px;border-radius:var(--radius-sm);">🔐 安全功能：登录密码保护 · 修改/删除密码 · 自动注销 · 操作审计日志（系统自动记录）</div>
                 </div>
 
+                <!-- 数据面板 -->
                 <div class="settings-panel" id="tab-data">
                     <div class="data-mgmt">
-                        <div class="data-row"><div class="info">📤 导出所有数据（Excel）<small>历史记录、客户模板、部件模板、系统设置</small></div><button class="btn-action export" id="exportAllDataBtn">导出 Excel</button></div>
-                        <div class="data-row"><div class="info">📥 导入所有数据（Excel）<small>从 .xlsx 文件恢复所有数据（将覆盖当前数据）</small></div><button class="btn-action import" id="importAllDataBtn">选择文件导入</button><input type="file" id="importFileInput" accept=".xlsx" style="display:none;" /></div>
+                        <div class="data-row"><div class="info">📤 导出所有数据（Excel）<small>历史记录、客户模板、部件明细</small></div><button class="btn-action export" id="exportAllDataBtn">导出 Excel</button></div>
+                        <div class="data-row" style="flex-wrap:wrap;">
+                            <div class="info" style="flex:1;min-width:140px;">📥 导入所有数据（Excel）<small>从 .xlsx 文件恢复所有数据</small></div>
+                            <select id="importModeSelect" style="padding:4px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:12px;background:#fff;cursor:pointer;min-width:120px;">
+                                <option value="replace">🔄 替换（清空后导入）</option>
+                                <option value="merge">📌 合并（追加并去重）</option>
+                            </select>
+                            <button class="btn-action import" id="importAllDataBtn">选择文件导入</button>
+                            <input type="file" id="importFileInput" accept=".xlsx" style="display:none;" />
+                        </div>
                         <div class="data-row"><div class="info">🗑️ 清空所有数据<small>删除所有历史记录、模板和设置（不可恢复）</small></div><button class="btn-action clear" id="clearAllDataBtn">清空全部</button></div>
                         <div class="data-row" style="background:#fff8f0;border-color:#f5d0b0;"><div class="info">⚠️ 重置为默认设置<small>恢复出厂默认值，不影响历史记录和模板</small></div><button class="btn-action danger" id="resetSettingsBtn">重置设置</button></div>
                     </div>
@@ -2622,10 +2504,7 @@
         <div class="login-box">
             <h2>🔐 赢景报价系统</h2>
             <p>请输入登录密码以访问报价系统</p>
-            <div class="input-group">
-                <label>密码</label>
-                <input type="password" id="loginPasswordInput" placeholder="输入密码" autofocus />
-            </div>
+            <div class="input-group"><label>密码</label><input type="password" id="loginPasswordInput" placeholder="输入密码" autofocus /></div>
             <button class="login-btn" id="loginBtn">✅ 登录</button>
             <div class="login-error" id="loginError">❌ 密码错误，请重试</div>
         </div>
@@ -2662,7 +2541,6 @@
             <div style="display:inline-block;"><span style="font-weight:600;">付款方式：</span><span id="pdfPayment">—</span> &nbsp;|&nbsp; <span style="font-weight:600;">交货期：</span><span id="pdfDelivery">—</span></div>
         </div>
         <div class="terms"><div class="line"><span class="label">备注：</span><span id="pdfRemarks">—</span></div></div>
-
         <div class="footer">
             <div class="product-image-footer" id="pdfProductImageContainer" style="display:none;"></div>
             本报价单为系统生成，最终解释权归 <span id="pdfCompanyNameFooter">赢景</span> 所有。
@@ -2694,8 +2572,7 @@
             }
 
             function saveSecurityData(data) {
-                try { localStorage.setItem(SECURITY_KEY, JSON.stringify(data)); } catch (e) { console.warn('保存安全数据失败:',
-                        e); }
+                try { localStorage.setItem(SECURITY_KEY, JSON.stringify(data)); } catch (e) { console.warn('保存安全数据失败:', e); }
             }
 
             function hashPassword(pw) {
@@ -2754,28 +2631,28 @@
                         saveCurrentParts(partRows);
                     }
                     const settings = loadSettings();
-                    settings.companyName = (typeof companyName !== 'undefined' && companyName) ? companyName.value ||
-                        '赢景' : '赢景';
-                    settings.companyAddress = (typeof companyAddress !== 'undefined' && companyAddress) ? companyAddress
-                        .value || '' : '';
-                    settings.companyPhone = (typeof companyPhone !== 'undefined' && companyPhone) ? companyPhone.value ||
+                    settings.companyName = (typeof companyName !== 'undefined' && companyName) ? companyName.value || '赢景' :
+                        '赢景';
+                    settings.companyAddress = (typeof companyAddress !== 'undefined' && companyAddress) ? companyAddress.value ||
                         '' : '';
-                    settings.companyContact = (typeof companyContact !== 'undefined' && companyContact) ? companyContact
-                        .value || '' : '';
-                    settings.defaultTaxRate = (typeof invoiceType !== 'undefined' && invoiceType) ? invoiceType.value ||
-                        '13' : '13';
-                    settings.defaultTaxIncluded = (typeof isTaxIncluded !== 'undefined' && isTaxIncluded) ? isTaxIncluded
-                        .value || 'yes' : 'yes';
-                    settings.defaultValidity = (typeof validity !== 'undefined' && validity) ? validity.value ||
-                        '7个工作日' : '7个工作日';
+                    settings.companyPhone = (typeof companyPhone !== 'undefined' && companyPhone) ? companyPhone.value || '' :
+                        '';
+                    settings.companyContact = (typeof companyContact !== 'undefined' && companyContact) ? companyContact.value ||
+                        '' : '';
+                    settings.defaultTaxRate = (typeof invoiceType !== 'undefined' && invoiceType) ? invoiceType.value || '13' :
+                        '13';
+                    settings.defaultTaxIncluded = (typeof isTaxIncluded !== 'undefined' && isTaxIncluded) ? isTaxIncluded.value ||
+                        'yes' : 'yes';
+                    settings.defaultValidity = (typeof validity !== 'undefined' && validity) ? validity.value || '7个工作日' :
+                        '7个工作日';
                     settings.defaultPayment = (typeof payment !== 'undefined' && payment) ? payment.value || '款到发货' :
                         '款到发货';
-                    settings.defaultDelivery = (typeof delivery !== 'undefined' && delivery) ? delivery.value ||
-                        '5-7个工作日' : '5-7个工作日';
-                    settings.defaultMarkupRate = (typeof markupRate !== 'undefined' && markupRate) ? parseFloat(markupRate
-                        .value) || 0 : 0;
-                    settings.defaultTargetMargin = (typeof targetMargin !== 'undefined' && targetMargin) ? parseFloat(
-                        targetMargin.value) || 15 : 15;
+                    settings.defaultDelivery = (typeof delivery !== 'undefined' && delivery) ? delivery.value || '5-7个工作日' :
+                        '5-7个工作日';
+                    settings.defaultMarkupRate = (typeof markupRate !== 'undefined' && markupRate) ? parseFloat(markupRate.value) ||
+                        0 : 0;
+                    settings.defaultTargetMargin = (typeof targetMargin !== 'undefined' && targetMargin) ? parseFloat(targetMargin
+                        .value) || 15 : 15;
                     settings.defaultRemarks = (typeof remarks !== 'undefined' && remarks) ? remarks.value || '' : '';
                     saveSettingsToStorage(settings);
 
@@ -2793,36 +2670,32 @@
                     }
                     const custData = {
                         name: (typeof customerName !== 'undefined' && customerName) ? customerName.value || '' : '',
-                        contact: (typeof customerContact !== 'undefined' && customerContact) ? customerContact.value ||
-                            '' : '',
-                        phone: (typeof customerPhone !== 'undefined' && customerPhone) ? customerPhone.value || '' :
+                        contact: (typeof customerContact !== 'undefined' && customerContact) ? customerContact.value || '' :
                             '',
-                        address: (typeof customerAddress !== 'undefined' && customerAddress) ? customerAddress.value ||
-                            '' : ''
+                        phone: (typeof customerPhone !== 'undefined' && customerPhone) ? customerPhone.value || '' : '',
+                        address: (typeof customerAddress !== 'undefined' && customerAddress) ? customerAddress.value || '' :
+                            ''
                     };
                     localStorage.setItem('quote_current_customer', JSON.stringify(custData));
                     const qty = (typeof orderQty !== 'undefined' && orderQty) ? parseInt(orderQty.value) || 100 : 100;
                     localStorage.setItem('quote_current_qty', String(qty));
-                    const markup = (typeof markupRate !== 'undefined' && markupRate) ? parseFloat(markupRate.value) ||
-                        0.5 : 0.5;
+                    const markup = (typeof markupRate !== 'undefined' && markupRate) ? parseFloat(markupRate.value) || 0.5 : 0.5;
                     localStorage.setItem('quote_current_markup', String(markup));
-                    const labor = (typeof laborCost !== 'undefined' && laborCost) ? parseFloat(laborCost.value) ||
-                        5000 : 5000;
+                    const labor = (typeof laborCost !== 'undefined' && laborCost) ? parseFloat(laborCost.value) || 5000 : 5000;
                     localStorage.setItem('quote_current_labor', String(labor));
-                    const overhead = (typeof overheadCost !== 'undefined' && overheadCost) ? parseFloat(overheadCost
-                        .value) || 2000 : 2000;
+                    const overhead = (typeof overheadCost !== 'undefined' && overheadCost) ? parseFloat(overheadCost.value) ||
+                        2000 : 2000;
                     localStorage.setItem('quote_current_overhead', String(overhead));
-                    const target = (typeof targetMargin !== 'undefined' && targetMargin) ? parseFloat(targetMargin
-                        .value) || 15 : 15;
+                    const target = (typeof targetMargin !== 'undefined' && targetMargin) ? parseFloat(targetMargin.value) || 15 :
+                        15;
                     localStorage.setItem('quote_current_target_margin', String(target));
-                    const currency = (typeof settlementCurrency !== 'undefined' && settlementCurrency) ? settlementCurrency
-                        .value || 'CNY' : 'CNY';
+                    const currency = (typeof settlementCurrency !== 'undefined' && settlementCurrency) ? settlementCurrency.value ||
+                        'CNY' : 'CNY';
                     localStorage.setItem('quote_current_currency', currency);
-                    const taxIncluded = (typeof isTaxIncluded !== 'undefined' && isTaxIncluded) ? isTaxIncluded.value ||
-                        'yes' : 'yes';
+                    const taxIncluded = (typeof isTaxIncluded !== 'undefined' && isTaxIncluded) ? isTaxIncluded.value || 'yes' :
+                        'yes';
                     localStorage.setItem('quote_current_tax_included', taxIncluded);
-                    const taxRate = (typeof invoiceType !== 'undefined' && invoiceType) ? invoiceType.value || '13' :
-                        '13';
+                    const taxRate = (typeof invoiceType !== 'undefined' && invoiceType) ? invoiceType.value || '13' : '13';
                     localStorage.setItem('quote_current_tax_rate', taxRate);
                 } catch (e) {
                     console.warn('保存状态时出错:', e);
@@ -2840,34 +2713,32 @@
                         try {
                             const cust = JSON.parse(savedCust);
                             if (cust.name) customerName.value = cust.name;
-                            if (cust.contact && typeof customerContact !== 'undefined' && customerContact) customerContact
-                                .value = cust.contact;
-                            if (cust.phone && typeof customerPhone !== 'undefined' && customerPhone) customerPhone.value =
-                                cust.phone;
-                            if (cust.address && typeof customerAddress !== 'undefined' && customerAddress) customerAddress
-                                .value = cust.address;
+                            if (cust.contact && typeof customerContact !== 'undefined' && customerContact) customerContact.value =
+                                cust.contact;
+                            if (cust.phone && typeof customerPhone !== 'undefined' && customerPhone) customerPhone.value = cust
+                                .phone;
+                            if (cust.address && typeof customerAddress !== 'undefined' && customerAddress) customerAddress.value =
+                                cust.address;
                         } catch (e) {}
                     }
                     const qty = localStorage.getItem('quote_current_qty');
                     if (qty && typeof orderQty !== 'undefined' && orderQty) orderQty.value = parseInt(qty) || 100;
                     const markup = localStorage.getItem('quote_current_markup');
-                    if (markup && typeof markupRate !== 'undefined' && markupRate) markupRate.value = parseFloat(markup) ||
-                        0.5;
+                    if (markup && typeof markupRate !== 'undefined' && markupRate) markupRate.value = parseFloat(markup) || 0.5;
                     const labor = localStorage.getItem('quote_current_labor');
-                    if (labor && typeof laborCost !== 'undefined' && laborCost) laborCost.value = parseFloat(labor) ||
-                        5000;
+                    if (labor && typeof laborCost !== 'undefined' && laborCost) laborCost.value = parseFloat(labor) || 5000;
                     const overhead = localStorage.getItem('quote_current_overhead');
                     if (overhead && typeof overheadCost !== 'undefined' && overheadCost) overheadCost.value = parseFloat(
                         overhead) || 2000;
                     const target = localStorage.getItem('quote_current_target_margin');
-                    if (target && typeof targetMargin !== 'undefined' && targetMargin) targetMargin.value = parseFloat(
-                        target) || 15;
+                    if (target && typeof targetMargin !== 'undefined' && targetMargin) targetMargin.value = parseFloat(target) ||
+                        15;
                     const currency = localStorage.getItem('quote_current_currency');
-                    if (currency && typeof settlementCurrency !== 'undefined' && settlementCurrency) settlementCurrency
-                        .value = currency || 'CNY';
+                    if (currency && typeof settlementCurrency !== 'undefined' && settlementCurrency) settlementCurrency.value =
+                        currency || 'CNY';
                     const taxIncluded = localStorage.getItem('quote_current_tax_included');
-                    if (taxIncluded && typeof isTaxIncluded !== 'undefined' && isTaxIncluded) isTaxIncluded.value =
-                        taxIncluded || 'yes';
+                    if (taxIncluded && typeof isTaxIncluded !== 'undefined' && isTaxIncluded) isTaxIncluded.value = taxIncluded ||
+                        'yes';
                     const taxRate = localStorage.getItem('quote_current_tax_rate');
                     if (taxRate && typeof invoiceType !== 'undefined' && invoiceType) invoiceType.value = taxRate || '13';
 
@@ -2945,38 +2816,49 @@
             }
 
             function updateLockUI() {
-    const btn = $('lockBtn');
-    if (!btn) return;
-    if (isLoggedIn) {
-        btn.textContent = '退出登录';
-        btn.classList.remove('locked');
-    } else {
-        btn.textContent = '登录';
-        btn.classList.add('locked');
-    }
-    const statusDisplay = $('securityStatusDisplay');
-    if (statusDisplay) {
-        if (isLoggedIn) {
-            statusDisplay.textContent = '🔐 已登录';
-            statusDisplay.className = 'status secure';
-        } else {
-            statusDisplay.textContent = '🔒 未登录';
-            statusDisplay.className = 'status insecure';
-        }
-    }
-
-    const protectionStatus = $('loginProtectionStatus');
-    if (protectionStatus) {
-        const hasPassword = securityData.passwordHash && securityData.passwordHash.length > 0;
-        if (hasPassword) {
-            protectionStatus.textContent = '✅ 已启用登录保护';
-            protectionStatus.style.color = 'var(--success)';
-        } else {
-            protectionStatus.textContent = '🔓 未启用登录保护（开放模式）';
-            protectionStatus.style.color = 'var(--warning)';
-        }
-    }
-}
+                const btn = $('lockBtn');
+                if (!btn) return;
+                if (isLoggedIn) {
+                    btn.textContent = '退出登录';
+                    btn.classList.remove('locked');
+                } else {
+                    btn.textContent = '登录';
+                    btn.classList.add('locked');
+                }
+                const statusDisplay = $('securityStatusDisplay');
+                if (statusDisplay) {
+                    if (isLoggedIn) {
+                        statusDisplay.textContent = '✅ 已登录';
+                        statusDisplay.className = 'status-badge profit';
+                        statusDisplay.style.color = 'var(--success)';
+                    } else {
+                        statusDisplay.textContent = '🔒 未登录';
+                        statusDisplay.className = 'status-badge loss';
+                        statusDisplay.style.color = 'var(--danger)';
+                    }
+                }
+                const protectionStatus = $('loginProtectionStatus');
+                const hasPassword = securityData.passwordHash && securityData.passwordHash.length > 0;
+                if (protectionStatus) {
+                    if (hasPassword) {
+                        protectionStatus.textContent = '✅ 已启用密码保护';
+                        protectionStatus.className = 'status-badge profit';
+                        protectionStatus.style.color = 'var(--success)';
+                    } else {
+                        protectionStatus.textContent = '🔓 开放模式（无密码）';
+                        protectionStatus.className = 'status-badge break-even';
+                        protectionStatus.style.color = 'var(--warning)';
+                    }
+                }
+                const hint = $('passwordStatusHint');
+                if (hint) {
+                    if (hasPassword) {
+                        hint.textContent = '系统已设置登录密码，每次打开或退出登录后需要验证。';
+                    } else {
+                        hint.textContent = '系统未设置登录密码，任何人均可访问。建议设置密码以保护数据安全。';
+                    }
+                }
+            }
 
             function requireLogin() {
                 if (isLoggedIn) return true;
@@ -3173,9 +3055,6 @@
                 return value.toFixed(decimals);
             }
 
-            // ============================================================
-            // ★ 货币名称/符号辅助函数
-            // ============================================================
             function getCurrencyInfo(code) {
                 const config = CURRENCY_CONFIG.find(c => c.code === code);
                 if (config) return config;
@@ -3333,20 +3212,19 @@
                     setTimeout(() => div.remove(), 400); }, 2800);
             }
 
-            function getHistory() { try { const data = localStorage.getItem(STORAGE_KEY); return data ? JSON.parse(
-                        data) : []; } catch { return []; } }
+            function getHistory() { try { const data = localStorage.getItem(STORAGE_KEY); return data ? JSON.parse(data) : []; } catch { return []; } }
 
             function setHistory(list) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch (e) { showToast(
                         '存储空间不足！', 'error'); } }
 
-            function getCustomerTemplates() { try { const data = localStorage.getItem(CUSTOMER_TEMPLATE_KEY); return data ?
-                    JSON.parse(data) : []; } catch { return []; } }
-
-            function setCustomerTemplates(list) { try { localStorage.setItem(CUSTOMER_TEMPLATE_KEY, JSON.stringify(
-                        list)); } catch (e) { showToast('存储空间不足！', 'error'); } }
-
-            function getPartTemplates() { try { const data = localStorage.getItem(PART_TEMPLATE_KEY); return data ? JSON
+            function getCustomerTemplates() { try { const data = localStorage.getItem(CUSTOMER_TEMPLATE_KEY); return data ? JSON
                     .parse(data) : []; } catch { return []; } }
+
+            function setCustomerTemplates(list) { try { localStorage.setItem(CUSTOMER_TEMPLATE_KEY, JSON.stringify(list)); } catch (e) { showToast(
+                        '存储空间不足！', 'error'); } }
+
+            function getPartTemplates() { try { const data = localStorage.getItem(PART_TEMPLATE_KEY); return data ? JSON.parse(
+                        data) : []; } catch { return []; } }
 
             function setPartTemplates(list) { try { localStorage.setItem(PART_TEMPLATE_KEY, JSON.stringify(list)); } catch (e) { showToast(
                         '存储空间不足！', 'error'); } }
@@ -3400,8 +3278,8 @@
                 root.style.setProperty('--primary-gradient', `linear-gradient(145deg, ${color} 0%, ${lightColor} 100%)`);
                 root.style.setProperty('--font-base', (settings.fontSize || 15) + 'px');
                 root.style.setProperty('--radius-md', (settings.borderRadius || 12) + 'px');
-                const shadowMap = { none: 'none', light: '0 4px 12px rgba(26,58,92,0.05)', medium: '0 8px 32px rgba(26,58,92,0.10)',
-                    heavy: '0 20px 60px rgba(26,58,92,0.15)' };
+                const shadowMap = { none: 'none', light: '0 4px 12px rgba(26,58,92,0.05)',
+                    medium: '0 8px 32px rgba(26,58,92,0.10)', heavy: '0 20px 60px rgba(26,58,92,0.15)' };
                 root.style.setProperty('--shadow-md', shadowMap[settings.boxShadow] || shadowMap.medium);
                 const header = document.querySelector('.header-title');
                 if (header) header.style.background = `linear-gradient(145deg, ${color} 0%, ${lightColor} 100%)`;
@@ -3491,7 +3369,6 @@
             function updateSummary() {
                 let unitPrice = 0;
                 partRows.forEach(p => { unitPrice += (p.price || 0); });
-                // 部件材料成本固定用人民币显示，不显示货币名称
                 partSummary.textContent = '单件材料成本：' + fmtMoney(unitPrice) + ' ¥';
                 calcAndRender();
             }
@@ -3547,59 +3424,77 @@
                 }
             }
 
-            setupFileUpload(logoUpload, logoFileName, logoPreview, removeLogoBtn, async function(file) {
-                if (!file) { currentLogoData = null; return; }
-                if (file.size > 5 * 1024 * 1024) { showToast('Logo 图片超过5MB', 'error');
-                    logoUpload.value = '';
-                    logoFileName.textContent = '未选择文件';
-                    logoFileName.classList.remove('has-file'); return; }
-                try { const compressed = await compressImage(file, 400, 0.92);
-                    currentLogoData = compressed;
-                    logoPreview.src = compressed;
-                    logoPreview.style.display = 'block';
-                    removeLogoBtn.style.display = 'inline-block';
-                    showToast('✅ Logo 已上传', 'success');
-                    addAuditLog('上传Logo', '公司Logo');
-                    localStorage.setItem('quote_logo_data_saved', compressed);
-                } catch (err) { showToast('处理失败', 'error'); }
-            });
+setupFileUpload(logoUpload, logoFileName, logoPreview, removeLogoBtn, async function(file) {
+    if (!file) { currentLogoData = null; return; }
+    if (file.size > 20 * 1024 * 1024) {
+        showToast('Logo 图片超过20MB，请压缩后重试', 'warning');
+        logoUpload.value = '';
+        logoFileName.textContent = '未选择文件';
+        logoFileName.classList.remove('has-file');
+        return;
+    }
+    try {
+        const compressed = await compressImage(file, 600, 0.92);
+        currentLogoData = compressed;
+        logoPreview.src = compressed;
+        logoPreview.style.display = 'block';
+        removeLogoBtn.style.display = 'inline-block';
+        showToast('✅ Logo 已上传（已压缩）', 'success');
+        addAuditLog('上传Logo', '公司Logo');
+        localStorage.setItem('quote_logo_data_saved', compressed);
+    } catch (err) {
+        showToast('处理失败：' + err.message, 'error');
+    }
+});
 
-            setupFileUpload(sealUpload, sealFileName, sealPreview, removeSealBtn, async function(file) {
-                if (!file) { currentSealData = null; return; }
-                if (file.size > 5 * 1024 * 1024) { showToast('⚠️ 印章图片超过5MB', 'warning');
-                    sealUpload.value = '';
-                    sealFileName.textContent = '未选择文件';
-                    sealFileName.classList.remove('has-file'); return; }
-                try { const compressed = await compressImage(file, 400, 1.0);
-                    currentSealData = compressed;
-                    sealPreview.src = compressed;
-                    sealPreview.style.display = 'block';
-                    removeSealBtn.style.display = 'inline-block';
-                    showToast('✅ 电子印章已上传', 'success');
-                    addAuditLog('上传印章', '电子印章');
-                    localStorage.setItem('quote_seal_data_saved', compressed);
-                } catch (err) { showToast('处理失败', 'error'); }
-            });
+ setupFileUpload(sealUpload, sealFileName, sealPreview, removeSealBtn, async function(file) {
+    if (!file) { currentSealData = null; return; }
+    if (file.size > 20 * 1024 * 1024) {
+        showToast('印章图片超过20MB，请压缩后重试', 'warning');
+        sealUpload.value = '';
+        sealFileName.textContent = '未选择文件';
+        sealFileName.classList.remove('has-file');
+        return;
+    }
+    try {
+        const compressed = await compressImage(file, 600, 1.0);
+        currentSealData = compressed;
+        sealPreview.src = compressed;
+        sealPreview.style.display = 'block';
+        removeSealBtn.style.display = 'inline-block';
+        showToast('✅ 电子印章已上传（已压缩）', 'success');
+        addAuditLog('上传印章', '电子印章');
+        localStorage.setItem('quote_seal_data_saved', compressed);
+    } catch (err) {
+        showToast('处理失败：' + err.message, 'error');
+    }
+});
 
-            setupFileUpload(imageUpload, imageFileName, productImagePreview, removeImageBtn, async function(file) {
-                if (!file) { currentImageData = null; return; }
-                if (file.size > 5 * 1024 * 1024) { showToast('图片超过5MB', 'error');
-                    imageUpload.value = '';
-                    imageFileName.textContent = '未选择文件';
-                    imageFileName.classList.remove('has-file'); return; }
-                try { const compressed = await compressImage(file, 300, 0.85);
-                    currentImageData = compressed;
-                    productImagePreview.src = compressed;
-                    productImagePreview.style.display = 'block';
-                    removeImageBtn.style.display = 'inline-block';
-                    showToast('✅ 产品图片已上传', 'success');
-                    addAuditLog('上传产品图', '产品实物图');
-                    localStorage.setItem('quote_image_data_saved', compressed);
-                } catch (err) { showToast('处理失败', 'error'); }
-            });
+ setupFileUpload(imageUpload, imageFileName, productImagePreview, removeImageBtn, async function(file) {
+    if (!file) { currentImageData = null; return; }
+    if (file.size > 20 * 1024 * 1024) {
+        showToast('产品图超过20MB，请压缩后重试', 'warning');
+        imageUpload.value = '';
+        imageFileName.textContent = '未选择文件';
+        imageFileName.classList.remove('has-file');
+        return;
+    }
+    try {
+        const compressed = await compressImage(file, 500, 0.90);
+        currentImageData = compressed;
+        productImagePreview.src = compressed;
+        productImagePreview.style.display = 'block';
+        removeImageBtn.style.display = 'inline-block';
+        showToast('✅ 产品图片已上传（已压缩）', 'success');
+        addAuditLog('上传产品图', '产品实物图');
+        localStorage.setItem('quote_image_data_saved', compressed);
+    } catch (err) {
+        showToast('处理失败：' + err.message, 'error');
+    }
+});
 
             // ============================================================
-            // ★★★ 核心计算（修复：汇率不可用时自动切换为人民币） ★★★
+            // ★★★ 核心计算 ★★★
             // ============================================================
             function calcAndRender() {
                 resetLogoutTimer();
@@ -3617,7 +3512,6 @@
                 const settings = loadSettings();
                 const places = settings.decimalPlaces || 3;
 
-                // ★ 获取货币名称和符号（仅用于报价计算中心和PDF）
                 let curInfo = getCurrencyInfo(settleCur);
                 let currencyName = curInfo.name;
                 let settleSymbol = curInfo.symbol;
@@ -3653,13 +3547,11 @@
                 const marginRate = (totalProfitCNY / totalSalesNoTaxCNY) * 100;
 
                 let exchangeRate = 1;
-                // ★ 修复：汇率不可用时强制切换为人民币
                 if (settleCur !== 'CNY') {
                     if (exchangeRates && exchangeRates[settleCur]) {
                         exchangeRate = exchangeRates[settleCur];
                     } else {
                         showToast('⚠️ 汇率不可用，已切换为人民币显示', 'warning');
-                        // ★ 强制切换为人民币
                         settlementCurrency.value = 'CNY';
                         settleCur = 'CNY';
                         const fallbackInfo = getCurrencyInfo('CNY');
@@ -3681,7 +3573,6 @@
                 const totalSales = displayTotal;
                 const totalSalesLabel = taxIncluded ? '💵 总销售额（含税）' : '💵 总销售额（不含税）';
 
-                // ★ 报价计算中心显示：货币名称 + 符号 + 金额
                 const currencyNameHtml = `<span class="currency-name">${currencyName}</span>`;
 
                 if (taxIncluded) {
@@ -3706,12 +3597,12 @@
 
                 if (taxIncluded) {
                     heroTaxInfo.className = 'number tax-highlight';
-                    heroTaxInfo.innerHTML = taxRate + '% / ' + fmtMoney(taxAmount) + ' ' + currencyNameHtml + ' <span class="cur">' +
-                        settleSymbol + '</span>';
+                    heroTaxInfo.innerHTML = taxRate + '% / ' + fmtMoney(taxAmount) + ' ' + currencyNameHtml +
+                        ' <span class="cur">' + settleSymbol + '</span>';
                 } else {
                     heroTaxInfo.className = 'number no-tax-highlight';
-                    heroTaxInfo.innerHTML = taxRate + '% / ' + fmtMoney(taxAmount) + ' ' + currencyNameHtml + ' <span class="cur">' +
-                        settleSymbol + '</span>';
+                    heroTaxInfo.innerHTML = taxRate + '% / ' + fmtMoney(taxAmount) + ' ' + currencyNameHtml +
+                        ' <span class="cur">' + settleSymbol + '</span>';
                 }
 
                 heroLabelNoTax.textContent = taxIncluded ? '💰 不含税单价' : '💰 不含税单价 (报价)';
@@ -3719,7 +3610,6 @@
 
                 paTotalSalesLabel.textContent = totalSalesLabel;
 
-                // ★ 盈亏分析价格同样显示货币名称
                 const setPValue = (el, val, cls = '') => {
                     if (val === '—' || val === undefined || !isFinite(val)) { el.textContent = '—'; return; }
                     el.innerHTML = fmtMoney(val) + ' ' + currencyNameHtml + ' ' + settleSymbol;
@@ -3729,10 +3619,9 @@
                 setPValue(paUnitProfit, unitProfit, unitProfit > 0.005 * exchangeRate ? 'positive' : unitProfit < -0.005 *
                     exchangeRate ? 'negative' : 'neutral');
                 paMarginRate.textContent = (isFinite(marginRate) ? marginRate.toFixed(2) : '—') + '%';
-                paMarginRate.className = 'pvalue ' + (marginRate > 10 ? 'positive' : marginRate > 0 ? 'neutral' :
-                'negative');
-                setPValue(paTotalProfit, totalProfit, totalProfit > 0.005 * exchangeRate ? 'positive' : totalProfit <
-                    -0.005 * exchangeRate ? 'negative' : 'neutral');
+                paMarginRate.className = 'pvalue ' + (marginRate > 10 ? 'positive' : marginRate > 0 ? 'neutral' : 'negative');
+                setPValue(paTotalProfit, totalProfit, totalProfit > 0.005 * exchangeRate ? 'positive' : totalProfit < -0.005 *
+                    exchangeRate ? 'negative' : 'neutral');
                 setPValue(paUnitCost, unitCost);
                 setPValue(paTotalSales, totalSales);
                 setPValue(paTotalCost, totalCost);
@@ -3745,7 +3634,6 @@
                 statusBadge.textContent = statusText;
                 statusBadge.className = 'status-badge ' + statusClass;
 
-                // ★ 建议报价
                 const target = parseFloat(targetMargin.value);
                 if (!isNaN(target) && target > 0 && target < 100 && unitTotalCost > 0) {
                     const suggestedNoTaxCNY = unitTotalCost / (1 - target / 100);
@@ -3758,16 +3646,16 @@
                     }
                     const suggestedDisplay = suggestedDisplayCNY * exchangeRate;
                     if (isFinite(suggestedDisplay) && suggestedDisplay > 0) {
-let priceText = '<span class="suggest-currency-name">' + currencyName + '</span> ' + settleSymbol + ' ' + suggestedDisplay.toFixed(places);
-suggestPrice.innerHTML = priceText;
+                        let priceText = '<span class="suggest-currency-name">' + currencyName + '</span> ' + settleSymbol +
+                            ' ' + suggestedDisplay.toFixed(places);
+                        suggestPrice.innerHTML = priceText;
                         const markupRateVal = ((suggestedDisplay / unitCost - 1) * 100);
                         if (isFinite(markupRateVal) && markupRateVal > 0.01) {
                             suggestMarkup.textContent = '(加价率 ' + markupRateVal.toFixed(1) + '%)';
                         } else {
                             suggestMarkup.textContent = '';
                         }
-                        suggestPrice.style.color = suggestedDisplay > unitTotalCost * exchangeRate ? '#1a8a4a' :
-                            '#c0392b';
+                        suggestPrice.style.color = suggestedDisplay > unitTotalCost * exchangeRate ? '#1a8a4a' : '#c0392b';
                         const taxDesc = taxIncluded ? '含税' : '不含税';
                         suggestNote.textContent = '（基于 ' + target + '% 目标毛利，' + taxDesc + '）';
                         suggestDetail.textContent = '';
@@ -3848,7 +3736,6 @@ suggestPrice.innerHTML = priceText;
             applySuggestBtn.addEventListener('click', function() {
                 if (!requireLogin()) return;
                 const suggestPriceEl = $('suggestPrice');
-                // ★ 使用更稳健的数字提取
                 const suggestHtml = suggestPriceEl.innerHTML;
                 const priceMatch = suggestHtml.match(/(\d+\.?\d*)/);
                 if (!priceMatch) {
@@ -3926,7 +3813,7 @@ suggestPrice.innerHTML = priceText;
                     customerAddress: data.customerAddress,
                     productName: data.productName,
                     parts: data.parts,
-                    unitPrice: data.unitPrice,        // 人民币单价
+                    unitPrice: data.unitPrice,
                     totalMaterialCost: data.totalMaterialCost,
                     totalQty: data.totalQty,
                     markup: data.markup,
@@ -3934,9 +3821,9 @@ suggestPrice.innerHTML = priceText;
                     overhead: data.overhead,
                     fixedTotal: data.fixedTotal,
                     unitTotalCost: data.unitTotalCost,
-                    totalCost: data.totalCostCNY,     // 人民币总成本
+                    totalCost: data.totalCostCNY,
                     taxRate: data.taxRate,
-                    priceNoTax: data.priceNoTaxCNY,   // 人民币不含税单价
+                    priceNoTax: data.priceNoTaxCNY,
                     priceWithTax: data.priceWithTaxCNY,
                     taxAmount: data.taxAmountCNY,
                     totalSalesNoTax: data.totalSalesNoTaxCNY,
@@ -3956,7 +3843,7 @@ suggestPrice.innerHTML = priceText;
                     displayTotal: data.taxIncluded ? data.totalSalesWithTaxCNY : data.totalSalesNoTaxCNY,
                     statusText: data.statusText,
                     statusClass: data.statusClass,
-                    settleCurrency: data.settleCurrency, // 仅记录，显示时仍然用人民币
+                    settleCurrency: data.settleCurrency,
                     settleSymbol: data.settleSymbol,
                     currencyName: data.currencyName,
                     exchangeRate: data.exchangeRate
@@ -3988,19 +3875,21 @@ suggestPrice.innerHTML = priceText;
                 statProfit.textContent = profitCount;
                 statLoss.textContent = lossCount;
                 statAvgMargin.textContent = total > 0 ? (totalMargin / total).toFixed(1) + '%' : '0%';
-                // 总销售额用人民币显示（原样）
                 statTotalRevenue.innerHTML = '¥ ' + (totalRevenue ? totalRevenue.toFixed(0) : '0');
             }
 
             let showAllHistory = false;
 
+            // ============================================================
+            // 渲染历史记录表格（含图片缩略图和客户联系人）
+            // ============================================================
             function renderHistory() {
                 const list = getHistory();
                 const countText = `(${list.length}条)`;
                 historyCount.textContent = countText;
                 if (historyCountLabel) historyCountLabel.textContent = countText;
                 if (list.length === 0) {
-                    historyBody.innerHTML = `<tr><td colspan="12" class="empty-history">暂无报价记录</td></tr>`;
+                    historyBody.innerHTML = `<tr><td colspan="13" class="empty-history">暂无报价记录</td></tr>`;
                     loadMoreBtn.style.display = 'none';
                     updateStats();
                     return;
@@ -4015,33 +3904,33 @@ suggestPrice.innerHTML = priceText;
                     const timeStr = item.timestamp ? new Date(item.timestamp).toLocaleString('zh-CN') : '—';
                     const quoteNo = item.quoteNo || '—';
                     const product = escapeHtml(item.productName || '—');
-                    const hasImg = !!(item.imageData && item.imageData.length > 100);
                     let imgHtml = `<span class="hist-no-img">无</span>`;
-                    if (hasImg) imgHtml = `<img src="${item.imageData}" class="hist-thumb" alt="产品图" />`;
+                    if (item.imageData && item.imageData.length > 100) {
+                        imgHtml =
+                            `<img src="${item.imageData}" class="hist-thumb" alt="产品图" />`;
+                    }
                     const customer = escapeHtml(item.customerName || '—');
-
-                    // 历史记录始终显示人民币，不带货币名称
+                    const contact = escapeHtml(item.customerContact || '—');
                     const unitCost = fmtMoney(item.unitPrice);
-                    const unitQuote = fmtMoney(item.displayPrice !== undefined ? item.displayPrice : item
-                        .priceWithTax);
+                    const unitQuote = fmtMoney(item.displayPrice !== undefined ? item.displayPrice : item.priceWithTax);
                     const unitProfit = fmtMoney(item.unitProfit);
                     const totalQty = item.totalQty || 0;
-                    const totalSales = fmtMoney(item.displayTotal !== undefined ? item.displayTotal : item
-                        .totalSalesWithTax);
+                    const totalSales = fmtMoney(item.displayTotal !== undefined ? item.displayTotal : item.totalSalesWithTax);
                     const phone = escapeHtml(item.customerPhone || '—');
                     html += `<tr>
-                        <td>${timeStr}</td>
-                        <td>${quoteNo}</td>
-                        <td>${product}</td>
-                        <td>${imgHtml}</td>
-                        <td>${customer}</td>
-                        <td>¥ ${unitCost}</td>
-                        <td>¥ ${unitQuote}</td>
-                        <td>¥ ${unitProfit}</td>
-                        <td>${totalQty}</td>
-                        <td>¥ ${totalSales}</td>
-                        <td>${phone}</td>
-                        <td style="white-space:nowrap;text-align:center;">
+                        <td class="align-left">${timeStr}</td>
+                        <td class="align-left">${quoteNo}</td>
+                        <td class="align-left">${product}</td>
+                        <td class="align-center">${imgHtml}</td>
+                        <td class="align-left">${customer}</td>
+                        <td class="align-left">${contact}</td>
+                        <td class="align-center">¥ ${unitCost}</td>
+                        <td class="align-center">¥ ${unitQuote}</td>
+                        <td class="align-center">¥ ${unitProfit}</td>
+                        <td class="align-center">${totalQty}</td>
+                        <td class="align-center">¥ ${totalSales}</td>
+                        <td class="align-left">${phone}</td>
+                        <td class="align-center" style="white-space:nowrap;">
                             <button class="hist-action-btn pdf-btn" data-id="${item.id}" title="PDF">📄<span class="label">PDF</span></button>
                             <button class="hist-action-btn excel-btn" data-id="${item.id}" title="Excel">📊<span class="label">Excel</span></button>
                             <button class="hist-action-btn del-btn" data-id="${item.id}" title="删除">✕</button>
@@ -4112,7 +4001,8 @@ suggestPrice.innerHTML = priceText;
                     { header: '单号', key: 'quoteNo', width: 16 },
                     { header: '商品', key: 'product', width: 18 },
                     { header: '图片', key: 'image', width: 12 },
-                    { header: '客户', key: 'customer', width: 18 },
+                    { header: '客户名称', key: 'customer', width: 18 },
+                    { header: '客户联系人', key: 'contact', width: 14 },
                     { header: '单价成本(¥)', key: 'unitCost', width: 16 },
                     { header: '单价报价(¥)', key: 'unitQuote', width: 16 },
                     { header: '单价利润(¥)', key: 'unitProfit', width: 16 },
@@ -4123,20 +4013,18 @@ suggestPrice.innerHTML = priceText;
                 const headerRow = worksheet.getRow(1);
                 headerRow.font = { bold: true };
                 headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
-                // 导出人民币金额
                 const row = worksheet.addRow({
                     time: new Date(record.timestamp).toLocaleString('zh-CN'),
                     quoteNo: record.quoteNo || '—',
                     product: record.productName || '',
                     image: '',
                     customer: record.customerName || '',
+                    contact: record.customerContact || '',
                     unitCost: fmtMoney(record.unitPrice),
-                    unitQuote: fmtMoney(record.displayPrice !== undefined ? record.displayPrice : record
-                        .priceWithTax),
+                    unitQuote: fmtMoney(record.displayPrice !== undefined ? record.displayPrice : record.priceWithTax),
                     unitProfit: fmtMoney(record.unitProfit),
                     qty: record.totalQty || 0,
-                    totalSales: fmtMoney(record.displayTotal !== undefined ? record.displayTotal : record
-                        .totalSalesWithTax),
+                    totalSales: fmtMoney(record.displayTotal !== undefined ? record.displayTotal : record.totalSalesWithTax),
                     phone: record.customerPhone || ''
                 });
                 row.alignment = { horizontal: 'center', vertical: 'middle' };
@@ -4154,21 +4042,16 @@ suggestPrice.innerHTML = priceText;
                 }
                 const buffer = await workbook.xlsx.writeBuffer();
                 const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                saveAs(blob,
-                    `报价单_${record.customerName||'客户'}_${new Date(record.timestamp).toISOString().slice(0,10)}.xlsx`
-                    );
+                saveAs(blob, `报价单_${record.customerName||'客户'}_${new Date(record.timestamp).toISOString().slice(0,10)}.xlsx`);
                 showToast('📊 已导出单条Excel', 'success');
                 addAuditLog('导出单条Excel', '客户: ' + record.customerName);
             }
 
-            // ★★★ 修复：添加 async/await ★★★
             async function exportHistoryItemPdf(id) {
                 if (!requireLogin()) return;
                 const list = getHistory();
                 const record = list.find(item => item.id === id);
                 if (!record) { showToast('未找到该记录', 'error'); return; }
-                // PDF导出使用记录中存储的货币信息（结算货币），但历史记录保存的是人民币值，需要重新计算显示
-                // 我们使用记录中保存的汇率和货币信息进行转换
                 const pdfRecord = {
                     ...record,
                     settleCurrency: record.settleCurrency || 'CNY',
@@ -4176,10 +4059,7 @@ suggestPrice.innerHTML = priceText;
                     currencyName: record.currencyName || '人民币',
                     exchangeRate: record.exchangeRate || 1
                 };
-                // 重新计算显示金额（根据记录的汇率和货币）
                 if (pdfRecord.settleCurrency !== 'CNY' && exchangeRates && exchangeRates[pdfRecord.settleCurrency]) {
-                    // 使用记录时的汇率，但为了准确性，我们直接用记录中保存的汇率
-                    // 如果记录中没有保存汇率，则使用当前汇率
                     if (!pdfRecord.exchangeRate || pdfRecord.exchangeRate === 1) {
                         pdfRecord.exchangeRate = exchangeRates[pdfRecord.settleCurrency] || 1;
                     }
@@ -4193,7 +4073,6 @@ suggestPrice.innerHTML = priceText;
                 addAuditLog('导出PDF', '客户: ' + record.customerName);
             }
 
-            // ★★★ PDF生成（含货币名称） ★★★
             async function buildPdfFromRecord(record) {
                 const now = new Date(record.timestamp || Date.now());
                 const taxIncluded = record.taxIncluded !== undefined ? record.taxIncluded : true;
@@ -4205,7 +4084,6 @@ suggestPrice.innerHTML = priceText;
                 const exchangeRate = record.exchangeRate || 1;
                 const places = settings.decimalPlaces || 3;
 
-                // 将存储的人民币值转换为显示货币
                 const priceNoTax = (record.priceNoTax || 0) * exchangeRate;
                 const priceWithTax = (record.priceWithTax || 0) * exchangeRate;
                 const totalSalesNoTax = (record.totalSalesNoTax || 0) * exchangeRate;
@@ -4360,7 +4238,6 @@ suggestPrice.innerHTML = priceText;
                 }
             }
 
-            // ★★★ 修复：添加 async/await ★★★
             async function exportPDF() {
                 if (!requireLogin()) return;
                 const data = calcAndRender();
@@ -4419,6 +4296,9 @@ suggestPrice.innerHTML = priceText;
                 addAuditLog('导出当前PDF', '商品: ' + data.productName);
             }
 
+            // ============================================================
+            // 导出当前报价单（exportExcel）
+            // ============================================================
             async function exportExcel() {
                 if (!requireLogin()) return;
                 const data = calcAndRender();
@@ -4430,6 +4310,7 @@ suggestPrice.innerHTML = priceText;
                 const worksheet = workbook.addWorksheet('报价单');
                 worksheet.columns = [
                     { header: '客户名称', key: 'customer', width: 18 },
+                    { header: '客户联系人', key: 'contact', width: 14 },
                     { header: '客户电话', key: 'phone', width: 16 },
                     { header: '商品名称', key: 'product', width: 18 },
                     { header: '图片', key: 'image', width: 12 },
@@ -4447,9 +4328,9 @@ suggestPrice.innerHTML = priceText;
                 headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
                 const taxIncluded = data.taxIncluded;
                 const displayTotal = taxIncluded ? data.totalSalesWithTaxCNY : data.totalSalesNoTaxCNY;
-                // 导出人民币金额
                 const row = worksheet.addRow({
                     customer: data.customerName,
+                    contact: data.customerContact,
                     phone: data.customerPhone,
                     product: data.productName,
                     image: '',
@@ -4472,7 +4353,7 @@ suggestPrice.innerHTML = priceText;
                         if (ext === 'jpg') ext = 'jpeg';
                         const imageId = workbook.addImage({ buffer: imageBuffer, extension: ext });
                         worksheet.getRow(2).height = 80;
-                        worksheet.addImage(imageId, { tl: { col: 3, row: 1 }, ext: { width: 80, height: 60 } });
+                        worksheet.addImage(imageId, { tl: { col: 4, row: 1 }, ext: { width: 80, height: 60 } });
                     } catch (e) { console.warn('图片嵌入失败:', e); }
                 }
                 const buffer = await workbook.xlsx.writeBuffer();
@@ -4482,18 +4363,23 @@ suggestPrice.innerHTML = priceText;
                 addAuditLog('导出当前Excel', '商品: ' + data.productName);
             }
 
+            // ============================================================
+            // 导出历史（统一格式，含图片和客户联系人）
+            // ============================================================
             async function exportHistory() {
                 if (!requireLogin()) return;
                 const list = getHistory();
                 if (list.length === 0) { showToast('暂无历史记录可导出', 'warning'); return; }
                 const workbook = new ExcelJS.Workbook();
-                const worksheet = workbook.addWorksheet('历史报价记录');
+                const worksheet = workbook.addWorksheet('历史记录');
+
                 worksheet.columns = [
                     { header: '时间', key: 'time', width: 20 },
                     { header: '单号', key: 'quoteNo', width: 16 },
                     { header: '商品', key: 'product', width: 18 },
                     { header: '图片', key: 'image', width: 12 },
-                    { header: '客户', key: 'customer', width: 18 },
+                    { header: '客户名称', key: 'customer', width: 18 },
+                    { header: '客户联系人', key: 'contact', width: 14 },
                     { header: '单价成本(¥)', key: 'unitCost', width: 16 },
                     { header: '单价报价(¥)', key: 'unitQuote', width: 16 },
                     { header: '单价利润(¥)', key: 'unitProfit', width: 16 },
@@ -4504,6 +4390,7 @@ suggestPrice.innerHTML = priceText;
                 const headerRow = worksheet.getRow(1);
                 headerRow.font = { bold: true };
                 headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
+
                 const sorted = [...list].reverse();
                 for (const item of sorted) {
                     const row = worksheet.addRow({
@@ -4512,17 +4399,15 @@ suggestPrice.innerHTML = priceText;
                         product: item.productName || '',
                         image: '',
                         customer: item.customerName || '',
+                        contact: item.customerContact || '',
                         unitCost: fmtMoney(item.unitPrice),
-                        unitQuote: fmtMoney(item.displayPrice !== undefined ? item.displayPrice : item
-                            .priceWithTax),
+                        unitQuote: fmtMoney(item.displayPrice !== undefined ? item.displayPrice : item.priceWithTax),
                         unitProfit: fmtMoney(item.unitProfit),
                         qty: item.totalQty || 0,
-                        totalSales: fmtMoney(item.displayTotal !== undefined ? item.displayTotal : item
-                            .totalSalesWithTax),
+                        totalSales: fmtMoney(item.displayTotal !== undefined ? item.displayTotal : item.totalSalesWithTax),
                         phone: item.customerPhone || ''
                     });
                     row.alignment = { horizontal: 'center', vertical: 'middle' };
-                    const currentRowNum = row.number;
                     if (item.imageData && item.imageData.length > 100) {
                         try {
                             const base64 = item.imageData.split(',')[1];
@@ -4531,17 +4416,140 @@ suggestPrice.innerHTML = priceText;
                             let ext = mime === 'jpeg' ? 'jpeg' : mime;
                             if (ext === 'jpg') ext = 'jpeg';
                             const imageId = workbook.addImage({ buffer: imageBuffer, extension: ext });
-                            worksheet.getRow(currentRowNum).height = 80;
-                            worksheet.addImage(imageId, { tl: { col: 3, row: currentRowNum - 1 }, ext: { width: 80,
-                                    height: 60 } });
+                            const rowIndex = row.number;
+                            worksheet.getRow(rowIndex).height = 80;
+                            worksheet.addImage(imageId, { tl: { col: 3, row: rowIndex - 1 }, ext: { width: 80, height: 60 } });
                         } catch (e) { console.warn('图片嵌入失败:', e); }
                     }
                 }
+
                 const buffer = await workbook.xlsx.writeBuffer();
                 const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                 saveAs(blob, `历史报价记录_${new Date().toISOString().slice(0,10)}.xlsx`);
                 showToast('📤 历史数据已导出', 'success');
                 addAuditLog('导出历史Excel', '共 ' + list.length + ' 条记录');
+            }
+
+            // ============================================================
+            // 导出所有数据（不含系统设置，含图片和客户联系人，移除部件模板兼容表）
+            // ============================================================
+            async function exportAllData() {
+                if (!requireLogin()) return;
+                const history = getHistory();
+                const customerTemplates = getCustomerTemplates();
+                const partTemplates = getPartTemplates();
+
+                const workbook = new ExcelJS.Workbook();
+
+                // ---- 历史记录工作表（与导出历史完全一致） ----
+                const wsHistory = workbook.addWorksheet('历史记录');
+                wsHistory.columns = [
+                    { header: '时间', key: 'time', width: 20 },
+                    { header: '单号', key: 'quoteNo', width: 16 },
+                    { header: '商品', key: 'product', width: 18 },
+                    { header: '图片', key: 'image', width: 12 },
+                    { header: '客户名称', key: 'customer', width: 18 },
+                    { header: '客户联系人', key: 'contact', width: 14 },
+                    { header: '单价成本(¥)', key: 'unitCost', width: 16 },
+                    { header: '单价报价(¥)', key: 'unitQuote', width: 16 },
+                    { header: '单价利润(¥)', key: 'unitProfit', width: 16 },
+                    { header: '总数量', key: 'qty', width: 10 },
+                    { header: '总销售额(¥)', key: 'totalSales', width: 18 },
+                    { header: '电话', key: 'phone', width: 16 }
+                ];
+                const hRow = wsHistory.getRow(1);
+                hRow.font = { bold: true };
+                hRow.alignment = { horizontal: 'center', vertical: 'middle' };
+                const sortedHistory = [...history].reverse();
+                for (const item of sortedHistory) {
+                    const row = wsHistory.addRow({
+                        time: item.timestamp ? new Date(item.timestamp).toLocaleString('zh-CN') : '—',
+                        quoteNo: item.quoteNo || '—',
+                        product: item.productName || '',
+                        image: '',
+                        customer: item.customerName || '',
+                        contact: item.customerContact || '',
+                        unitCost: fmtMoney(item.unitPrice),
+                        unitQuote: fmtMoney(item.displayPrice !== undefined ? item.displayPrice : item.priceWithTax),
+                        unitProfit: fmtMoney(item.unitProfit),
+                        qty: item.totalQty || 0,
+                        totalSales: fmtMoney(item.displayTotal !== undefined ? item.displayTotal : item.totalSalesWithTax),
+                        phone: item.customerPhone || ''
+                    });
+                    row.alignment = { horizontal: 'center', vertical: 'middle' };
+                    if (item.imageData && item.imageData.length > 100) {
+                        try {
+                            const base64 = item.imageData.split(',')[1];
+                            const imageBuffer = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+                            const mime = item.imageData.match(/data:image\/(.*?);/)?.[1] || 'jpeg';
+                            let ext = mime === 'jpeg' ? 'jpeg' : mime;
+                            if (ext === 'jpg') ext = 'jpeg';
+                            const imageId = workbook.addImage({ buffer: imageBuffer, extension: ext });
+                            const rowIndex = row.number;
+                            wsHistory.getRow(rowIndex).height = 80;
+                            wsHistory.addImage(imageId, { tl: { col: 3, row: rowIndex - 1 }, ext: { width: 80, height: 60 } });
+                        } catch (e) { console.warn('图片嵌入失败:', e); }
+                    }
+                }
+
+                // ---- 客户模板工作表 ----
+                const wsCustomer = workbook.addWorksheet('客户模板');
+                wsCustomer.columns = [
+                    { header: 'ID', key: 'id', width: 20 },
+                    { header: '模板名称', key: 'name', width: 16 },
+                    { header: '客户名称', key: 'customerName', width: 18 },
+                    { header: '联系人', key: 'customerContact', width: 14 },
+                    { header: '电话', key: 'customerPhone', width: 16 },
+                    { header: '地址', key: 'customerAddress', width: 22 }
+                ];
+                const hRow2 = wsCustomer.getRow(1);
+                hRow2.font = { bold: true };
+                hRow2.alignment = { horizontal: 'center' };
+                customerTemplates.forEach(t => {
+                    wsCustomer.addRow({
+                        id: t.id || '',
+                        name: t.name || '',
+                        customerName: t.customerName || '',
+                        customerContact: t.customerContact || '',
+                        customerPhone: t.customerPhone || '',
+                        customerAddress: t.customerAddress || ''
+                    });
+                });
+
+                // ---- 部件明细工作表（展开部件数据） ----
+                const wsPartDetail = workbook.addWorksheet('部件明细');
+                wsPartDetail.columns = [
+                    { header: '模板ID', key: 'id', width: 20 },
+                    { header: '模板名称', key: 'name', width: 16 },
+                    { header: '商品名称', key: 'productName', width: 18 },
+                    { header: '部件序号', key: 'index', width: 10 },
+                    { header: '部件名称', key: 'partName', width: 16 },
+                    { header: '规格', key: 'spec', width: 14 },
+                    { header: '单价(¥)', key: 'price', width: 12 }
+                ];
+                const hRow3 = wsPartDetail.getRow(1);
+                hRow3.font = { bold: true };
+                hRow3.alignment = { horizontal: 'center' };
+                partTemplates.forEach(t => {
+                    const parts = t.parts || [];
+                    parts.forEach((p, idx) => {
+                        wsPartDetail.addRow({
+                            id: t.id || '',
+                            name: t.name || '',
+                            productName: t.productName || '',
+                            index: idx + 1,
+                            partName: p.name || '',
+                            spec: p.spec || '',
+                            price: p.price || 0
+                        });
+                    });
+                });
+
+                const buffer = await workbook.xlsx.writeBuffer();
+                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                saveAs(blob, `赢景报价系统_全部数据_${new Date().toISOString().slice(0,10)}.xlsx`);
+                showToast('📤 全部数据已导出（含历史、客户模板、部件明细）', 'success');
+                addAuditLog('导出全部数据', 'Excel（不含系统设置）');
             }
 
             function clearHistory() {
@@ -4742,8 +4750,7 @@ suggestPrice.innerHTML = priceText;
             backupToFolderBtn.addEventListener('click', async function() {
                 if (!requireLogin()) return;
                 if (!storageFolderHandle) { showToast('⚠️ 请先选择保存文件夹', 'warning'); return; }
-                if (!('showDirectoryPicker' in window)) { showToast('⚠️ 浏览器不支持 File System Access API',
-                        'warning'); return; }
+                if (!('showDirectoryPicker' in window)) { showToast('⚠️ 浏览器不支持 File System Access API', 'warning'); return; }
                 try {
                     const history = getHistory();
                     const customerTemplates = getCustomerTemplates();
@@ -4763,8 +4770,8 @@ suggestPrice.innerHTML = priceText;
                     const blob = new Blob([jsonStr], { type: 'application/json' });
                     const fileName = `报价系统备份_${new Date().toISOString().slice(0,10)}.json`;
                     let fileHandle;
-                    try { fileHandle = await storageFolderHandle.getFileHandle(fileName, { create: true }); } catch (
-                        e) { fileHandle = await storageFolderHandle.getFileHandle(fileName, { create: true }); }
+                    try { fileHandle = await storageFolderHandle.getFileHandle(fileName, { create: true }); } catch (e) { fileHandle =
+                            await storageFolderHandle.getFileHandle(fileName, { create: true }); }
                     const writable = await fileHandle.createWritable();
                     await writable.write(blob);
                     await writable.close();
@@ -4794,13 +4801,177 @@ suggestPrice.innerHTML = priceText;
                     const blob = new Blob([jsonStr], { type: 'application/json' });
                     const fileName = `报价系统自动备份_${new Date().toISOString().slice(0,10)}.json`;
                     let fileHandle;
-                    try { fileHandle = await storageFolderHandle.getFileHandle(fileName, { create: true }); } catch (
-                        e) { fileHandle = await storageFolderHandle.getFileHandle(fileName, { create: true }); }
+                    try { fileHandle = await storageFolderHandle.getFileHandle(fileName, { create: true }); } catch (e) { fileHandle =
+                            await storageFolderHandle.getFileHandle(fileName, { create: true }); }
                     const writable = await fileHandle.createWritable();
                     await writable.write(blob);
                     await writable.close();
                 } catch (e) { /* 静默 */ }
             }
+
+            // ============================================================
+            // ★ 从备份文件导入（JSON）
+            // ============================================================
+            const importBackupBtn = $('importBackupBtn');
+            const importBackupInput = $('importBackupInput');
+            const importBackupMode = $('importBackupMode');
+
+            importBackupBtn.addEventListener('click', function() {
+                if (!requireLogin()) return;
+                importBackupInput.click();
+            });
+
+            importBackupInput.addEventListener('change', async function(e) {
+                const file = this.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = async function(ev) {
+                    try {
+                        const jsonData = JSON.parse(ev.target.result);
+                        if (!jsonData.version || !jsonData.exportedAt) {
+                            showToast('无效的备份文件，请检查格式', 'error');
+                            return;
+                        }
+                        const mode = importBackupMode.value;
+                        const modeLabel = mode === 'replace' ? '替换' : '合并';
+                        if (!confirm(`确认以「${modeLabel}」模式导入备份文件？\n${mode === 'replace' ? '⚠️ 当前所有数据将被清空并替换！' : '📌 导入的数据将与现有数据合并，相同ID的记录将被覆盖。'}`)) {
+                            return;
+                        }
+
+                        const importedHistory = jsonData.history || [];
+                        const importedCustomerTemplates = jsonData.customerTemplates || [];
+                        const importedPartTemplates = jsonData.partTemplates || [];
+                        const importedSettings = jsonData.settings || {};
+                        const importedImages = jsonData.images || {};
+
+                        if (mode === 'replace') {
+                            setHistory(importedHistory);
+                            setCustomerTemplates(importedCustomerTemplates);
+                            setPartTemplates(importedPartTemplates);
+                            if (Object.keys(importedSettings).length > 0) {
+                                const def = getDefaultSettings();
+                                for (const key in def) {
+                                    if (!(key in importedSettings)) importedSettings[key] = def[key];
+                                }
+                                saveSettingsToStorage(importedSettings);
+                            }
+                            if (importedImages.logo) {
+                                currentLogoData = importedImages.logo;
+                                logoPreview.src = importedImages.logo;
+                                logoPreview.style.display = 'block';
+                                removeLogoBtn.style.display = 'inline-block';
+                                logoFileName.textContent = '已导入 Logo';
+                                logoFileName.classList.add('has-file');
+                                localStorage.setItem('quote_logo_data_saved', importedImages.logo);
+                            }
+                            if (importedImages.seal) {
+                                currentSealData = importedImages.seal;
+                                sealPreview.src = importedImages.seal;
+                                sealPreview.style.display = 'block';
+                                removeSealBtn.style.display = 'inline-block';
+                                sealFileName.textContent = '已导入 印章';
+                                sealFileName.classList.add('has-file');
+                                localStorage.setItem('quote_seal_data_saved', importedImages.seal);
+                            }
+                            if (importedImages.product) {
+                                currentImageData = importedImages.product;
+                                productImagePreview.src = importedImages.product;
+                                productImagePreview.style.display = 'block';
+                                removeImageBtn.style.display = 'inline-block';
+                                imageFileName.textContent = '已导入 产品图';
+                                imageFileName.classList.add('has-file');
+                                localStorage.setItem('quote_image_data_saved', importedImages.product);
+                            }
+                            showToast(`✅ 数据导入成功（替换模式），历史 ${importedHistory.length} 条，客户模板 ${importedCustomerTemplates.length} 个，部件模板 ${importedPartTemplates.length} 个`,
+                                'success');
+                            addAuditLog('从备份文件导入（替换）', `历史${importedHistory.length}条，客户模板${importedCustomerTemplates.length}个，部件模板${importedPartTemplates.length}个`);
+                        } else {
+                            const existingHistory = getHistory();
+                            const existingCustomerTemplates = getCustomerTemplates();
+                            const existingPartTemplates = getPartTemplates();
+
+                            const historyMap = new Map();
+                            existingHistory.forEach(item => { if (item.id) historyMap.set(item.id, item); });
+                            importedHistory.forEach(item => { if (item.id) historyMap.set(item.id, item); });
+                            const mergedHistory = Array.from(historyMap.values());
+
+                            const customerMap = new Map();
+                            existingCustomerTemplates.forEach(item => { if (item.id) customerMap.set(item.id, item); });
+                            importedCustomerTemplates.forEach(item => { if (item.id) customerMap.set(item.id, item); });
+                            const mergedCustomerTemplates = Array.from(customerMap.values());
+
+                            const partMap = new Map();
+                            existingPartTemplates.forEach(item => { if (item.id) partMap.set(item.id, item); });
+                            importedPartTemplates.forEach(item => { if (item.id) partMap.set(item.id, item); });
+                            const mergedPartTemplates = Array.from(partMap.values());
+
+                            let mergedSettings = loadSettings();
+                            if (Object.keys(importedSettings).length > 0) {
+                                const def = getDefaultSettings();
+                                for (const key in def) {
+                                    if (key in importedSettings) {
+                                        mergedSettings[key] = importedSettings[key];
+                                    } else if (!(key in mergedSettings)) {
+                                        mergedSettings[key] = def[key];
+                                    }
+                                }
+                            }
+
+                            setHistory(mergedHistory);
+                            setCustomerTemplates(mergedCustomerTemplates);
+                            setPartTemplates(mergedPartTemplates);
+                            saveSettingsToStorage(mergedSettings);
+
+                            if (importedImages.logo) {
+                                currentLogoData = importedImages.logo;
+                                logoPreview.src = importedImages.logo;
+                                logoPreview.style.display = 'block';
+                                removeLogoBtn.style.display = 'inline-block';
+                                logoFileName.textContent = '已导入 Logo';
+                                logoFileName.classList.add('has-file');
+                                localStorage.setItem('quote_logo_data_saved', importedImages.logo);
+                            }
+                            if (importedImages.seal) {
+                                currentSealData = importedImages.seal;
+                                sealPreview.src = importedImages.seal;
+                                sealPreview.style.display = 'block';
+                                removeSealBtn.style.display = 'inline-block';
+                                sealFileName.textContent = '已导入 印章';
+                                sealFileName.classList.add('has-file');
+                                localStorage.setItem('quote_seal_data_saved', importedImages.seal);
+                            }
+                            if (importedImages.product) {
+                                currentImageData = importedImages.product;
+                                productImagePreview.src = importedImages.product;
+                                productImagePreview.style.display = 'block';
+                                removeImageBtn.style.display = 'inline-block';
+                                imageFileName.textContent = '已导入 产品图';
+                                imageFileName.classList.add('has-file');
+                                localStorage.setItem('quote_image_data_saved', importedImages.product);
+                            }
+
+                            showToast(`✅ 数据导入成功（合并模式），历史 ${mergedHistory.length} 条，客户模板 ${mergedCustomerTemplates.length} 个，部件模板 ${mergedPartTemplates.length} 个`,
+                                'success');
+                            addAuditLog('从备份文件导入（合并）',
+                                `合并后历史${mergedHistory.length}条，客户模板${mergedCustomerTemplates.length}个，部件模板${mergedPartTemplates.length}个`);
+                        }
+
+                        renderHistory();
+                        renderCustomerTemplateSelect();
+                        renderPartTemplateSelect();
+                        const settings = loadSettings();
+                        applySettingsToForm(settings);
+                        calcAndRender();
+                        updateLockUI();
+
+                    } catch (err) {
+                        showToast('解析备份文件失败：' + err.message, 'error');
+                        console.error(err);
+                    }
+                };
+                reader.readAsText(file);
+                this.value = '';
+            });
 
             // ============================================================
             // ★ 密码管理功能（修改 / 删除）
@@ -4833,6 +5004,7 @@ suggestPrice.innerHTML = priceText;
                 saveSecurityData(securityData);
                 showToast('✅ 密码已修改', 'success');
                 addAuditLog('修改密码', '密码已更新');
+                updateLockUI();
 
                 $('oldPasswordInput').value = '';
                 $('newPasswordInput').value = '';
@@ -4856,6 +5028,7 @@ suggestPrice.innerHTML = priceText;
                         showToast('✅ 密码已删除，系统已切换到开放模式', 'success');
                         addAuditLog('删除密码', '密码已删除，系统开放');
                         $('deletePasswordInput').value = '';
+                        updateLockUI();
 
                         if ($('loginOverlay').classList.contains('active')) {
                             isLoggedIn = true;
@@ -4980,6 +5153,7 @@ suggestPrice.innerHTML = priceText;
                 saveSettingsToStorage(newSettings);
                 applySettingsToForm(newSettings);
                 applyAppearance(newSettings);
+                updateLockUI();
                 showToast('✅ 设置已保存', 'success');
                 closeSettings();
                 calcAndRender();
@@ -5004,270 +5178,374 @@ suggestPrice.innerHTML = priceText;
             }
 
             // ============================================================
-            // 数据管理
+            // 数据管理 - 导入（支持新格式，含客户联系人、图片）
             // ============================================================
             const exportAllDataBtn = $('exportAllDataBtn');
             const importAllDataBtn = $('importAllDataBtn');
             const importFileInput = $('importFileInput');
             const clearAllDataBtn = $('clearAllDataBtn');
             const resetSettingsBtn = $('resetSettingsBtn');
+            const importModeSelect = $('importModeSelect');
 
-            exportAllDataBtn.addEventListener('click', async function() {
-                if (!requireLogin()) return;
-                const history = getHistory();
-                const customerTemplates = getCustomerTemplates();
-                const partTemplates = getPartTemplates();
-                const settings = loadSettings();
-                const workbook = new ExcelJS.Workbook();
-
-                const ws1 = workbook.addWorksheet('历史记录');
-                ws1.columns = [
-                    { header: 'ID', key: 'id', width: 20 },
-                    { header: '单号', key: 'quoteNo', width: 16 },
-                    { header: '时间戳', key: 'timestamp', width: 22 },
-                    { header: '公司名称', key: 'companyName', width: 18 },
-                    { header: '客户名称', key: 'customerName', width: 18 },
-                    { header: '客户电话', key: 'customerPhone', width: 16 },
-                    { header: '商品名称', key: 'productName', width: 18 },
-                    { header: '图片', key: 'hasImage', width: 8 },
-                    { header: '总件数', key: 'totalQty', width: 10 },
-                    { header: '单价成本(¥)', key: 'unitPrice', width: 16 },
-                    { header: '单价报价(¥)', key: 'displayPrice', width: 16 },
-                    { header: '总销售额(¥)', key: 'displayTotal', width: 18 },
-                    { header: '总利润(¥)', key: 'totalProfit', width: 16 },
-                    { header: '毛利率(%)', key: 'marginRate', width: 12 },
-                    { header: '结算货币', key: 'settleCurrency', width: 12 },
-                    { header: '备注', key: 'remarks', width: 20 }
-                ];
-                const headerRow1 = ws1.getRow(1);
-                headerRow1.font = { bold: true };
-                headerRow1.alignment = { horizontal: 'center' };
-                history.forEach(item => {
-                    ws1.addRow({
-                        id: item.id || '',
-                        quoteNo: item.quoteNo || '',
-                        timestamp: item.timestamp ? new Date(item.timestamp).toISOString() : '',
-                        companyName: item.companyName || '',
-                        customerName: item.customerName || '',
-                        customerPhone: item.customerPhone || '',
-                        productName: item.productName || '',
-                        hasImage: item.imageData ? '有' : '无',
-                        totalQty: item.totalQty || 0,
-                        unitPrice: fmtMoney(item.unitPrice),
-                        displayPrice: fmtMoney(item.displayPrice !== undefined ? item.displayPrice : item
-                            .priceWithTax),
-                        displayTotal: fmtMoney(item.displayTotal !== undefined ? item.displayTotal : item
-                            .totalSalesWithTax),
-                        totalProfit: fmtMoney(item.totalProfit),
-                        marginRate: item.marginRate || 0,
-                        settleCurrency: item.settleCurrency || 'CNY',
-                        remarks: item.remarks || ''
-                    });
-                });
-
-                const ws2 = workbook.addWorksheet('客户模板');
-                ws2.columns = [
-                    { header: 'ID', key: 'id', width: 20 },
-                    { header: '模板名称', key: 'name', width: 16 },
-                    { header: '客户名称', key: 'customerName', width: 18 },
-                    { header: '联系人', key: 'customerContact', width: 14 },
-                    { header: '电话', key: 'customerPhone', width: 16 },
-                    { header: '地址', key: 'customerAddress', width: 22 }
-                ];
-                const headerRow2 = ws2.getRow(1);
-                headerRow2.font = { bold: true };
-                headerRow2.alignment = { horizontal: 'center' };
-                customerTemplates.forEach(t => {
-                    ws2.addRow({
-                        id: t.id || '',
-                        name: t.name || '',
-                        customerName: t.customerName || '',
-                        customerContact: t.customerContact || '',
-                        customerPhone: t.customerPhone || '',
-                        customerAddress: t.customerAddress || ''
-                    });
-                });
-
-                const ws3 = workbook.addWorksheet('部件模板');
-                ws3.columns = [
-                    { header: 'ID', key: 'id', width: 20 },
-                    { header: '模板名称', key: 'name', width: 16 },
-                    { header: '部件数据(JSON)', key: 'parts', width: 50 },
-                    { header: '商品名称', key: 'productName', width: 18 }
-                ];
-                const headerRow3 = ws3.getRow(1);
-                headerRow3.font = { bold: true };
-                headerRow3.alignment = { horizontal: 'center' };
-                partTemplates.forEach(t => {
-                    ws3.addRow({
-                        id: t.id || '',
-                        name: t.name || '',
-                        parts: JSON.stringify(t.parts || []),
-                        productName: t.productName || ''
-                    });
-                });
-
-                const ws4 = workbook.addWorksheet('系统设置');
-                ws4.columns = [
-                    { header: '设置项', key: 'key', width: 22 },
-                    { header: '值', key: 'value', width: 30 }
-                ];
-                const headerRow4 = ws4.getRow(1);
-                headerRow4.font = { bold: true };
-                headerRow4.alignment = { horizontal: 'center' };
-                const settingEntries = Object.entries(settings);
-                settingEntries.forEach(([key, val]) => {
-                    ws4.addRow({ key: key, value: String(val) });
-                });
-
-                const buffer = await workbook.xlsx.writeBuffer();
-                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                saveAs(blob, `赢景报价系统_全部数据_${new Date().toISOString().slice(0,10)}.xlsx`);
-                showToast('📤 全部数据已导出为 Excel', 'success');
-                addAuditLog('导出全部数据', 'Excel');
-            });
+            exportAllDataBtn.addEventListener('click', exportAllData);
 
             importAllDataBtn.addEventListener('click', function() { if (!requireLogin()) return;
                 importFileInput.click(); });
+
             importFileInput.addEventListener('change', async function(e) {
                 const file = this.files[0];
                 if (!file) return;
+
+                if (!file.name.match(/\.(xlsx|xls)$/i)) {
+                    showToast('请选择 .xlsx 或 .xls 格式的 Excel 文件', 'warning');
+                    this.value = '';
+                    return;
+                }
+
                 const reader = new FileReader();
                 reader.onload = async function(ev) {
                     try {
                         const data = new Uint8Array(ev.target.result);
                         const workbook = new ExcelJS.Workbook();
                         await workbook.xlsx.load(data);
-                        let history = [],
-                            customerTemplates = [],
-                            partTemplates = [],
-                            settings = {};
-                        const wsHistory = workbook.getWorksheet('历史记录');
-                        if (wsHistory) {
-                            const rows = wsHistory.getRows(2, wsHistory.rowCount - 1);
-                            rows.forEach(row => {
-                                const obj = {};
-                                row.eachCell((cell, colNumber) => {
-                                    const header = wsHistory.getRow(1).getCell(colNumber)
-                                        .text;
-                                    if (header === 'ID') obj.id = cell.text;
-                                    else if (header === '单号') obj.quoteNo = cell.text;
-                                    else if (header === '时间戳') obj.timestamp = cell
-                                        .text ? new Date(cell.text).getTime() :
-                                        Date.now();
-                                    else if (header === '公司名称') obj.companyName = cell
-                                        .text;
-                                    else if (header === '客户名称') obj.customerName = cell
-                                        .text;
-                                    else if (header === '客户电话') obj.customerPhone = cell
-                                        .text;
-                                    else if (header === '商品名称') obj.productName = cell
-                                        .text;
-                                    else if (header === '图片') obj.hasImage = cell.text;
-                                    else if (header === '总件数') obj.totalQty = parseFloat(
-                                        cell.text) || 0;
-                                    else if (header === '单价成本(¥)') obj.unitPrice = parseFloat(
-                                            cell.text) || 0;
-                                    else if (header === '单价报价(¥)') obj.displayPrice = parseFloat(
-                                            cell.text) || 0;
-                                    else if (header === '总销售额(¥)') obj.displayTotal = parseFloat(
-                                            cell.text) || 0;
-                                    else if (header === '总利润(¥)') obj.totalProfit = parseFloat(
-                                            cell.text) || 0;
-                                    else if (header === '毛利率(%)') obj.marginRate = parseFloat(
-                                            cell.text) || 0;
-                                    else if (header === '结算货币') obj.settleCurrency = cell
-                                        .text || 'CNY';
-                                    else if (header === '备注') obj.remarks = cell.text;
-                                });
-                                if (obj.id) history.push(obj);
-                            });
+
+                        let importedHistory = [];
+                        let importedCustomerTemplates = [];
+                        let importedPartTemplates = [];
+                        let importedSettings = {};
+                        let errorMessages = [];
+
+                        function getWorksheet(workbook, name) {
+                            let ws = workbook.getWorksheet(name);
+                            if (ws) return ws;
+                            ws = workbook.getWorksheet(name.trim());
+                            if (ws) return ws;
+                            for (const sheet of workbook.worksheets) {
+                                if (sheet.name.trim() === name.trim()) {
+                                    return sheet;
+                                }
+                            }
+                            return null;
                         }
-                        const wsCustomer = workbook.getWorksheet('客户模板');
-                        if (wsCustomer) {
-                            const rows = wsCustomer.getRows(2, wsCustomer.rowCount - 1);
-                            rows.forEach(row => {
-                                const obj = {};
-                                row.eachCell((cell, colNumber) => {
-                                    const header = wsCustomer.getRow(1).getCell(
-                                        colNumber).text;
-                                    if (header === 'ID') obj.id = cell.text;
-                                    else if (header === '模板名称') obj.name = cell.text;
-                                    else if (header === '客户名称') obj.customerName = cell
-                                        .text;
-                                    else if (header === '联系人') obj.customerContact =
-                                        cell.text;
-                                    else if (header === '电话') obj.customerPhone = cell
-                                        .text;
-                                    else if (header === '地址') obj.customerAddress = cell
-                                        .text;
-                                });
-                                if (obj.id) customerTemplates.push(obj);
+
+                        function parseWorksheet(worksheet, expectedHeaders, mappingFn, fallbackByPosition = true) {
+                            if (!worksheet) return { rows: [], error: '工作表不存在' };
+                            const rowCount = Math.max(0, worksheet.rowCount - 1);
+                            if (rowCount === 0) return { rows: [], error: '工作表无数据行' };
+
+                            const headerRow = worksheet.getRow(1);
+                            const headerCells = [];
+                            headerRow.eachCell((cell, colNumber) => {
+                                headerCells[colNumber] = cell.text ? cell.text.trim().toLowerCase() : '';
                             });
-                        }
-                        const wsPart = workbook.getWorksheet('部件模板');
-                        if (wsPart) {
-                            const rows = wsPart.getRows(2, wsPart.rowCount - 1);
+
+                            const hasExpected = expectedHeaders.some(h => headerCells.some(c => c === h.toLowerCase()));
+                            if (!hasExpected && !fallbackByPosition) {
+                                return { rows: [], error: `列头不匹配，期望包含：${expectedHeaders.join('、')}` };
+                            }
+
+                            const usePosition = !hasExpected && fallbackByPosition;
+                            const rows = worksheet.getRows(2, rowCount);
+                            const result = [];
                             rows.forEach(row => {
-                                const obj = {};
-                                row.eachCell((cell, colNumber) => {
-                                    const header = wsPart.getRow(1).getCell(colNumber)
-                                        .text;
-                                    if (header === 'ID') obj.id = cell.text;
-                                    else if (header === '模板名称') obj.name = cell.text;
-                                    else if (header === '部件数据(JSON)') { try { obj
-                                                .parts = JSON.parse(cell.text); } catch (
-                                            e) { obj.parts = []; } }
-                                    else if (header === '商品名称') obj.productName = cell
-                                        .text;
-                                });
-                                if (obj.id) partTemplates.push(obj);
-                            });
-                        }
-                        const wsSettings = workbook.getWorksheet('系统设置');
-                        if (wsSettings) {
-                            const rows = wsSettings.getRows(2, wsSettings.rowCount - 1);
-                            rows.forEach(row => {
-                                let key = '',
-                                    value = '';
-                                row.eachCell((cell, colNumber) => {
-                                    if (colNumber === 1) key = cell.text;
-                                    if (colNumber === 2) value = cell.text;
-                                });
-                                if (key) {
-                                    if (value === 'true') value = true;
-                                    else if (value === 'false') value = false;
-                                    else if (!isNaN(value) && value !== '') value =
-                                        parseFloat(value);
-                                    settings[key] = value;
+                                if (!row || !row.hasValues) return;
+                                const obj = mappingFn(row, usePosition ? null : headerCells, usePosition);
+                                if (obj && Object.keys(obj).length > 0) {
+                                    result.push(obj);
                                 }
                             });
+                            return { rows: result, error: null };
                         }
-                        if (history.length === 0 && customerTemplates.length === 0 && partTemplates
-                            .length === 0 && Object.keys(settings).length === 0) {
-                            showToast('未找到有效数据，请检查 Excel 文件格式', 'warning');
+
+                        // 1. 历史记录
+                        const wsHistory = getWorksheet(workbook, '历史记录');
+                        if (wsHistory) {
+                            const expected = ['时间', '单号', '商品', '图片', '客户名称', '客户联系人', '单价成本(¥)', '单价报价(¥)',
+                                '单价利润(¥)', '总数量', '总销售额(¥)', '电话'
+                            ];
+                            const result = parseWorksheet(wsHistory, expected, (row, headers, usePos) => {
+                                const posMap = { time: 1, quoteNo: 2, product: 3, image: 4, customer: 5,
+                                    contact: 6, unitCost: 7, unitQuote: 8, unitProfit: 9, qty: 10,
+                                    totalSales: 11, phone: 12 };
+                                const getVal = (name) => {
+                                    if (usePos) {
+                                        const idx = posMap[name];
+                                        if (idx === undefined) return undefined;
+                                        const cell = row.getCell(idx);
+                                        return cell ? cell.text : undefined;
+                                    } else {
+                                        const idx = headers.findIndex(h => h === name.toLowerCase());
+                                        if (idx === -1) return undefined;
+                                        const cell = row.getCell(idx + 1);
+                                        return cell ? cell.text : undefined;
+                                    }
+                                };
+                                const time = getVal('time');
+                                const quote = getVal('quoteNo');
+                                if (!time && !quote) return null;
+                                const record = {
+                                    id: Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                                    quoteNo: quote || '',
+                                    timestamp: time ? new Date(time).getTime() : Date.now(),
+                                    companyName: '',
+                                    companyAddress: '',
+                                    companyPhone: '',
+                                    companyContact: '',
+                                    customerName: getVal('customer') || '',
+                                    customerContact: getVal('contact') || '',
+                                    customerPhone: getVal('phone') || '',
+                                    customerAddress: '',
+                                    productName: getVal('product') || '',
+                                    parts: [],
+                                    unitPrice: parseFloat(getVal('unitCost')) || 0,
+                                    totalMaterialCost: 0,
+                                    totalQty: parseFloat(getVal('qty')) || 0,
+                                    markup: 0,
+                                    labor: 0,
+                                    overhead: 0,
+                                    fixedTotal: 0,
+                                    unitTotalCost: parseFloat(getVal('unitCost')) || 0,
+                                    totalCost: 0,
+                                    taxRate: 13,
+                                    priceNoTax: 0,
+                                    priceWithTax: parseFloat(getVal('unitQuote')) || 0,
+                                    taxAmount: 0,
+                                    totalSalesNoTax: 0,
+                                    totalSalesWithTax: parseFloat(getVal('totalSales')) || 0,
+                                    totalProfit: parseFloat(getVal('unitProfit')) * (parseFloat(getVal(
+                                        'qty')) || 0) || 0,
+                                    unitProfit: parseFloat(getVal('unitProfit')) || 0,
+                                    marginRate: 0,
+                                    validity: '',
+                                    payment: '',
+                                    delivery: '',
+                                    remarks: '',
+                                    logoData: null,
+                                    sealData: null,
+                                    imageData: null,
+                                    taxIncluded: true,
+                                    displayPrice: parseFloat(getVal('unitQuote')) || 0,
+                                    displayTotal: parseFloat(getVal('totalSales')) || 0,
+                                    statusText: '',
+                                    statusClass: '',
+                                    settleCurrency: 'CNY',
+                                    settleSymbol: '¥',
+                                    currencyName: '人民币',
+                                    exchangeRate: 1
+                                };
+                                return record;
+                            }, true);
+                            if (result.error) errorMessages.push(`历史记录工作表：${result.error}`);
+                            else importedHistory = result.rows;
+                        }
+
+                        // 2. 客户模板
+                        const wsCustomer = getWorksheet(workbook, '客户模板');
+                        if (wsCustomer) {
+                            const expected = ['ID', '模板名称', '客户名称', '联系人', '电话', '地址'];
+                            const result = parseWorksheet(wsCustomer, expected, (row, headers, usePos) => {
+                                const posMap = { id: 1, name: 2, customerName: 3, customerContact: 4,
+                                    customerPhone: 5, customerAddress: 6 };
+                                const getVal = (name) => {
+                                    if (usePos) {
+                                        const idx = posMap[name];
+                                        if (idx === undefined) return undefined;
+                                        const cell = row.getCell(idx);
+                                        return cell ? cell.text : undefined;
+                                    } else {
+                                        const idx = headers.findIndex(h => h === name.toLowerCase());
+                                        if (idx === -1) return undefined;
+                                        const cell = row.getCell(idx + 1);
+                                        return cell ? cell.text : undefined;
+                                    }
+                                };
+                                const id = getVal('id');
+                                if (!id) return null;
+                                return {
+                                    id,
+                                    name: getVal('name') || '',
+                                    customerName: getVal('customerName') || '',
+                                    customerContact: getVal('customerContact') || '',
+                                    customerPhone: getVal('customerPhone') || '',
+                                    customerAddress: getVal('customerAddress') || ''
+                                };
+                            }, true);
+                            if (result.error) errorMessages.push(`客户模板工作表：${result.error}`);
+                            else importedCustomerTemplates = result.rows;
+                        }
+
+                        // 3. 部件明细
+                        let partTemplatesFromDetail = [];
+                        const wsDetail = getWorksheet(workbook, '部件明细');
+                        if (wsDetail) {
+                            const expected = ['模板ID', '模板名称', '商品名称', '部件序号', '部件名称', '规格', '单价(¥)'];
+                            const result = parseWorksheet(wsDetail, expected, (row, headers, usePos) => {
+                                const posMap = { id: 1, name: 2, productName: 3, index: 4, partName: 5,
+                                    spec: 6, price: 7 };
+                                const getVal = (name) => {
+                                    if (usePos) {
+                                        const idx = posMap[name];
+                                        if (idx === undefined) return undefined;
+                                        const cell = row.getCell(idx);
+                                        return cell ? cell.text : undefined;
+                                    } else {
+                                        const idx = headers.findIndex(h => h === name.toLowerCase());
+                                        if (idx === -1) return undefined;
+                                        const cell = row.getCell(idx + 1);
+                                        return cell ? cell.text : undefined;
+                                    }
+                                };
+                                const id = getVal('id');
+                                if (!id) return null;
+                                return {
+                                    id,
+                                    name: getVal('name') || '',
+                                    productName: getVal('productName') || '',
+                                    index: parseInt(getVal('index')) || 0,
+                                    partName: getVal('partName') || '',
+                                    spec: getVal('spec') || '',
+                                    price: parseFloat(getVal('price')) || 0
+                                };
+                            }, true);
+                            if (result.error) {
+                                errorMessages.push(`部件明细工作表：${result.error}`);
+                            } else {
+                                const groups = {};
+                                result.rows.forEach(item => {
+                                    if (!groups[item.id]) {
+                                        groups[item.id] = {
+                                            id: item.id,
+                                            name: item.name,
+                                            productName: item.productName,
+                                            parts: []
+                                        };
+                                    }
+                                    groups[item.id].parts.push({
+                                        name: item.partName,
+                                        spec: item.spec,
+                                        price: item.price
+                                    });
+                                });
+                                partTemplatesFromDetail = Object.values(groups);
+                            }
+                        }
+
+                        // 如果部件明细没有，尝试旧版部件模板
+                        if (partTemplatesFromDetail.length === 0) {
+                            const wsPart = getWorksheet(workbook, '部件模板');
+                            if (wsPart) {
+                                const expected = ['ID', '模板名称', '部件数据(JSON)', '商品名称'];
+                                const result = parseWorksheet(wsPart, expected, (row, headers, usePos) => {
+                                    const posMap = { id: 1, name: 2, parts: 3, productName: 4 };
+                                    const getVal = (name) => {
+                                        if (usePos) {
+                                            const idx = posMap[name];
+                                            if (idx === undefined) return undefined;
+                                            const cell = row.getCell(idx);
+                                            return cell ? cell.text : undefined;
+                                        } else {
+                                            const idx = headers.findIndex(h => h === name
+                                            .toLowerCase());
+                                            if (idx === -1) return undefined;
+                                            const cell = row.getCell(idx + 1);
+                                            return cell ? cell.text : undefined;
+                                        }
+                                    };
+                                    const id = getVal('id');
+                                    if (!id) return null;
+                                    let parts = [];
+                                    try { parts = JSON.parse(getVal('parts') || '[]'); } catch (e) {}
+                                    return {
+                                        id,
+                                        name: getVal('name') || '',
+                                        parts,
+                                        productName: getVal('productName') || ''
+                                    };
+                                }, true);
+                                if (result.error) {
+                                    errorMessages.push(`部件模板工作表：${result.error}`);
+                                } else {
+                                    importedPartTemplates = result.rows;
+                                }
+                            }
+                        } else {
+                            importedPartTemplates = partTemplatesFromDetail;
+                        }
+
+                        const hasData = importedHistory.length > 0 || importedCustomerTemplates.length > 0 ||
+                            importedPartTemplates.length > 0;
+
+                        if (!hasData) {
+                            let msg = '未找到有效数据。';
+                            if (errorMessages.length > 0) {
+                                msg += ' 问题详情：' + errorMessages.join('；');
+                            } else {
+                                msg += ' 请确保 Excel 包含“历史记录”、“客户模板”或“部件明细/部件模板”工作表。';
+                            }
+                            showToast(msg, 'warning');
+                            this.value = '';
                             return;
                         }
-                        if (confirm('导入将覆盖当前所有数据（历史记录、模板、设置），确认继续？')) {
-                            setHistory(history);
-                            setCustomerTemplates(customerTemplates);
-                            setPartTemplates(partTemplates);
-                            if (Object.keys(settings).length > 0) {
-                                const def = getDefaultSettings();
-                                for (const key in def) {
-                                    if (!(key in settings)) settings[key] = def[key];
-                                }
-                                saveSettingsToStorage(settings);
-                            }
-                            renderHistory();
-                            renderCustomerTemplateSelect();
-                            renderPartTemplateSelect();
-                            applySettingsToForm(settings);
-                            calcAndRender();
-                            showToast('✅ 数据导入成功', 'success');
-                            addAuditLog('导入全部数据', 'Excel 导入');
+
+                        if (errorMessages.length > 0) {
+                            showToast('部分工作表解析异常，但已成功导入其他数据。详情：' + errorMessages.join('；'), 'warning');
                         }
-                    } catch (err) { showToast('解析文件失败：' + err.message, 'error'); }
+
+                        const mode = importModeSelect ? importModeSelect.value : 'replace';
+                        const modeLabel = mode === 'replace' ? '替换（清空后导入）' : '合并（追加并去重）';
+                        if (!confirm(`确认以「${modeLabel}」方式导入数据？\n${mode === 'replace' ? '⚠️ 当前所有数据将被清空并替换！' : '📌 导入的数据将与现有数据合并，相同ID的记录将被覆盖。'}`)) {
+                            this.value = '';
+                            return;
+                        }
+
+                        if (mode === 'replace') {
+                            setHistory(importedHistory);
+                            setCustomerTemplates(importedCustomerTemplates);
+                            setPartTemplates(importedPartTemplates);
+                            showToast(`✅ 数据导入成功（替换模式），历史 ${importedHistory.length} 条，客户模板 ${importedCustomerTemplates.length} 个，部件模板 ${importedPartTemplates.length} 个`,
+                                'success');
+                            addAuditLog('导入全部数据（替换）', 'Excel 导入，替换模式');
+                        } else {
+                            const existingHistory = getHistory();
+                            const existingCustomerTemplates = getCustomerTemplates();
+                            const existingPartTemplates = getPartTemplates();
+
+                            const historyMap = new Map();
+                            existingHistory.forEach(item => { if (item.id) historyMap.set(item.id, item); });
+                            importedHistory.forEach(item => { if (item.id) historyMap.set(item.id, item); });
+                            const mergedHistory = Array.from(historyMap.values());
+
+                            const customerMap = new Map();
+                            existingCustomerTemplates.forEach(item => { if (item.id) customerMap.set(item.id, item); });
+                            importedCustomerTemplates.forEach(item => { if (item.id) customerMap.set(item.id, item); });
+                            const mergedCustomerTemplates = Array.from(customerMap.values());
+
+                            const partMap = new Map();
+                            existingPartTemplates.forEach(item => { if (item.id) partMap.set(item.id, item); });
+                            importedPartTemplates.forEach(item => { if (item.id) partMap.set(item.id, item); });
+                            const mergedPartTemplates = Array.from(partMap.values());
+
+                            setHistory(mergedHistory);
+                            setCustomerTemplates(mergedCustomerTemplates);
+                            setPartTemplates(mergedPartTemplates);
+
+                            showToast(`✅ 数据导入成功（合并模式），历史 ${mergedHistory.length} 条，客户模板 ${mergedCustomerTemplates.length} 个，部件模板 ${mergedPartTemplates.length} 个`,
+                                'success');
+                            addAuditLog('导入全部数据（合并）', `合并后历史${mergedHistory.length}条，客户模板${mergedCustomerTemplates.length}个，部件模板${mergedPartTemplates.length}个`);
+                        }
+
+                        renderHistory();
+                        renderCustomerTemplateSelect();
+                        renderPartTemplateSelect();
+                        const settings = loadSettings();
+                        applySettingsToForm(settings);
+                        calcAndRender();
+                        updateLockUI();
+
+                    } catch (err) {
+                        showToast('解析文件失败：' + err.message, 'error');
+                        console.error(err);
+                    }
                 };
                 reader.readAsArrayBuffer(file);
                 this.value = '';
@@ -5355,6 +5633,7 @@ suggestPrice.innerHTML = priceText;
                     });
                     applyAppearance(def);
                     calcAndRender();
+                    updateLockUI();
                     showToast('✅ 设置已重置为默认', 'success');
                     addAuditLog('重置设置', '恢复默认设置');
                     closeSettings();
@@ -5384,7 +5663,7 @@ suggestPrice.innerHTML = priceText;
             });
 
             // ============================================================
-            // 汇率加载（启动时自动拉取，有6小时缓存）
+            // 汇率加载
             // ============================================================
             fetchExchangeRates(false).then(success => {
                 if (!success) showToast('⚠️ 汇率加载失败，部分货币可能无法换算', 'warning');
@@ -5422,6 +5701,7 @@ suggestPrice.innerHTML = priceText;
                     restoreSavedState();
                     calcAndRender();
                 }
+                updateLockUI();
             });
 
             window.__app = { requireLogin, logout, showLogin };
