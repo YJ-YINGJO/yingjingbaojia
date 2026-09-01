@@ -1451,7 +1451,7 @@
         #quotation-template .terms {
             margin-top: 0;
             padding: 0;
-            font-size: 9.5px;
+            font-size: 9.5px !important;
             color: #4a5a6e;
             display: block;
         }
@@ -1464,10 +1464,11 @@
             padding-top: 0;
             border-top: none;
             line-height: 1.5;
+            font-size: 9.5px !important;
         }
         #quotation-template .product-image-footer {
             position: absolute;
-            bottom: calc(100% + 1mm);
+            bottom: calc(100% + 0.5mm);
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
@@ -1482,7 +1483,7 @@
         }
         #quotation-template .footer {
             position: relative;
-            margin-top: 8px;
+            margin-top: 20px;
             border-top: 1px solid #d9e2ef;
             padding-top: 8px;
             font-size: 9.5px;
@@ -2052,6 +2053,7 @@
             display: none;
         }
 
+        /* ===== 响应式 ===== */
         @media (max-width: 820px) {
             .stats-grid {
                 grid-template-columns: repeat(3, 1fr);
@@ -2129,6 +2131,43 @@
             .module-body {
                 padding: var(--space-md) var(--space-md) var(--space-md);
             }
+
+            /* ★★★ 修复手机端按钮溢出 ★★★ */
+            .info-group .template-actions {
+                flex-wrap: wrap !important;
+                gap: 4px !important;
+                width: 100% !important;
+            }
+            .info-group .template-actions select,
+            .info-group .template-actions button {
+                flex-shrink: 0;
+                min-width: auto !important;
+                padding: 4px 10px !important;
+                font-size: 12px !important;
+            }
+            .part-header .right-group {
+                flex-wrap: wrap !important;
+                gap: 4px !important;
+                width: 100% !important;
+            }
+            .part-header .right-group .template-actions {
+                flex-wrap: wrap !important;
+                gap: 4px !important;
+            }
+            .part-header .right-group .template-actions select,
+            .part-header .right-group .template-actions button {
+                flex-shrink: 0;
+                min-width: auto !important;
+                padding: 3px 10px !important;
+                font-size: 12px !important;
+            }
+            .part-header .right-group .add-part-btn {
+                font-size: 12px !important;
+                padding: 3px 12px !important;
+            }
+            .module-body .info-grid-2col .col-full .template-actions {
+                flex-wrap: wrap !important;
+            }
         }
         @media (max-width: 500px) {
             .container {
@@ -2190,6 +2229,12 @@
             }
             .calc-params {
                 padding: var(--space-sm) var(--space-sm);
+            }
+            .info-group .template-actions button,
+            .part-header .right-group .template-actions button,
+            .part-header .right-group .add-part-btn {
+                font-size: 11px !important;
+                padding: 2px 8px !important;
             }
         }
     </style>
@@ -2263,7 +2308,7 @@
                         </div>
                     </div>
                     <div class="info-group col-half"><label>客户名称</label><input type="text" id="customerName" placeholder="例：XX科技有限公司" /></div>
-                    <div class="info-group col-half"><label>客户联系人</label><input type="text" id="customerContact" placeholder="李经理" /></div>
+                    <div class="info-group col-half"><label>联系人</label><input type="text" id="customerContact" placeholder="李经理" /></div>
                     <div class="info-group col-half"><label>客户地址</label><input type="text" id="customerAddress" placeholder="上海市浦东新区" /></div>
                     <div class="info-group col-half"><label>客户电话</label><input type="text" id="customerPhone" placeholder="138-0000-0000" /></div>
                 </div>
@@ -2297,7 +2342,7 @@
                     <div class="part-header">
                         <div class="left-group">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                            <span>商品原材料部件清单（默认人民币报价）</span>
+                            <span>BOM清单</span>
                         </div>
                         <div class="right-group">
                             <div class="template-actions" style="flex-wrap:nowrap;">
@@ -2306,16 +2351,16 @@
                                 <button id="savePartTemplateBtn" style="padding:3px 12px;">保存产品信息</button>
                                 <button id="deletePartTemplateBtn" style="display:none; padding:3px 12px;">删除</button>
                             </div>
-                            <button class="add-part-btn" id="addPartBtn">＋ 添加部件</button>
+                            <button class="add-part-btn" id="addPartBtn">＋ 添加物料</button>
                         </div>
                     </div>
                     <div class="part-table-wrap">
                         <table class="part-list">
-                            <thead><tr><th style="width:30px;">#</th><th>部件名称</th><th>规格</th><th style="width:100px;">单价 (¥)</th><th style="width:60px; text-align:center;">操作</th></tr></thead>
+                            <thead><tr><th style="width:30px;">#</th><th>物料名称</th><th>规格</th><th style="width:100px;">单价 (¥)</th><th style="width:60px; text-align:center;">操作</th></tr></thead>
                             <tbody id="partBody"></tbody>
                         </table>
                     </div>
-                    <div class="part-summary" id="partSummary">单件材料成本：0.000 ¥</div>
+                    <div class="part-summary" id="partSummary">单件物料成本：0.000 ¥</div>
                 </div>
             </div>
         </div>
@@ -2354,13 +2399,12 @@
                             盈亏分析 <span id="statusBadge" class="status-badge profit">✅ 盈利</span>
                         </div>
                         <div class="profit-grid" id="profitGrid">
-                            <div class="profit-item"><span class="plabel">💵 单位毛利</span><span class="pvalue" id="paUnitProfit">—</span></div>
                             <div class="profit-item"><span class="plabel">💵 毛利率</span><span class="pvalue" id="paMarginRate">—</span></div>
-                            <div class="profit-item"><span class="plabel">💵 单位总成本</span><span class="pvalue" id="paUnitCost">—</span></div>
-                            <div class="profit-item"><span class="plabel">💵 总成本</span><span class="pvalue" id="paTotalCost">—</span></div>
-                            <div class="profit-item"><span class="plabel">💵 总利润</span><span class="pvalue" id="paTotalProfit">—</span></div>                
+                            <div class="profit-item"><span class="plabel">💵 单件毛利</span><span class="pvalue" id="paUnitProfit">—</span></div>
+                            <div class="profit-item"><span class="plabel">💵 单件总成本</span><span class="pvalue" id="paUnitCost">—</span></div>
+                            <div class="profit-item"><span class="plabel">💵 总利润</span><span class="pvalue" id="paTotalProfit">—</span></div>
                             <div class="profit-item"><span class="plabel" id="paTotalSalesLabel">💵 总销售额</span><span class="pvalue" id="paTotalSales">—</span></div>
-
+                            <div class="profit-item"><span class="plabel">💵 总成本</span><span class="pvalue" id="paTotalCost">—</span></div>
                         </div>
                         <div class="suggest-row">
                             <label>🎯 目标毛利率 (%)</label>
@@ -2413,8 +2457,8 @@
                 <div class="history-header">
                     <div class="left">
                         <div class="actions">
-                            <button class="btn-action export" id="exportHistoryBtn">📤 导出历史</button>
-                            <button class="btn-action danger" id="clearHistoryBtn">🗑️ 清空全部</button>
+                            <button class="btn-action export" id="exportHistoryBtn">📤 导出</button>
+                            <button class="btn-action danger" id="clearHistoryBtn">🗑️ 清空</button>
                         </div>
                     </div>
                 </div>
@@ -2427,9 +2471,9 @@
                                 <th class="align-left">商品</th>
                                 <th class="align-center">图片</th>
                                 <th class="align-left">客户</th>
-                                <th class="align-center">单价成本(¥)</th>
-                                <th class="align-center">单价报价(¥)</th>
-                                <th class="align-center">单价利润(¥)</th>
+                                <th class="align-center">单件成本(¥)</th>
+                                <th class="align-center">单件报价(¥)</th>
+                                <th class="align-center">单件利润(¥)</th>
                                 <th class="align-center">总数量</th>
                                 <th class="align-center">总销售额(¥)</th>
                                 <th class="align-left">客户联系人</th>
@@ -2455,12 +2499,12 @@
             <div class="modal-header"><h2>⚙️ 系统设置</h2><button class="close-btn" id="closeSettingsBtn">✕</button></div>
             <div class="modal-body">
                 <div class="settings-tabs">
-                    <button class="tab-btn active" data-tab="company">🏢 公司</button>
-                    <button class="tab-btn" data-tab="defaults">📋 默认值</button>
-                    <button class="tab-btn" data-tab="display">🎨 显示</button>
-                    <button class="tab-btn" data-tab="storage">💾 存储</button>
-                    <button class="tab-btn" data-tab="security">🔒 安全</button>
-                    <button class="tab-btn" data-tab="data">📦 数据</button>
+                    <button class="tab-btn active" data-tab="company">🏢 公司信息</button>
+                    <button class="tab-btn" data-tab="defaults">📋 默认数据</button>
+                    <button class="tab-btn" data-tab="display">🎨 界面显示</button>
+                    <button class="tab-btn" data-tab="storage">💾 系统数据</button>
+                    <button class="tab-btn" data-tab="security">🔒 系统安全</button>
+                    <button class="tab-btn" data-tab="data">📦 报价数据</button>
                 </div>
 
                 <!-- 公司面板 -->
@@ -2684,22 +2728,23 @@
             <div class="title">QUOTATION</div>
         </div>
         <div class="info-grid">
-            <div class="item"><span class="label">地址：</span><span id="pdfCompanyAddress">—</span></div>
-            <div class="item"><span class="label">电话：</span><span id="pdfCompanyPhone">—</span></div>
+            <div class="item"><span class="label">公司地址：</span><span id="pdfCompanyAddress">—</span></div>
+            <div class="item"><span class="label">报价单号：</span><span id="pdfQuoteNo">—</span></div>
             <div class="item"><span class="label">联系人：</span><span id="pdfCompanyContact">—</span></div>
             <div class="item"><span class="label">报价日期：</span><span id="pdfDate">—</span></div>
-            <div class="item"><span class="label">报价单号：</span><span id="pdfQuoteNo">—</span></div>
+
+            <div class="item"><span class="label">联系电话：</span><span id="pdfCompanyPhone">—</span></div>
             <div class="item"><span class="label">有效期：</span><span id="pdfValidity">—</span></div>
         </div>
         <div style="margin:8px 0 4px 0;font-weight:600;color:#1a3a5c;">客户信息</div>
         <div class="info-grid" style="margin-top:0;">
-            <div class="item"><span class="label">客户名称：</span><span id="pdfCustomerName">—</span></div>
+            <div class="item"><span class="label">公司名称：</span><span id="pdfCustomerName">—</span></div>
             <div class="item"><span class="label">联系人：</span><span id="pdfCustomerContact">—</span></div>
-            <div class="item"><span class="label">电话：</span><span id="pdfCustomerPhone">—</span></div>
-            <div class="item"><span class="label">地址：</span><span id="pdfCustomerAddress">—</span></div>
+            <div class="item"><span class="label">公司地址：</span><span id="pdfCustomerAddress">—</span></div>
+            <div class="item"><span class="label">联系电话：</span><span id="pdfCustomerPhone">—</span></div>
         </div>
-        <div class="part-detail-title">📋 材料明细</div>
-        <table class="part-detail-table" id="pdfPartTable"><thead><tr><th>部件名称</th><th>规格</th><th>单价</th></tr></thead><tbody id="pdfPartBody"></tbody></table>
+        <div class="part-detail-title">📋 BOM清单</div>
+        <table class="part-detail-table" id="pdfPartTable"><thead><tr><th>物料名称</th><th>规格</th><th>单价</th></tr></thead><tbody id="pdfPartBody"></tbody></table>
         <table class="quote-table" id="pdfQuoteTable"><thead id="pdfQuoteThead"></thead><tbody id="pdfQuoteTbody"></tbody><tfoot id="pdfQuoteTfoot"></tfoot></table>
         <div style="display:flex;align-items:center;margin-top:100px;flex-wrap:wrap;gap:12px;">
             <div style="display:inline-block;"><span style="font-weight:600;">付款方式：</span><span id="pdfPayment">—</span> &nbsp;|&nbsp; <span style="font-weight:600;">交货期：</span><span id="pdfDelivery">—</span></div>
@@ -3538,7 +3583,7 @@
                 partRows.forEach((p, idx) => {
                     html += `<tr>
                         <td style="text-align:center;">${idx+1}</td>
-                        <td><input type="text" class="part-name" value="${escapeHtml(p.name)}" data-idx="${idx}" placeholder="部件名称" /></td>
+                        <td><input type="text" class="part-name" value="${escapeHtml(p.name)}" data-idx="${idx}" placeholder="物料名称" /></td>
                         <td><input type="text" class="part-spec" value="${escapeHtml(p.spec||'')}" data-idx="${idx}" placeholder="规格" /></td>
                         <td><input type="number" class="part-price" value="${p.price}" step="0.001" min="0" data-idx="${idx}" /></td>
                         <td class="part-actions"><button class="del-part-btn" data-idx="${idx}" title="删除">✕</button></td>
@@ -3580,7 +3625,7 @@
             function updateSummary() {
                 let unitPrice = 0;
                 partRows.forEach(p => { unitPrice += (p.price || 0); });
-                partSummary.textContent = '单件材料成本：' + fmtMoney(unitPrice) + ' ¥';
+                partSummary.textContent = '单件物料成本：' + fmtMoney(unitPrice) + ' ¥';
                 calcAndRender();
             }
 
@@ -4259,12 +4304,15 @@
                 addAuditLog('导出单条Excel', '客户: ' + record.customerName);
             }
 
-            // ★★★ 修复1：PDF生成时确保材料明细和客户地址完整 ★★★
+            // ============================================================
+            // ★★★ 修复：PDF生成时从记录中提取 parts，并确保表格正常 ★★★
+            // ============================================================
             async function buildPdfFromRecord(record) {
                 try {
                     const template = document.getElementById('quotation-template');
                     if (!template) throw new Error('PDF 模板未找到');
 
+                    // 重新获取所有元素
                     const logoContainer = document.getElementById('pdfLogoContainer');
                     const companyNameEl = document.getElementById('pdfCompanyName');
                     const companyAddressEl = document.getElementById('pdfCompanyAddress');
@@ -4316,6 +4364,7 @@
                     const totalSalesWithTax = (record.totalSalesWithTax || 0) * exchangeRate;
                     const totalDisplay = taxIncluded ? totalSalesWithTax : totalSalesNoTax;
 
+                    // 设置公司信息
                     if (companyNameEl) companyNameEl.textContent = companyNameVal;
                     if (companyAddressEl) companyAddressEl.textContent = companyAddressVal;
                     if (companyPhoneEl) companyPhoneEl.textContent = companyPhoneVal;
@@ -4334,7 +4383,7 @@
                     if (remarksEl) remarksEl.textContent = remarksVal;
                     if (companyNameFooterEl) companyNameFooterEl.textContent = companyNameVal;
 
-                    // ★★★ 材料明细表格：从记录中提取 parts，若为空则显示总材料成本 ★★★
+                    // ★★★ 材料明细表格 ★★★
                     let parts = (record.parts && Array.isArray(record.parts)) ? record.parts : [];
                     let partHtml = '';
                     if (parts.length === 0) {
@@ -4352,6 +4401,7 @@
                     }
                     partBodyEl.innerHTML = partHtml;
 
+                    // 报价主表
                     const showTax = taxIncluded;
                     let headers = [],
                         rowCells = [];
@@ -4407,6 +4457,7 @@
                     tfootHtml += `</div></td></tr>`;
                     quoteTfootEl.innerHTML = tfootHtml;
 
+                    // Logo
                     const logoToUse = currentLogoData || record.logoData;
                     if (logoContainer) {
                         if (logoToUse) {
@@ -4416,6 +4467,8 @@
                             logoContainer.innerHTML = '';
                         }
                     }
+
+                    // 产品图片
                     if (productImageContainer) {
                         if (record.imageData) {
                             productImageContainer.innerHTML =
@@ -4427,6 +4480,7 @@
                         }
                     }
 
+                    // 显示模板并截图
                     template.style.display = 'block';
                     template.classList.add('template-visible');
                     document.body.appendChild(template);
@@ -4486,10 +4540,10 @@
                         showToast('未找到该记录', 'error');
                         return;
                     }
-                    // ★★★ 确保 parts 为数组，并尝试从产品模板补全 ★★★
+                    // 保证 parts 为数组
                     let parts = (record.parts && Array.isArray(record.parts)) ? record.parts : [];
+                    // 如果记录中没有 parts，尝试从产品模板中匹配
                     if (parts.length === 0 && record.productName) {
-                        // 从产品模板中查找
                         const partTemplates = getPartTemplates();
                         const matched = partTemplates.find(t =>
                             t.productName === record.productName &&
@@ -4715,7 +4769,7 @@
             }
 
             // ============================================================
-            // ★★★ 修复2：导出所有数据，去掉冗余的模板名称列 ★★★
+            // ★★★ 导出所有数据，去掉冗余的模板名称列 ★★★
             // ============================================================
             async function exportAllData() {
                 if (!requireLogin()) return;
@@ -4815,7 +4869,7 @@
                     { header: '模板ID', key: 'id', width: 20 },
                     { header: '商品名称', key: 'productName', width: 18 },
                     { header: '部件序号', key: 'index', width: 10 },
-                    { header: '部件名称', key: 'partName', width: 16 },
+                    { header: '物料名称', key: 'partName', width: 16 },
                     { header: '规格', key: 'spec', width: 14 },
                     { header: '单价(¥)', key: 'price', width: 12 }
                 ];
@@ -4858,7 +4912,7 @@
             }
 
             // ============================================================
-            // ★★★ 修复3：从客户模板补全客户地址、联系人、电话 ★★★
+            // ★★★ 从客户模板补全客户信息（地址、联系人、电话） ★★★
             // ============================================================
             function fillCustomerInfoFromTemplates(historyList, customerTemplates) {
                 if (!historyList || !customerTemplates || customerTemplates.length === 0) return historyList;
@@ -5646,7 +5700,7 @@
                 return { rows, error: null };
             }
 
-            // ★★★ 修复4：Excel 导入时补全 parts 和客户地址 ★★★
+            // ★★★ 修复：Excel 导入时补全 parts 和客户地址 ★★★
             importFileInput.addEventListener('change', async function(e) {
                 const file = this.files[0];
                 if (!file) return;
@@ -5840,7 +5894,7 @@
                                 name: '模板名称',
                                 productName: '商品名称',
                                 index: { header: '部件序号', transform: v => parseInt(v) || 0 },
-                                partName: '部件名称',
+                                partName: '物料名称',
                                 spec: '规格',
                                 price: { header: '单价', transform: v => parseFloat(v) || 0 }
                             });
