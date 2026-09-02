@@ -431,13 +431,12 @@
         }
         .company-info-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;  /* 地址列更宽 */
+            grid-template-columns: 2fr 1fr;
             gap: var(--grid-gap);
         }
         .company-info-grid .info-group {
             grid-column: span 1;
         }
-        /* 地址行自定义样式 */
         .company-address-wrapper {
             display: flex;
             flex-direction: column;
@@ -492,31 +491,28 @@
             color: var(--danger);
             border-color: #f5d0d0;
         }
-/* 客户信息、产品信息的删除按钮改为红色 */
-#deleteCustomerTemplateBtn,
-#deletePartTemplateBtn {
-    color: #c0392b !important;
-    background: #fce8e8 !important;
-    border: 1.5px solid #f5d0d0 !important;
-    border-radius: var(--radius-full);
-    padding: 3px 12px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all var(--transition);
-}
-
-#deleteCustomerTemplateBtn:hover,
-#deletePartTemplateBtn:hover {
-    background: #ffe0e0 !important;
-    border-color: #c0392b !important;
-    transform: translateY(-1px);
-}
+        #deleteCustomerTemplateBtn,
+        #deletePartTemplateBtn {
+            color: #c0392b !important;
+            background: #fce8e8 !important;
+            border: 1.5px solid #f5d0d0 !important;
+            border-radius: var(--radius-full);
+            padding: 3px 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        #deleteCustomerTemplateBtn:hover,
+        #deletePartTemplateBtn:hover {
+            background: #ffe0e0 !important;
+            border-color: #c0392b !important;
+            transform: translateY(-1px);
+        }
         .address-row .addr-btn.del:hover {
             background: #ffe0e0;
             border-color: var(--danger);
             color: var(--danger);
         }
-        /* 自定义下拉列表 */
         .address-dropdown {
             display: none;
             position: absolute;
@@ -2177,7 +2173,6 @@
             display: none;
         }
 
-        /* ===== 响应式 ===== */
         @media (max-width: 820px) {
             .stats-grid {
                 grid-template-columns: repeat(3, 1fr);
@@ -2255,7 +2250,6 @@
             .module-body {
                 padding: var(--space-md) var(--space-md) var(--space-md);
             }
-
             .info-group .template-actions {
                 flex-wrap: wrap !important;
                 gap: 4px !important;
@@ -2417,7 +2411,6 @@
                 <div class="company-info-grid">
                     <div class="info-group"><label>公司名称</label><input type="text" id="companyName" value="慈利赢景工艺品厂" /></div>
                     <div class="info-group"><label>联系人</label><input type="text" id="companyContact" value="王女士" /></div>
-                    <!-- 公司地址 - 自定义下拉始终显示全部 -->
                     <div class="info-group company-address-wrapper">
                         <label>公司地址</label>
                         <div class="address-row">
@@ -2440,7 +2433,6 @@
                             <select id="customerTemplateSelect" style="min-width:100px; width:auto;"><option value="">-- 选择客户信息 --</option></select>
                             <button id="saveCustomerTemplateBtn" style="padding:3px 12px;">保存客户信息</button>
                             <button id="deleteCustomerTemplateBtn" style="display:none; padding:3px 12px;">删除</button>
-
                         </div>
                     </div>
                     <div class="info-group col-half"><label>客户名称</label><input type="text" id="customerName" placeholder="例：XX科技有限公司" /></div>
@@ -5062,13 +5054,14 @@
             }
 
             // ============================================================
-            // ★★★ 导出所有数据，去掉冗余的模板名称列 ★★★
+            // ★★★ 导出所有数据，包含公司地址模板 ★★★
             // ============================================================
             async function exportAllData() {
                 if (!requireLogin()) return;
                 let history = getHistory();
                 let customerTemplates = getCustomerTemplates();
                 let partTemplates = getPartTemplates();
+                let addressTemplates = getAddressTemplates();
 
                 customerTemplates = customerTemplates.filter(t => {
                     const name = (t.name || '').trim();
@@ -5134,7 +5127,7 @@
                     }
                 }
 
-                // ---- 客户信息工作表（保留ID，去掉模板名称） ----
+                // ---- 客户信息工作表 ----
                 const wsCustomer = workbook.addWorksheet('客户信息');
                 wsCustomer.columns = [
                     { header: 'ID', key: 'id', width: 20 },
@@ -5156,7 +5149,7 @@
                     });
                 });
 
-                // ---- 产品明细工作表（保留ID，去掉模板名称） ----
+                // ---- 产品明细工作表 ----
                 const wsPartDetail = workbook.addWorksheet('产品明细');
                 wsPartDetail.columns = [
                     { header: '模板ID', key: 'id', width: 20 },
@@ -5183,11 +5176,23 @@
                     });
                 });
 
+                // ---- ★★★ 新增：公司地址模板工作表 ★★★ ----
+                const wsAddress = workbook.addWorksheet('公司地址模板');
+                wsAddress.columns = [
+                    { header: '地址', key: 'address', width: 60 }
+                ];
+                const hRowAddr = wsAddress.getRow(1);
+                hRowAddr.font = { bold: true };
+                hRowAddr.alignment = { horizontal: 'center' };
+                addressTemplates.forEach(addr => {
+                    wsAddress.addRow({ address: addr });
+                });
+
                 const buffer = await workbook.xlsx.writeBuffer();
                 const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                 saveAs(blob, `赢景报价系统_全部数据_${new Date().toISOString().slice(0,10)}.xlsx`);
-                showToast('📤 全部数据已导出（含历史、客户信息、产品明细）', 'success');
-                addAuditLog('导出全部数据', 'Excel（不含系统设置）');
+                showToast('📤 全部数据已导出（含历史、客户信息、产品明细、公司地址模板）', 'success');
+                addAuditLog('导出全部数据', 'Excel（含地址模板）');
             }
 
             function clearHistory() {
@@ -5420,6 +5425,7 @@
                 }
             });
 
+            // ★★★ 修改：备份到文件夹时包含地址模板 ★★★
             backupToFolderBtn.addEventListener('click', async function() {
                 if (!requireLogin()) return;
                 if (!storageFolderHandle) { showToast('⚠️ 请先选择保存文件夹', 'warning'); return; }
@@ -5428,6 +5434,7 @@
                     const history = getHistory();
                     const customerTemplates = getCustomerTemplates();
                     const partTemplates = getPartTemplates();
+                    const addressTemplates = getAddressTemplates(); // ★ 新增
                     const settings = loadSettings();
                     const dataPackage = {
                         version: '2.3',
@@ -5435,6 +5442,7 @@
                         history: history,
                         customerTemplates: customerTemplates,
                         partTemplates: partTemplates,
+                        addressTemplates: addressTemplates, // ★ 新增
                         settings: settings,
                         images: { logo: currentLogoData || null, seal: currentSealData || null, product: currentImageData ||
                                 null }
@@ -5448,7 +5456,7 @@
                     const writable = await fileHandle.createWritable();
                     await writable.write(blob);
                     await writable.close();
-                    showToast('✅ 数据已备份到文件夹：' + fileName, 'success');
+                    showToast('✅ 数据已备份到文件夹（含地址模板）', 'success');
                     addAuditLog('备份到文件夹', fileName);
                 } catch (err) {
                     console.error('备份失败:', err);
@@ -5461,11 +5469,13 @@
                 if (!('showDirectoryPicker' in window)) return;
                 try {
                     const history = getHistory();
+                    const addressTemplates = getAddressTemplates();
                     const settings = loadSettings();
                     const dataPackage = {
                         version: '2.3',
                         exportedAt: new Date().toISOString(),
                         history: history,
+                        addressTemplates: addressTemplates,
                         settings: settings,
                         images: { logo: currentLogoData || null, seal: currentSealData || null, product: currentImageData ||
                                 null }
@@ -5483,7 +5493,7 @@
             }
 
             // ============================================================
-            // ★ 从备份文件导入（JSON）
+            // ★ 从备份文件导入（JSON）—— 支持地址模板 ★
             // ============================================================
             const importBackupBtn = $('importBackupBtn');
             const importBackupInput = $('importBackupInput');
@@ -5514,6 +5524,7 @@
                         let importedHistory = jsonData.history || [];
                         const importedCustomerTemplates = jsonData.customerTemplates || [];
                         const importedPartTemplates = jsonData.partTemplates || [];
+                        const importedAddressTemplates = jsonData.addressTemplates || []; // ★ 新增
                         const importedSettings = jsonData.settings || {};
                         const importedImages = jsonData.images || {};
 
@@ -5533,13 +5544,20 @@
                             };
                         });
 
-                        // ★★★ 从客户模板补全地址 ★★★
                         importedHistory = fillCustomerInfoFromTemplates(importedHistory, importedCustomerTemplates);
 
+                        // ★★★ 处理地址模板 ★★★
+                        let mergedAddressTemplates = [];
                         if (mode === 'replace') {
                             setHistory(importedHistory);
                             setCustomerTemplates(importedCustomerTemplates);
                             setPartTemplates(importedPartTemplates);
+                            if (importedAddressTemplates.length > 0) {
+                                setAddressTemplates(importedAddressTemplates);
+                                mergedAddressTemplates = importedAddressTemplates;
+                            } else {
+                                setAddressTemplates([]);
+                            }
                             if (Object.keys(importedSettings).length > 0) {
                                 const def = getDefaultSettings();
                                 for (const key in def) {
@@ -5574,13 +5592,16 @@
                                 imageFileName.classList.add('has-file');
                                 localStorage.setItem('quote_image_data_saved', importedImages.product);
                             }
-                            showToast(`✅ 数据导入成功（替换模式），历史 ${importedHistory.length} 条，客户信息 ${importedCustomerTemplates.length} 个，产品信息 ${importedPartTemplates.length} 个`,
+                            showToast(`✅ 数据导入成功（替换模式），历史 ${importedHistory.length} 条，客户信息 ${importedCustomerTemplates.length} 个，产品信息 ${importedPartTemplates.length} 个，地址模板 ${importedAddressTemplates.length} 个`,
                                 'success');
-                            addAuditLog('从备份文件导入（替换）', `历史${importedHistory.length}条，客户信息${importedCustomerTemplates.length}个，产品信息${importedPartTemplates.length}个`);
+                            addAuditLog('从备份文件导入（替换）',
+                                `历史${importedHistory.length}条，客户信息${importedCustomerTemplates.length}个，产品信息${importedPartTemplates.length}个，地址模板${importedAddressTemplates.length}个`
+                                );
                         } else {
                             let existingHistory = getHistory();
                             const existingCustomerTemplates = getCustomerTemplates();
                             const existingPartTemplates = getPartTemplates();
+                            const existingAddressTemplates = getAddressTemplates(); // ★ 新增
 
                             const historyMap = new Map();
                             existingHistory.forEach(item => {
@@ -5613,6 +5634,12 @@
                             importedPartTemplates.forEach(item => { if (item.id) partMap.set(item.id, item); });
                             const mergedPartTemplates = Array.from(partMap.values());
 
+                            // ★★★ 合并地址模板（使用 Set 去重） ★★★
+                            const addressSet = new Set();
+                            existingAddressTemplates.forEach(addr => addressSet.add(addr));
+                            importedAddressTemplates.forEach(addr => addressSet.add(addr));
+                            mergedAddressTemplates = Array.from(addressSet.values());
+
                             let mergedSettings = loadSettings();
                             if (Object.keys(importedSettings).length > 0) {
                                 const def = getDefaultSettings();
@@ -5628,6 +5655,7 @@
                             setHistory(mergedHistory);
                             setCustomerTemplates(mergedCustomerTemplates);
                             setPartTemplates(mergedPartTemplates);
+                            setAddressTemplates(mergedAddressTemplates); // ★ 新增
                             saveSettingsToStorage(mergedSettings);
 
                             if (importedImages.logo) {
@@ -5658,15 +5686,19 @@
                                 localStorage.setItem('quote_image_data_saved', importedImages.product);
                             }
 
-                            showToast(`✅ 数据导入成功（合并模式），历史 ${mergedHistory.length} 条，客户信息 ${mergedCustomerTemplates.length} 个，产品信息 ${mergedPartTemplates.length} 个`,
+                            showToast(`✅ 数据导入成功（合并模式），历史 ${mergedHistory.length} 条，客户信息 ${mergedCustomerTemplates.length} 个，产品信息 ${mergedPartTemplates.length} 个，地址模板 ${mergedAddressTemplates.length} 个`,
                                 'success');
                             addAuditLog('从备份文件导入（合并）',
-                                `合并后历史${mergedHistory.length}条，客户信息${mergedCustomerTemplates.length}个，产品信息${mergedPartTemplates.length}个`);
+                                `合并后历史${mergedHistory.length}条，客户信息${mergedCustomerTemplates.length}个，产品信息${mergedPartTemplates.length}个，地址模板${mergedAddressTemplates.length}个`
+                                );
                         }
 
                         renderHistory();
                         renderCustomerTemplateSelect();
                         renderPartTemplateSelect();
+                        // ★ 刷新地址下拉
+                        renderAddressDropdown();
+                        toggleDeleteAddressBtn();
                         const settings2 = loadSettings();
                         applySettingsToForm(settings2);
                         calcAndRender();
@@ -5895,7 +5927,7 @@
             }
 
             // ============================================================
-            // 数据管理 - 导入（Excel）
+            // 数据管理 - 导入（Excel）—— 支持公司地址模板 ★
             // ============================================================
             const exportAllDataBtn = $('exportAllDataBtn');
             const importAllDataBtn = $('importAllDataBtn');
@@ -5999,7 +6031,7 @@
                 return { rows, error: null };
             }
 
-            // ★★★ 修复：Excel 导入时补全 parts 和客户地址 ★★★
+            // ★★★ 修改：Excel 导入时增加对公司地址模板的支持 ★★★
             importFileInput.addEventListener('change', async function(e) {
                 const file = this.files[0];
                 if (!file) return;
@@ -6020,6 +6052,7 @@
                         let importedHistory = [];
                         let importedCustomerTemplates = [];
                         let importedPartTemplates = [];
+                        let importedAddressTemplates = []; // ★ 新增
                         let importedSettings = {};
                         let errorMessages = [];
                         let foundAnyData = false;
@@ -6265,6 +6298,25 @@
                             importedPartTemplates = partTemplatesFromDetail;
                         }
 
+                        // ★★★ 4. 新增：公司地址模板 ★★★
+                        const wsAddress = getWorksheet(workbook, '公司地址模板');
+                        if (wsAddress) {
+                            const result = robustParse(wsAddress, {
+                                address: '地址'
+                            });
+                            if (result.error) {
+                                // 地址模板工作表可能不存在，忽略错误
+                            } else {
+                                result.rows.forEach(r => {
+                                    const addr = r.data.address;
+                                    if (addr && addr.trim() !== '') {
+                                        importedAddressTemplates.push(addr.trim());
+                                    }
+                                });
+                                if (importedAddressTemplates.length > 0) foundAnyData = true;
+                            }
+                        }
+
                         // ★★★ 核心修复：从产品模板补全历史记录的 parts ★★★
                         if (importedHistory.length > 0 && importedPartTemplates.length > 0) {
                             importedHistory = importedHistory.map(rec => {
@@ -6289,7 +6341,7 @@
                             if (errorMessages.length > 0) {
                                 msg += ' 问题详情：' + errorMessages.join('；');
                             } else {
-                                msg += ' 请确保 Excel 包含“历史记录”、“客户信息”或“产品明细/产品信息”工作表。';
+                                msg += ' 请确保 Excel 包含“历史记录”、“客户信息”、“产品明细”或“公司地址模板”工作表。';
                             }
                             showToast(msg, 'warning');
                             this.value = '';
@@ -6322,6 +6374,12 @@
                             } else {
                                 setPartTemplates(currentPartTemplates);
                             }
+                            // ★ 处理地址模板
+                            if (importedAddressTemplates.length > 0) {
+                                setAddressTemplates(importedAddressTemplates);
+                            } else {
+                                setAddressTemplates([]);
+                            }
                             if (importedSettings && Object.keys(importedSettings).length > 0) {
                                 const def = getDefaultSettings();
                                 for (const key in def) {
@@ -6329,13 +6387,14 @@
                                 }
                                 saveSettingsToStorage(importedSettings);
                             }
-                            showToast(`✅ 数据导入成功（替换模式），历史 ${importedHistory.length} 条，客户信息 ${importedCustomerTemplates.length > 0 ? importedCustomerTemplates.length : '保留原有'} 个，产品信息 ${importedPartTemplates.length > 0 ? importedPartTemplates.length : '保留原有'} 个`,
+                            showToast(`✅ 数据导入成功（替换模式），历史 ${importedHistory.length} 条，客户信息 ${importedCustomerTemplates.length > 0 ? importedCustomerTemplates.length : '保留原有'} 个，产品信息 ${importedPartTemplates.length > 0 ? importedPartTemplates.length : '保留原有'} 个，地址模板 ${importedAddressTemplates.length} 个`,
                                 'success');
-                            addAuditLog('导入全部数据（替换）', 'Excel 导入，替换模式');
+                            addAuditLog('导入全部数据（替换）', 'Excel 导入，替换模式（含地址模板）');
                         } else {
                             const existingHistory = getHistory();
                             const existingCustomerTemplates = getCustomerTemplates();
                             const existingPartTemplates = getPartTemplates();
+                            const existingAddressTemplates = getAddressTemplates(); // ★
 
                             const historyMap = new Map();
                             existingHistory.forEach(item => { if (item.quoteNo) historyMap.set(item.quoteNo, item); });
@@ -6366,18 +6425,30 @@
                             importedPartTemplates.forEach(item => { if (item.id) partMap.set(item.id, item); });
                             const mergedPartTemplates = Array.from(partMap.values());
 
+                            // ★ 合并地址模板
+                            const addressSet = new Set();
+                            existingAddressTemplates.forEach(addr => addressSet.add(addr));
+                            importedAddressTemplates.forEach(addr => addressSet.add(addr));
+                            const mergedAddressTemplates = Array.from(addressSet.values());
+
                             setHistory(mergedHistory);
                             setCustomerTemplates(mergedCustomerTemplates);
                             setPartTemplates(mergedPartTemplates);
+                            setAddressTemplates(mergedAddressTemplates); // ★
 
-                            showToast(`✅ 数据导入成功（合并模式），历史 ${mergedHistory.length} 条，客户信息 ${mergedCustomerTemplates.length} 个，产品信息 ${mergedPartTemplates.length} 个`,
+                            showToast(`✅ 数据导入成功（合并模式），历史 ${mergedHistory.length} 条，客户信息 ${mergedCustomerTemplates.length} 个，产品信息 ${mergedPartTemplates.length} 个，地址模板 ${mergedAddressTemplates.length} 个`,
                                 'success');
-                            addAuditLog('导入全部数据（合并）', `合并后历史${mergedHistory.length}条，客户信息${mergedCustomerTemplates.length}个，产品信息${mergedPartTemplates.length}个`);
+                            addAuditLog('导入全部数据（合并）',
+                                `合并后历史${mergedHistory.length}条，客户信息${mergedCustomerTemplates.length}个，产品信息${mergedPartTemplates.length}个，地址模板${mergedAddressTemplates.length}个`
+                                );
                         }
 
                         renderHistory();
                         renderCustomerTemplateSelect();
                         renderPartTemplateSelect();
+                        // ★ 刷新地址下拉
+                        renderAddressDropdown();
+                        toggleDeleteAddressBtn();
                         const settings2 = loadSettings();
                         applySettingsToForm(settings2);
                         calcAndRender();
@@ -6392,6 +6463,9 @@
                 this.value = '';
             });
 
+            // ============================================================
+            // 清空全部数据时清空地址模板
+            // ============================================================
             clearAllDataBtn.addEventListener('click', function() {
                 if (!requireLogin()) return;
                 requirePasswordForSensitiveAction('清空全部数据').then(ok => {
@@ -6401,6 +6475,7 @@
                             setHistory([]);
                             setCustomerTemplates([]);
                             setPartTemplates([]);
+                            setAddressTemplates([]); // ★ 清空地址模板
                             const def = getDefaultSettings();
                             saveSettingsToStorage(def);
                             securityData.passwordHash = '';
@@ -6452,11 +6527,14 @@
                 });
             });
 
+            // ============================================================
+            // 重置设置时不清除地址模板（保留用户数据）
+            // ============================================================
             resetSettingsBtn.addEventListener('click', function() {
                 if (!requireLogin()) return;
                 requirePasswordForSensitiveAction('重置设置').then(ok => {
                     if (!ok) return;
-                    if (confirm('重置系统设置为默认值，不影响历史记录和模板，确认？')) {
+                    if (confirm('重置系统设置为默认值，不影响历史记录、客户信息、产品信息和地址模板，确认？')) {
                         const def = getDefaultSettings();
                         const currentSettings = loadSettings();
                         def.storageFolderHandle = currentSettings.storageFolderHandle || null;
@@ -6485,9 +6563,10 @@
                             el.classList.toggle('active', el.dataset.color === def.themeColor);
                         });
                         applyAppearance(def);
-                        // 同步地址输入
+                        // 同步地址输入（地址模板保留）
                         if (companyAddress) companyAddress.value = def.companyAddress || '';
                         toggleDeleteAddressBtn();
+                        renderAddressDropdown(); // 刷新下拉（模板数据保留）
                         calcAndRender();
                         updateLockUI();
                         showToast('✅ 设置已重置为默认', 'success');
