@@ -341,7 +341,7 @@
         }
         .info-grid-2col {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 2fr 1fr;
             gap: var(--grid-gap);
         }
         .info-grid-2col .col-full {
@@ -431,11 +431,127 @@
         }
         .company-info-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 2fr 1fr;  /* 地址列更宽 */
             gap: var(--grid-gap);
         }
         .company-info-grid .info-group {
             grid-column: span 1;
+        }
+        /* 地址行自定义样式 */
+        .company-address-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .address-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            position: relative;
+        }
+        .address-row input {
+            flex: 1;
+            min-width: 120px;
+            padding: 6px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-md);
+            background: var(--card);
+            transition: all var(--transition);
+            color: var(--text);
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        .address-row input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 4px rgba(42, 125, 225, 0.10);
+        }
+        .address-row .addr-btn {
+            padding: 3px 12px;
+            border-radius: var(--radius-full);
+            border: 1.5px solid var(--border);
+            background: #f0f7ff;
+            font-size: var(--font-sm);
+            cursor: pointer;
+            transition: all var(--transition);
+            white-space: nowrap;
+            font-weight: 500;
+            color: var(--text);
+            flex-shrink: 0;
+        }
+        .address-row .addr-btn:hover {
+            background: #e0ecff;
+            border-color: var(--primary-light);
+            color: var(--primary-light);
+            transform: translateY(-1px);
+        }
+        .address-row .addr-btn.del {
+            background: #fce8e8;
+            color: var(--danger);
+            border-color: #f5d0d0;
+        }
+/* 客户信息、产品信息的删除按钮改为红色 */
+#deleteCustomerTemplateBtn,
+#deletePartTemplateBtn {
+    color: #c0392b !important;
+    background: #fce8e8 !important;
+    border: 1.5px solid #f5d0d0 !important;
+    border-radius: var(--radius-full);
+    padding: 3px 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+#deleteCustomerTemplateBtn:hover,
+#deletePartTemplateBtn:hover {
+    background: #ffe0e0 !important;
+    border-color: #c0392b !important;
+    transform: translateY(-1px);
+}
+        .address-row .addr-btn.del:hover {
+            background: #ffe0e0;
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+        /* 自定义下拉列表 */
+        .address-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 2px);
+            left: 0;
+            right: 0;
+            max-height: 150px;
+            overflow-y: auto;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            list-style: none;
+            margin: 0;
+            padding: 4px 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-md);
+        }
+        .address-dropdown li {
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: var(--font-sm);
+            transition: background 0.15s;
+            color: var(--text);
+        }
+        .address-dropdown li:hover {
+            background: #e8f0fe;
+        }
+        .address-dropdown li:active {
+            background: #d4e4ff;
+        }
+        .address-dropdown .empty-msg {
+            color: var(--text-muted);
+            cursor: default;
+            padding: 8px 14px;
+            font-style: italic;
         }
         .module-product .module-body {
             padding-bottom: var(--space-md);
@@ -1292,6 +1408,8 @@
         }
 
         #quotation-template {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
             display: none;
             width: 210mm;
             min-height: 297mm;
@@ -1449,6 +1567,9 @@
             display: block;
         }
         #quotation-template .terms {
+            -webkit-text-size-adjust: 100% !important;
+            text-size-adjust: 100% !important;
+            font-size: 9.5px !important;
             margin-top: 0;
             padding: 0;
             font-size: 9.5px !important;
@@ -1482,6 +1603,9 @@
             border-radius: 4px;
         }
         #quotation-template .footer {
+            -webkit-text-size-adjust: 100% !important;
+            text-size-adjust: 100% !important;
+            font-size: 9.5px !important;
             position: relative;
             margin-top: 20px;
             border-top: 1px solid #d9e2ef;
@@ -2132,7 +2256,6 @@
                 padding: var(--space-md) var(--space-md) var(--space-md);
             }
 
-            /* ★★★ 修复手机端按钮溢出 ★★★ */
             .info-group .template-actions {
                 flex-wrap: wrap !important;
                 gap: 4px !important;
@@ -2236,6 +2359,9 @@
                 font-size: 11px !important;
                 padding: 2px 8px !important;
             }
+            .address-row {
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
@@ -2291,7 +2417,16 @@
                 <div class="company-info-grid">
                     <div class="info-group"><label>公司名称</label><input type="text" id="companyName" value="慈利赢景工艺品厂" /></div>
                     <div class="info-group"><label>联系人</label><input type="text" id="companyContact" value="王女士" /></div>
-                    <div class="info-group"><label>公司地址</label><input type="text" id="companyAddress" value="深圳市宝安区西乡大道258号大益广场2栋十七单元17-3B" /></div>
+                    <!-- 公司地址 - 自定义下拉始终显示全部 -->
+                    <div class="info-group company-address-wrapper">
+                        <label>公司地址</label>
+                        <div class="address-row">
+                            <input type="text" id="companyAddress" placeholder="输入或选择地址" autocomplete="off" />
+                            <ul id="addressDropdown" class="address-dropdown"></ul>
+                            <button class="addr-btn" id="saveCompanyAddressBtn">保存地址</button>
+                            <button class="addr-btn del" id="deleteCompanyAddressBtn" style="display:none;">删除</button>
+                        </div>
+                    </div>
                     <div class="info-group"><label>公司电话</label><input type="text" id="companyPhone" value="+86 18807444885" /></div>
                 </div>
                 <div class="section-sub" style="margin-top:var(--space-md);">
@@ -2305,6 +2440,7 @@
                             <select id="customerTemplateSelect" style="min-width:100px; width:auto;"><option value="">-- 选择客户信息 --</option></select>
                             <button id="saveCustomerTemplateBtn" style="padding:3px 12px;">保存客户信息</button>
                             <button id="deleteCustomerTemplateBtn" style="display:none; padding:3px 12px;">删除</button>
+
                         </div>
                     </div>
                     <div class="info-group col-half"><label>客户名称</label><input type="text" id="customerName" placeholder="例：XX科技有限公司" /></div>
@@ -2761,7 +2897,7 @@
             const $ = id => document.getElementById(id);
 
             // ============================================================
-            // 安全模块 - 登录管理
+            // 安全模块 - 登录管理（保持不变）
             // ============================================================
             const SECURITY_KEY = 'quote_security_data_v2';
 
@@ -3419,6 +3555,163 @@
             const selectStorageFolderBtn = $('selectStorageFolderBtn');
             const storageFolderPath = $('storageFolderPath');
             const backupToFolderBtn = $('backupToFolderBtn');
+
+            // ============================================================
+            // ★★★ 公司地址模板管理（自定义下拉，始终显示全部） ★★★
+            // ============================================================
+            const COMPANY_ADDRESS_KEY = 'company_address_templates';
+
+            function getAddressTemplates() {
+                try {
+                    const raw = localStorage.getItem(COMPANY_ADDRESS_KEY);
+                    if (raw) {
+                        const parsed = JSON.parse(raw);
+                        if (Array.isArray(parsed)) return parsed;
+                    }
+                } catch (e) {}
+                return [];
+            }
+
+            function setAddressTemplates(templates) {
+                try { localStorage.setItem(COMPANY_ADDRESS_KEY, JSON.stringify(templates)); } catch (e) { showToast('存储空间不足！',
+                        'error'); }
+            }
+
+            function toggleDeleteAddressBtn() {
+                const input = $('companyAddress');
+                const delBtn = $('deleteCompanyAddressBtn');
+                const current = input.value.trim();
+                const templates = getAddressTemplates();
+                delBtn.style.display = (current && templates.includes(current)) ? 'inline-block' : 'none';
+            }
+
+            // 核心：渲染自定义下拉（始终显示全部）
+            function renderAddressDropdown() {
+                const dropdown = $('addressDropdown');
+                const templates = getAddressTemplates();
+                dropdown.innerHTML = '';
+                if (templates.length === 0) {
+                    const li = document.createElement('li');
+                    li.textContent = '暂无保存的地址';
+                    li.className = 'empty-msg';
+                    dropdown.appendChild(li);
+                } else {
+                    templates.forEach(addr => {
+                        const li = document.createElement('li');
+                        li.textContent = addr;
+                        li.dataset.addr = addr;
+                        li.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const input = $('companyAddress');
+                            input.value = this.dataset.addr;
+                            dropdown.style.display = 'none';
+                            // 触发 input 事件以同步设置和删除按钮
+                            input.dispatchEvent(new Event('input', { bubbles: true }));
+                        });
+                        dropdown.appendChild(li);
+                    });
+                }
+                // 控制删除按钮
+                toggleDeleteAddressBtn();
+            }
+
+            function initCompanyAddressTemplates() {
+                const input = $('companyAddress');
+                const dropdown = $('addressDropdown');
+                const delBtn = $('deleteCompanyAddressBtn');
+
+                // 从设置加载当前地址
+                const settings = loadSettings();
+                input.value = settings.companyAddress || '';
+
+                // 显示下拉（渲染全部地址）
+                function showDropdown() {
+                    renderAddressDropdown();
+                    dropdown.style.display = 'block';
+                }
+
+                function hideDropdown() {
+                    dropdown.style.display = 'none';
+                }
+
+                // 输入框获得焦点时显示下拉
+                input.addEventListener('focus', function() {
+                    showDropdown();
+                });
+
+                // 输入框失去焦点时延迟隐藏（给点击选项留时间）
+                input.addEventListener('blur', function() {
+                    setTimeout(() => {
+                        hideDropdown();
+                    }, 200);
+                });
+
+                // 输入时同步设置和删除按钮
+                input.addEventListener('input', function() {
+                    const val = this.value.trim();
+                    const settings = loadSettings();
+                    settings.companyAddress = val;
+                    saveSettingsToStorage(settings);
+                    toggleDeleteAddressBtn();
+                    calcAndRender();
+                });
+
+                // 按下 Escape 键关闭下拉
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        hideDropdown();
+                    }
+                });
+
+                // 点击页面其他区域关闭下拉
+                document.addEventListener('click', function(e) {
+                    const wrapper = input.closest('.address-row');
+                    if (wrapper && !wrapper.contains(e.target)) {
+                        hideDropdown();
+                    }
+                });
+
+                // 保存按钮
+                $('saveCompanyAddressBtn').addEventListener('click', function() {
+                    if (!requireLogin()) return;
+                    const addr = input.value.trim();
+                    if (!addr) { showToast('请输入地址', 'warning'); return; }
+                    let templates = getAddressTemplates();
+                    if (templates.includes(addr)) {
+                        showToast('该地址已存在', 'warning');
+                        return;
+                    }
+                    templates.push(addr);
+                    setAddressTemplates(templates);
+                    renderAddressDropdown();
+                    showToast('✅ 地址已保存', 'success');
+                    addAuditLog('保存公司地址', addr);
+                });
+
+                // 删除按钮
+                $('deleteCompanyAddressBtn').addEventListener('click', function() {
+                    if (!requireLogin()) return;
+                    const addr = input.value.trim();
+                    if (!addr) { showToast('请选择要删除的地址', 'warning'); return; }
+                    if (!confirm(`确定删除地址「${addr}」吗？`)) return;
+                    let templates = getAddressTemplates();
+                    templates = templates.filter(a => a !== addr);
+                    setAddressTemplates(templates);
+                    renderAddressDropdown();
+                    input.value = '';
+                    // 同步设置
+                    const settings = loadSettings();
+                    settings.companyAddress = '';
+                    saveSettingsToStorage(settings);
+                    showToast('已删除', 'success');
+                    addAuditLog('删除公司地址', addr);
+                    calcAndRender();
+                });
+
+                // 初始渲染
+                renderAddressDropdown();
+                toggleDeleteAddressBtn();
+            }
 
             // ============================================================
             // 工具函数
@@ -5593,6 +5886,12 @@
                 laborCost.value = settings.defaultLaborCost || 5000;
                 overheadCost.value = settings.defaultOverheadCost || 2000;
                 applyAppearance(settings);
+                // 同步地址模板中的当前地址
+                const addrInput = $('companyAddress');
+                if (addrInput) {
+                    addrInput.value = settings.companyAddress || '';
+                    toggleDeleteAddressBtn();
+                }
             }
 
             // ============================================================
@@ -6110,6 +6409,7 @@
                                 localStorage.removeItem('quote_logo_data_saved');
                                 localStorage.removeItem('quote_seal_data_saved');
                                 localStorage.removeItem('quote_image_data_saved');
+                                localStorage.removeItem(COMPANY_ADDRESS_KEY);
                             } catch (e) {}
                             applySettingsToForm(def);
                             renderHistory();
@@ -6135,6 +6435,11 @@
                                 { name: '保护膜', spec: '透明', price: 0.10 } ];
                             saveCurrentParts(partRows);
                             renderParts();
+                            // 清空地址模板并重置输入
+                            setAddressTemplates([]);
+                            renderAddressDropdown();
+                            if (companyAddress) companyAddress.value = '';
+                            toggleDeleteAddressBtn();
                             calcAndRender();
                             isLoggedIn = true;
                             securityData.isLoggedIn = true;
@@ -6180,6 +6485,9 @@
                             el.classList.toggle('active', el.dataset.color === def.themeColor);
                         });
                         applyAppearance(def);
+                        // 同步地址输入
+                        if (companyAddress) companyAddress.value = def.companyAddress || '';
+                        toggleDeleteAddressBtn();
                         calcAndRender();
                         updateLockUI();
                         showToast('✅ 设置已重置为默认', 'success');
@@ -6234,6 +6542,8 @@
             window.addEventListener('DOMContentLoaded', function() {
                 const settings = loadSettings();
                 applySettingsToForm(settings);
+                // 初始化公司地址模板（放在apply之后，以同步当前地址）
+                initCompanyAddressTemplates();
                 initParts();
                 calcAndRender();
                 renderHistory();
