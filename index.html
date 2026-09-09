@@ -1422,7 +1422,7 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid #1a3a5c;
-            padding-bottom: 6px;
+            padding-bottom: 8px;
             margin-bottom: 12px;
             gap: 12px;
         }
@@ -1437,12 +1437,12 @@
             flex-shrink: 0;
             display: flex;
             align-items: center;
-            max-height: 50px;
-            max-width: 90px;
+            max-height: 70px;
+            max-width: 130px;
         }
         #quotation-template .header-left .logo-wrap img {
-            max-height: 50px;
-            max-width: 90px;
+            max-height: 70px;
+            max-width: 130px;
             width: auto;
             height: auto;
             object-fit: contain;
@@ -2508,8 +2508,8 @@
                     <div class="param-grid">
                         <div class="param-item"><label>总件数</label><input type="number" id="orderQty" value="100" step="1" min="1" /></div>
                         <div class="param-item"><label>加价率 (%)</label><input type="number" id="markupRate" value="0.5" step="0.1" min="0" /></div>
-                        <div class="param-item"><label>总人力成本 (¥)</label><input type="number" id="laborCost" value="5000" step="100" min="0" /></div>
-                        <div class="param-item"><label>总运营成本 (¥)</label><input type="number" id="overheadCost" value="2000" step="100" min="0" /></div>
+                        <div class="param-item"><label>总人力成本 (¥)</label><input type="number" id="laborCost" value="5000" step="100" min="0" title="当前报价单的人力成本，默认值可在系统设置中修改" /></div>
+                        <div class="param-item"><label>总运营成本 (¥)</label><input type="number" id="overheadCost" value="2000" step="100" min="0" title="当前报价单的运营成本，默认值可在系统设置中修改" /></div>
                         <div class="param-item"><label>报价含税</label><select id="isTaxIncluded"><option value="yes">是（含税价）</option><option value="no">否（不含税价）</option></select></div>
                         <div class="param-item span-2"><label>税率</label><select id="invoiceType" style="width:100%;"><option value="13">一般纳税人销售货物、劳务等（13%）</option><option value="9">一般纳税人交通运输、建筑等（9%）</option><option value="6">一般纳税人现代服务、生活服务等（6%）</option><option value="5">简易计税特定项目（5%）</option><option value="3">小规模纳税人（3%）</option><option value="1">小规模纳税人减征（1%）</option><option value="0">出口零税率（0%）</option></select></div>
                         <div class="param-item"><label>💱 结算货币</label><select id="settlementCurrency" style="width:100%;"><option value="CNY" selected>人民币 (CNY ¥)</option><option value="USD">美元 (USD $)</option><option value="EUR">欧元 (EUR €)</option><option value="GBP">英镑 (GBP £)</option><option value="JPY">日元 (JPY ¥)</option><option value="HKD">港币 (HKD HK$)</option><option value="KRW">韩元 (KRW ₩)</option><option value="AUD">澳元 (AUD A$)</option><option value="CAD">加元 (CAD C$)</option></select></div>
@@ -2599,11 +2599,11 @@
                                 <th class="align-left">商品</th>
                                 <th class="align-center">图片</th>
                                 <th class="align-left">客户</th>
-                                <th class="align-center">单件成本(¥)</th>
-                                <th class="align-center">单件报价(¥)</th>
-                                <th class="align-center">单件利润(¥)</th>
+                                <th class="align-center">单件成本</th>
+                                <th class="align-center">单件报价</th>
+                                <th class="align-center">单件利润</th>
                                 <th class="align-center">总数量</th>
-                                <th class="align-center">总销售额(¥)</th>
+                                <th class="align-center">总销售额</th>
                                 <th class="align-left">客户联系人</th>
                                 <th class="align-left">电话</th>
                                 <th class="align-center" style="width:100px;">操作</th>
@@ -2690,6 +2690,7 @@
                         <div class="setting-group"><label>默认人力成本 (¥)</label><input type="number" id="setDefaultLaborCost" value="5000" step="100" min="0" /></div>
                         <div class="setting-group"><label>默认运营成本 (¥)</label><input type="number" id="setDefaultOverheadCost" value="2000" step="100" min="0" /></div>
                     </div>
+                    <div style="font-size:var(--font-sm);color:var(--text-muted);background:#f4f8fe;padding:var(--space-sm) var(--space-md);border-radius:var(--radius-sm);margin-top:var(--space-sm);">💡 默认人力/运营成本作为新报价单的初始值，保存设置后立即生效；也可以直接在报价计算中心按单修改。</div>
                 </div>
 
                 <!-- 显示面板 -->
@@ -2851,7 +2852,6 @@
         <div class="header">
             <div class="header-left">
                 <div class="logo-wrap" id="pdfLogoContainer"></div>
-                <div class="company" id="pdfCompanyName">慈利赢景工艺品厂</div>
             </div>
             <div class="title">QUOTATION</div>
         </div>
@@ -2899,7 +2899,7 @@
                     if (raw) {
                         const data = JSON.parse(raw);
                         if (!data.passwordHash) data.passwordHash = '';
-                        if (!data.logoutTimeout) data.logoutTimeout = 30;
+                        if (data.logoutTimeout === undefined || data.logoutTimeout === null || isNaN(data.logoutTimeout)) data.logoutTimeout = 30;
                         if (!data.auditLog) data.auditLog = [];
                         data.isLoggedIn = false;
                         return data;
@@ -2962,32 +2962,9 @@
                     if (typeof partRows !== 'undefined' && partRows) {
                         saveCurrentParts(partRows);
                     }
-                    const settings = loadSettings();
-                    settings.companyName = (typeof companyName !== 'undefined' && companyName) ? companyName.value || '赢景' :
-                        '赢景';
-                    settings.companyAddress = (typeof companyAddress !== 'undefined' && companyAddress) ? companyAddress.value ||
-                        '' : '';
-                    settings.companyPhone = (typeof companyPhone !== 'undefined' && companyPhone) ? companyPhone.value || '' :
-                        '';
-                    settings.companyContact = (typeof companyContact !== 'undefined' && companyContact) ? companyContact.value ||
-                        '' : '';
-                    settings.defaultTaxRate = (typeof invoiceType !== 'undefined' && invoiceType) ? invoiceType.value || '13' :
-                        '13';
-                    settings.defaultTaxIncluded = (typeof isTaxIncluded !== 'undefined' && isTaxIncluded) ? isTaxIncluded.value ||
-                        'yes' : 'yes';
-                    settings.defaultValidity = (typeof validity !== 'undefined' && validity) ? validity.value || '7个工作日' :
-                        '7个工作日';
-                    settings.defaultPayment = (typeof payment !== 'undefined' && payment) ? payment.value || '款到发货' :
-                        '款到发货';
-                    settings.defaultDelivery = (typeof delivery !== 'undefined' && delivery) ? delivery.value || '5-7个工作日' :
-                        '5-7个工作日';
-                    settings.defaultMarkupRate = (typeof markupRate !== 'undefined' && markupRate) ? parseFloat(markupRate.value) ||
-                        0 : 0;
-                    settings.defaultTargetMargin = (typeof targetMargin !== 'undefined' && targetMargin) ? parseFloat(targetMargin
-                        .value) || 15 : 15;
-                    settings.defaultRemarks = (typeof remarks !== 'undefined' && remarks) ? remarks.value || '' : '';
-                    saveSettingsToStorage(settings);
-
+                    // ★ 修复：退出/关闭页面时不再把表单当前值回写系统设置，
+                    // 系统设置（quote_system_settings_v2）中的默认值保持权威，
+                    // 这里仅保存“当前工作状态”（quote_current_*）供下次打开恢复。
                     if (typeof currentLogoData !== 'undefined' && currentLogoData) {
                         localStorage.setItem('quote_logo_data_saved', currentLogoData);
                     }
@@ -3009,17 +2986,15 @@
                             ''
                     };
                     localStorage.setItem('quote_current_customer', JSON.stringify(custData));
-                    const qty = (typeof orderQty !== 'undefined' && orderQty) ? parseInt(orderQty.value) || 100 : 100;
+                    const qty = (typeof orderQty !== 'undefined' && orderQty) ? safeNum(orderQty.value, 100) : 100;
                     localStorage.setItem('quote_current_qty', String(qty));
-                    const markup = (typeof markupRate !== 'undefined' && markupRate) ? parseFloat(markupRate.value) || 0.5 : 0.5;
+                    const markup = (typeof markupRate !== 'undefined' && markupRate) ? safeNum(markupRate.value, 0.5) : 0.5;
                     localStorage.setItem('quote_current_markup', String(markup));
-                    const labor = (typeof laborCost !== 'undefined' && laborCost) ? parseFloat(laborCost.value) || 5000 : 5000;
+                    const labor = (typeof laborCost !== 'undefined' && laborCost) ? safeNum(laborCost.value, 5000) : 5000;
                     localStorage.setItem('quote_current_labor', String(labor));
-                    const overhead = (typeof overheadCost !== 'undefined' && overheadCost) ? parseFloat(overheadCost.value) ||
-                        2000 : 2000;
+                    const overhead = (typeof overheadCost !== 'undefined' && overheadCost) ? safeNum(overheadCost.value, 2000) : 2000;
                     localStorage.setItem('quote_current_overhead', String(overhead));
-                    const target = (typeof targetMargin !== 'undefined' && targetMargin) ? parseFloat(targetMargin.value) || 15 :
-                        15;
+                    const target = (typeof targetMargin !== 'undefined' && targetMargin) ? safeNum(targetMargin.value, 15) : 15;
                     localStorage.setItem('quote_current_target_margin', String(target));
                     const currency = (typeof settlementCurrency !== 'undefined' && settlementCurrency) ? settlementCurrency.value ||
                         'CNY' : 'CNY';
@@ -3056,15 +3031,14 @@
                     const qty = localStorage.getItem('quote_current_qty');
                     if (qty && typeof orderQty !== 'undefined' && orderQty) orderQty.value = parseInt(qty) || 100;
                     const markup = localStorage.getItem('quote_current_markup');
-                    if (markup && typeof markupRate !== 'undefined' && markupRate) markupRate.value = parseFloat(markup) || 0.5;
+                    if (markup && typeof markupRate !== 'undefined' && markupRate) markupRate.value = safeNum(markup, 0.5);
                     const labor = localStorage.getItem('quote_current_labor');
-                    if (labor && typeof laborCost !== 'undefined' && laborCost) laborCost.value = parseFloat(labor) || 5000;
+                    if (labor && typeof laborCost !== 'undefined' && laborCost) laborCost.value = safeNum(labor, 5000);
                     const overhead = localStorage.getItem('quote_current_overhead');
-                    if (overhead && typeof overheadCost !== 'undefined' && overheadCost) overheadCost.value = parseFloat(
-                        overhead) || 2000;
+                    if (overhead && typeof overheadCost !== 'undefined' && overheadCost) overheadCost.value = safeNum(
+                        overhead, 2000);
                     const target = localStorage.getItem('quote_current_target_margin');
-                    if (target && typeof targetMargin !== 'undefined' && targetMargin) targetMargin.value = parseFloat(target) ||
-                        15;
+                    if (target && typeof targetMargin !== 'undefined' && targetMargin) targetMargin.value = safeNum(target, 15);
                     const currency = localStorage.getItem('quote_current_currency');
                     if (currency && typeof settlementCurrency !== 'undefined' && settlementCurrency) settlementCurrency.value =
                         currency || 'CNY';
@@ -3132,7 +3106,9 @@
 
             function startLogoutTimer() {
                 if (logoutTimer) clearTimeout(logoutTimer);
-                const timeout = (securityData.logoutTimeout || 30) * 60 * 1000;
+                // ★ 修复：0 表示永不自动注销，不允许被 || 30 兜底
+                const t = securityData.logoutTimeout;
+                const timeout = (t === undefined || t === null || isNaN(t) ? 30 : t) * 60 * 1000;
                 if (timeout > 0) {
                     logoutTimer = setTimeout(() => {
                         if (isLoggedIn) {
@@ -3708,6 +3684,20 @@
             // ============================================================
             // 工具函数
             // ============================================================
+            // ★ 修复：数值解析助手，允许 0 值（避免 parseFloat(x) || 默认值 把 0 吞掉）
+            function safeNum(v, fallback) {
+                const n = parseFloat(v);
+                return isNaN(n) ? fallback : n;
+            }
+
+            // ★ 优化：Excel 导出表头统一样式（深蓝底白字）
+            function styleHeaderRow(row) {
+                row.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+                row.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1A3A5C' } };
+                row.alignment = { horizontal: 'center', vertical: 'middle' };
+                row.height = 22;
+            }
+
             function fmtMoney(v) {
                 if (v === undefined || v === null || !isFinite(v)) return '—';
                 const settings = loadSettings();
@@ -3934,7 +3924,7 @@
                 addAuditLog('添加部件', '新增部件');
             });
 
-            orderQty.addEventListener('input', function() { updateSummary(); });
+            // ★ 修复：orderQty 已包含在下方 inputs 统一绑定中，删除此处重复绑定（避免 calcAndRender 被触发两次）
 
             // ============================================================
             // 文件上传（设置面板中的Logo和印章）
@@ -4411,7 +4401,8 @@
                     if (profit > 0.005) profitCount++;
                     else if (profit < -0.005) lossCount++;
                     totalMargin += (item.marginRate || 0);
-                    totalRevenue += (item.displayTotal || 0);
+                    // ★ 修复：不同币种记录统一按保存时的汇率折算为 CNY 后再合计，避免外币金额直接相加
+                    totalRevenue += (item.displayTotal || 0) / (item.exchangeRate || 1);
                 });
                 statTotal.textContent = total;
                 statProfit.textContent = profitCount;
@@ -4452,6 +4443,7 @@
                             `<img src="${item.imageData}" class="hist-thumb" alt="产品图" />`;
                     }
                     const customer = escapeHtml(item.customerName || '—');
+                    const sym = item.settleSymbol || '¥'; // ★ 修复：使用记录保存时的货币符号
                     const unitCost = fmtMoney(item.unitPrice);
                     const unitQuote = fmtMoney(item.displayPrice !== undefined ? item.displayPrice : item.priceWithTax);
                     const unitProfit = fmtMoney(item.unitProfit);
@@ -4465,11 +4457,11 @@
                         <td class="align-left">${product}</td>
                         <td class="align-center">${imgHtml}</td>
                         <td class="align-left">${customer}</td>
-                        <td class="align-center">¥ ${unitCost}</td>
-                        <td class="align-center">¥ ${unitQuote}</td>
-                        <td class="align-center">¥ ${unitProfit}</td>
+                        <td class="align-center">${sym} ${unitCost}</td>
+                        <td class="align-center">${sym} ${unitQuote}</td>
+                        <td class="align-center">${sym} ${unitProfit}</td>
                         <td class="align-center">${totalQty}</td>
-                        <td class="align-center">¥ ${totalSales}</td>
+                        <td class="align-center">${sym} ${totalSales}</td>
                         <td class="align-left">${contact}</td>
                         <td class="align-left">${phone}</td>
                         <td class="align-center" style="white-space:nowrap;">
@@ -4553,19 +4545,19 @@
                     { header: '电话', key: 'phone', width: 16 }
                 ];
                 const headerRow = worksheet.getRow(1);
-                headerRow.font = { bold: true };
-                headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
+                styleHeaderRow(headerRow);
+                worksheet.views = [{ state: 'frozen', ySplit: 1 }];
                 const row = worksheet.addRow({
                     time: new Date(record.timestamp).toLocaleString('zh-CN'),
                     quoteNo: record.quoteNo || '—',
                     product: record.productName || '',
                     image: '',
                     customer: record.customerName || '',
-                    unitCost: fmtMoney(record.unitPrice),
-                    unitQuote: fmtMoney(record.displayPrice !== undefined ? record.displayPrice : record.priceWithTax),
-                    unitProfit: fmtMoney(record.unitProfit),
+                    unitCost: safeNum(record.unitPrice, 0),
+                    unitQuote: safeNum(record.displayPrice !== undefined ? record.displayPrice : record.priceWithTax, 0),
+                    unitProfit: safeNum(record.unitProfit, 0),
                     qty: record.totalQty || 0,
-                    totalSales: fmtMoney(record.displayTotal !== undefined ? record.displayTotal : record.totalSalesWithTax),
+                    totalSales: safeNum(record.displayTotal !== undefined ? record.displayTotal : record.totalSalesWithTax, 0),
                     contact: record.customerContact || '',
                     phone: record.customerPhone || ''
                 });
@@ -4672,14 +4664,14 @@
                     let parts = (record.parts && Array.isArray(record.parts)) ? record.parts : [];
                     let partHtml = '';
                     if (parts.length === 0) {
-                        const totalMatCost = (record.totalMaterialCost || 0) * exchangeRate;
+                        // ★ 修复：报价单是给客户看的，不再显示“总材料成本”，避免泄露成本信息
                         partHtml = `<tr><td colspan="3" style="text-align:center;color:#8a9bb0;padding:8px 0;">
-                            无部件明细数据（总材料成本：${fmtMoney(totalMatCost)} ${curName} ${settleSym}）
+                            无部件明细
                         </td></tr>`;
                     } else {
-                        const factor = 1 + markup / 100;
+                        // ★ 修复：BOM 单价显示含加价率的售价（报价单是给客户看的，不能泄露成本价）
                         parts.forEach(p => {
-                            const price = (p.price || 0) * factor * exchangeRate;
+                            const price = (p.price || 0) * (1 + markup / 100) * exchangeRate;
                             partHtml +=
                                 `<tr><td>${escapeHtml(p.name||'未命名')}</td><td>${escapeHtml(p.spec||'')}</td><td>${fmtMoney(price)} <span class="currency-name-pdf">${curName}</span> ${settleSym}</td></tr>`;
                         });
@@ -4747,7 +4739,7 @@
                     if (logoContainer) {
                         if (logoToUse) {
                             logoContainer.innerHTML =
-                                `<img src="${logoToUse}" style="max-height:50px;max-width:90px;width:auto;height:auto;object-fit:contain;display:block;" />`;
+                                `<img src="${logoToUse}" style="max-height:60px;max-width:120px;width:auto;height:auto;object-fit:contain;display:block;" />`;
                         } else {
                             logoContainer.innerHTML = '';
                         }
@@ -4846,14 +4838,7 @@ if (productImageContainer) {
                         currencyName: record.currencyName || '人民币',
                         exchangeRate: record.exchangeRate || 1,
                     };
-                    if (pdfRecord.settleCurrency !== 'CNY' && exchangeRates && exchangeRates[pdfRecord.settleCurrency]) {
-                        pdfRecord.exchangeRate = exchangeRates[pdfRecord.settleCurrency] || 1;
-                    } else {
-                        pdfRecord.settleCurrency = 'CNY';
-                        pdfRecord.settleSymbol = '¥';
-                        pdfRecord.currencyName = '人民币';
-                        pdfRecord.exchangeRate = 1;
-                    }
+                    // ★ 修复：历史记录 PDF 使用保存时的汇率与货币符号，还原当时报价金额（不再用最新汇率重算）
                     await buildPdfFromRecord(pdfRecord);
                     addAuditLog('导出PDF', '客户: ' + record.customerName);
                 } catch (err) {
@@ -4948,8 +4933,8 @@ if (productImageContainer) {
                     { header: '毛利率(%)', key: 'margin', width: 12 }
                 ];
                 const headerRow = worksheet.getRow(1);
-                headerRow.font = { bold: true };
-                headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
+                styleHeaderRow(headerRow);
+                worksheet.views = [{ state: 'frozen', ySplit: 1 }];
                 const taxIncluded = data.taxIncluded;
                 const displayTotal = taxIncluded ? data.totalSalesWithTaxCNY : data.totalSalesNoTaxCNY;
                 const row = worksheet.addRow({
@@ -4959,12 +4944,12 @@ if (productImageContainer) {
                     product: data.productName,
                     image: '',
                     qty: data.totalQty,
-                    priceNoTax: fmtMoney(data.priceNoTaxCNY),
+                    priceNoTax: safeNum(data.priceNoTaxCNY, 0),
                     taxRate: data.taxRate + '%',
-                    priceWithTax: fmtMoney(data.priceWithTaxCNY),
-                    total: fmtMoney(displayTotal),
-                    totalCost: fmtMoney(data.totalCostCNY),
-                    profit: fmtMoney(data.totalProfitCNY),
+                    priceWithTax: safeNum(data.priceWithTaxCNY, 0),
+                    total: safeNum(displayTotal, 0),
+                    totalCost: safeNum(data.totalCostCNY, 0),
+                    profit: safeNum(data.totalProfitCNY, 0),
                     margin: (data.marginRate || 0).toFixed(2) + '%'
                 });
                 row.alignment = { horizontal: 'center', vertical: 'middle' };
@@ -5011,8 +4996,8 @@ if (productImageContainer) {
                     { header: '电话', key: 'phone', width: 16 }
                 ];
                 const headerRow = worksheet.getRow(1);
-                headerRow.font = { bold: true };
-                headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
+                styleHeaderRow(headerRow);
+                worksheet.views = [{ state: 'frozen', ySplit: 1 }];
 
                 const sorted = [...list].reverse();
                 for (const item of sorted) {
@@ -5022,11 +5007,11 @@ if (productImageContainer) {
                         product: item.productName || '',
                         image: '',
                         customer: item.customerName || '',
-                        unitCost: fmtMoney(item.unitPrice),
-                        unitQuote: fmtMoney(item.displayPrice !== undefined ? item.displayPrice : item.priceWithTax),
-                        unitProfit: fmtMoney(item.unitProfit),
+                        unitCost: safeNum(item.unitPrice, 0),
+                        unitQuote: safeNum(item.displayPrice !== undefined ? item.displayPrice : item.priceWithTax, 0),
+                        unitProfit: safeNum(item.unitProfit, 0),
                         qty: item.totalQty || 0,
-                        totalSales: fmtMoney(item.displayTotal !== undefined ? item.displayTotal : item.totalSalesWithTax),
+                        totalSales: safeNum(item.displayTotal !== undefined ? item.displayTotal : item.totalSalesWithTax, 0),
                         contact: item.customerContact || '',
                         phone: item.customerPhone || ''
                     });
@@ -5093,8 +5078,8 @@ if (productImageContainer) {
                     { header: '电话', key: 'phone', width: 16 }
                 ];
                 const hRow = wsHistory.getRow(1);
-                hRow.font = { bold: true };
-                hRow.alignment = { horizontal: 'center', vertical: 'middle' };
+                styleHeaderRow(hRow);
+                wsHistory.views = [{ state: 'frozen', ySplit: 1 }];
                 const sortedHistory = [...history].reverse();
                 for (const item of sortedHistory) {
                     const row = wsHistory.addRow({
@@ -5103,11 +5088,11 @@ if (productImageContainer) {
                         product: item.productName || '',
                         image: '',
                         customer: item.customerName || '',
-                        unitCost: fmtMoney(item.unitPrice),
-                        unitQuote: fmtMoney(item.displayPrice !== undefined ? item.displayPrice : item.priceWithTax),
-                        unitProfit: fmtMoney(item.unitProfit),
+                        unitCost: safeNum(item.unitPrice, 0),
+                        unitQuote: safeNum(item.displayPrice !== undefined ? item.displayPrice : item.priceWithTax, 0),
+                        unitProfit: safeNum(item.unitProfit, 0),
                         qty: item.totalQty || 0,
-                        totalSales: fmtMoney(item.displayTotal !== undefined ? item.displayTotal : item.totalSalesWithTax),
+                        totalSales: safeNum(item.displayTotal !== undefined ? item.displayTotal : item.totalSalesWithTax, 0),
                         contact: item.customerContact || '',
                         phone: item.customerPhone || ''
                     });
@@ -5810,11 +5795,11 @@ if (productImageContainer) {
                 setDefaultValidity.value = settings.defaultValidity || '7个工作日';
                 setDefaultPayment.value = settings.defaultPayment || '款到发货';
                 setDefaultDelivery.value = settings.defaultDelivery || '5-7个工作日';
-                setDefaultMarkupRate.value = settings.defaultMarkupRate || 0.5;
-                setDefaultTargetMargin.value = settings.defaultTargetMargin || 15;
+                setDefaultMarkupRate.value = safeNum(settings.defaultMarkupRate, 0.5);
+                setDefaultTargetMargin.value = safeNum(settings.defaultTargetMargin, 15);
                 setDefaultRemarks.value = settings.defaultRemarks || '以上报价不含运费，质保期为12个月。';
-                setDefaultLaborCost.value = settings.defaultLaborCost || 5000;
-                setDefaultOverheadCost.value = settings.defaultOverheadCost || 2000;
+                setDefaultLaborCost.value = safeNum(settings.defaultLaborCost, 5000);
+                setDefaultOverheadCost.value = safeNum(settings.defaultOverheadCost, 2000);
                 setDecimalPlaces.value = settings.decimalPlaces || 3;
                 setFontSize.value = settings.fontSize || 15;
                 setBorderRadius.value = settings.borderRadius || 12;
@@ -5864,7 +5849,7 @@ if (productImageContainer) {
                 const selectedColor = document.querySelector('#themeColorOptions .color-item.active');
                 const themeColor = selectedColor ? selectedColor.dataset.color : '#1a3a5c';
 
-                securityData.logoutTimeout = parseInt(setLogoutTimeout.value) || 30;
+                securityData.logoutTimeout = safeNum(setLogoutTimeout.value, 30);
                 saveSecurityData(securityData);
                 if (isLoggedIn) startLogoutTimer();
 
@@ -5878,11 +5863,11 @@ if (productImageContainer) {
                     defaultValidity: setDefaultValidity.value.trim() || '7个工作日',
                     defaultPayment: setDefaultPayment.value.trim() || '款到发货',
                     defaultDelivery: setDefaultDelivery.value.trim() || '5-7个工作日',
-                    defaultMarkupRate: parseFloat(setDefaultMarkupRate.value) || 0,
-                    defaultTargetMargin: parseFloat(setDefaultTargetMargin.value) || 0,
+                    defaultMarkupRate: safeNum(setDefaultMarkupRate.value, 0),
+                    defaultTargetMargin: safeNum(setDefaultTargetMargin.value, 0),
                     defaultRemarks: setDefaultRemarks.value.trim(),
-                    defaultLaborCost: parseFloat(setDefaultLaborCost.value) || 5000,
-                    defaultOverheadCost: parseFloat(setDefaultOverheadCost.value) || 2000,
+                    defaultLaborCost: safeNum(setDefaultLaborCost.value, 5000),
+                    defaultOverheadCost: safeNum(setDefaultOverheadCost.value, 2000),
                     decimalPlaces: parseInt(setDecimalPlaces.value) || 3,
                     themeColor: themeColor,
                     fontSize: parseInt(setFontSize.value) || 15,
@@ -5894,6 +5879,16 @@ if (productImageContainer) {
                 saveSettingsToStorage(newSettings);
                 applySettingsToForm(newSettings);
                 applyAppearance(newSettings);
+                // ★ 修复：保存设置后同步“当前工作状态”，确保下次打开页面时
+                // restoreSavedState() 恢复的是新默认值，而不是被旧值覆盖
+                try {
+                    localStorage.setItem('quote_current_labor', String(newSettings.defaultLaborCost));
+                    localStorage.setItem('quote_current_overhead', String(newSettings.defaultOverheadCost));
+                    localStorage.setItem('quote_current_markup', String(newSettings.defaultMarkupRate));
+                    localStorage.setItem('quote_current_target_margin', String(newSettings.defaultTargetMargin));
+                    localStorage.setItem('quote_current_tax_rate', String(newSettings.defaultTaxRate));
+                    localStorage.setItem('quote_current_tax_included', String(newSettings.defaultTaxIncluded));
+                } catch (e) {}
                 updateLockUI();
                 showToast('✅ 设置已保存', 'success');
                 closeSettings();
@@ -5912,11 +5907,11 @@ if (productImageContainer) {
                 validity.value = settings.defaultValidity || '7个工作日';
                 payment.value = settings.defaultPayment || '款到发货';
                 delivery.value = settings.defaultDelivery || '5-7个工作日';
-                markupRate.value = settings.defaultMarkupRate || 0;
-                targetMargin.value = settings.defaultTargetMargin || 15;
+                markupRate.value = safeNum(settings.defaultMarkupRate, 0);
+                targetMargin.value = safeNum(settings.defaultTargetMargin, 15);
                 remarks.value = settings.defaultRemarks || '';
-                laborCost.value = settings.defaultLaborCost || 5000;
-                overheadCost.value = settings.defaultOverheadCost || 2000;
+                laborCost.value = safeNum(settings.defaultLaborCost, 5000);
+                overheadCost.value = safeNum(settings.defaultOverheadCost, 2000);
                 applyAppearance(settings);
                 // 同步地址模板中的当前地址
                 const addrInput = $('companyAddress');
@@ -6475,7 +6470,7 @@ if (productImageContainer) {
                             setHistory([]);
                             setCustomerTemplates([]);
                             setPartTemplates([]);
-                            setAddressTemplates([]); // ★ 清空地址模板
+                            // ★ 地址模板在下文与 renderAddressDropdown() 一起清空
                             const def = getDefaultSettings();
                             saveSettingsToStorage(def);
                             securityData.passwordHash = '';
@@ -6636,7 +6631,7 @@ if (productImageContainer) {
                 addAuditLog('系统启动,欢迎使用');
 
                 if (isLoggedIn) {
-                    restoreSavedState();
+                    // ★ 修复：restoreSavedState() 已在 initSecurity() 中调用过，此处避免重复恢复覆盖默认值
                     calcAndRender();
                 }
                 updateLockUI();
