@@ -816,6 +816,24 @@ select {
 .settings-panel { display: none; animation: fadeSlide .25s ease-out; }
 .settings-panel.active { display: block; }
 @keyframes fadeSlide { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.login-tip { margin-top: 10px; font-size: 12px; color: var(--text-3); text-align: center; }
+.login-reset { margin-top: 6px; font-size: 12px; color: var(--primary); text-align: center; cursor: pointer; }
+.login-reset:hover { text-decoration: underline; }
+.pw-wrap { position: relative; display: flex; align-items: center; flex: 1; min-width: 0; }
+.pw-wrap input { padding-right: 30px; }
+.pw-toggle { position: absolute; right: 2px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-3); display: flex; align-items: center; justify-content: center; width: 26px; height: 100%; padding: 0; }
+.pw-toggle:hover { color: var(--text-1); }
+.pw-toggle .eye-off { display: none; }
+.pw-toggle.visible .eye-on { display: none; }
+.pw-toggle.visible .eye-off { display: flex; }
+.accounts-table-wrap { overflow-x: auto; margin-top: 4px; }
+.accounts-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.accounts-table th, .accounts-table td { padding: 7px 10px; border-bottom: 1px solid var(--border-light); text-align: left; }
+.accounts-table th { color: var(--text-3); font-weight: 500; white-space: nowrap; }
+.accounts-table td { color: var(--text-1); }
+.role-badge { display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+.role-badge.admin { background: rgba(51,112,255,.12); color: var(--primary); }
+.role-badge.user { background: var(--border-light); color: var(--text-2); }
 .setting-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; margin-bottom: 12px; }
 .setting-row .full { grid-column: 1 / -1; }
 .setting-group { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
@@ -1391,8 +1409,9 @@ select {
                 <button class="tab-btn" data-tab="defaults">默认数据</button>
                 <button class="tab-btn" data-tab="display">界面显示</button>
                 <button class="tab-btn" data-tab="storage">数据存储</button>
-                <button class="tab-btn" data-tab="security">系统安全</button>
+
                 <button class="tab-btn" data-tab="data">报价数据</button>
+                <button class="tab-btn" data-tab="accounts" id="accountsTabBtn">账号与安全</button>
             </div>
 
             <!-- 公司信息 -->
@@ -1502,8 +1521,26 @@ select {
                 </div>
             </div>
 
-            <!-- 系统安全 -->
-            <div class="settings-panel" id="tab-security">
+            <!-- 报价数据 -->
+            <div class="settings-panel" id="tab-data">
+                <div class="data-mgmt">
+                    <div class="data-row"><div class="info">导出所有数据（Excel）<small>历史记录、客户信息、产品明细</small></div><button class="btn-action export" id="exportAllDataBtn">导出 Excel</button></div>
+                    <div class="data-row">
+                        <div class="info" style="min-width:140px;">导入所有数据（Excel）<small>从 .xlsx 文件恢复所有数据</small></div>
+                        <select id="importModeSelect" style="padding:5px 30px 5px 12px;border:1px solid var(--border);border-radius:var(--radius-full);font-size:13px;cursor:pointer;min-width:130px;">
+                            <option value="replace">替换（清空后导入）</option>
+                            <option value="merge">合并（按单号去重）</option>
+                        </select>
+                        <button class="btn-action import" id="importAllDataBtn">选择文件导入</button>
+                        <input type="file" id="importFileInput" accept=".xlsx" style="display:none;" />
+                    </div>
+                    <div class="data-row"><div class="info">清空所有数据<small>删除所有历史记录、模板和设置（不可恢复）</small></div><button class="btn-action clear" id="clearAllDataBtn">清空全部</button></div>
+                    <div class="data-row" style="background:#fff8f0;border-color:#f5d0b0;"><div class="info">重置为默认设置<small>恢复出厂默认值，不影响历史记录和模板</small></div><button class="btn-action danger" id="resetSettingsBtn">重置设置</button></div>
+                </div>
+            </div>
+
+            <!-- 账号与安全 -->
+            <div class="settings-panel" id="tab-accounts">
                 <div class="setting-row">
                     <div class="setting-group full">
                         <div style="background:var(--border-light);padding:14px 18px;border-radius:var(--radius-m);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;border:1px solid var(--border-light);">
@@ -1523,24 +1560,27 @@ select {
                 </div>
                 <div class="setting-row">
                     <div class="setting-group full">
-                        <label>修改密码 <span class="hint">（需要验证当前密码）</span></label>
-                        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
-                            <input type="password" id="oldPasswordInput" placeholder="当前密码" style="flex:1;min-width:120px;" />
-                            <input type="password" id="newPasswordInput" placeholder="新密码（至少6位）" style="flex:1;min-width:120px;" />
-                            <input type="password" id="confirmPasswordInput" placeholder="确认新密码" style="flex:1;min-width:120px;" />
-                            <button class="btn-action import" id="changePasswordBtn" style="border:none;">修改密码</button>
-                        </div>
-                        <div style="font-size:12px;color:var(--text-3);margin-top:4px;">修改密码需要验证当前密码，新密码至少 6 位。</div>
+                        <label>账号列表 <span class="hint">（管理员可添加 / 重置密码 / 删除账号）</span></label>
+                        <div class="accounts-table-wrap"><table class="accounts-table">
+                            <thead><tr><th>用户名</th><th>角色</th><th>创建时间</th><th style="width:170px;">操作</th></tr></thead>
+                            <tbody id="accountsTableBody"></tbody>
+                        </table></div>
+                        <div style="font-size:12px;color:var(--text-3);margin-top:4px;">不能删除当前登录账号，且至少保留一个管理员。</div>
                     </div>
                 </div>
                 <div class="setting-row">
                     <div class="setting-group full">
-                        <label>删除密码 <span class="hint">（取消登录保护）</span></label>
-                        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;align-items:center;">
-                            <input type="password" id="deletePasswordInput" placeholder="当前密码" style="flex:1;min-width:150px;" />
-                            <button class="btn-action clear" id="deletePasswordBtn" style="border:none;">删除密码</button>
+                        <label>添加账号</label>
+                        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+                            <input type="text" id="newAccountUsername" placeholder="用户名" style="flex:1;min-width:120px;" />
+                            <div class="pw-wrap"><input type="password" id="newAccountPassword" placeholder="密码（至少6位）" style="flex:1;min-width:0;" /><button type="button" class="pw-toggle" title="显示/隐藏密码" tabindex="-1"><span class="eye-on"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span><span class="eye-off"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></span></button></div>
+                            <select id="newAccountRole" style="flex:0 0 110px;">
+                                <option value="user">普通用户</option>
+                                <option value="admin">管理员</option>
+                            </select>
+                            <button class="btn-action import" id="addAccountBtn" style="border:none;">添加</button>
                         </div>
-                        <div style="font-size:12px;color:var(--text-3);margin-top:4px;">删除后系统将不再需要密码登录，所有数据仍保留。操作需验证当前密码。</div>
+                        <div style="font-size:12px;color:var(--text-3);margin-top:4px;">普通用户登录后自动隐藏删除类操作与系统设置入口。</div>
                     </div>
                 </div>
                 <div class="setting-row">
@@ -1550,25 +1590,7 @@ select {
                         <div style="font-size:12px;color:var(--text-3);">0 表示永不自动注销</div>
                     </div>
                 </div>
-                <div class="settings-note">安全功能：登录密码保护 · 修改/删除密码 · 自动注销 · 操作审计日志（系统自动记录）</div>
-            </div>
-
-            <!-- 报价数据 -->
-            <div class="settings-panel" id="tab-data">
-                <div class="data-mgmt">
-                    <div class="data-row"><div class="info">导出所有数据（Excel）<small>历史记录、客户信息、产品明细</small></div><button class="btn-action export" id="exportAllDataBtn">导出 Excel</button></div>
-                    <div class="data-row">
-                        <div class="info" style="min-width:140px;">导入所有数据（Excel）<small>从 .xlsx 文件恢复所有数据</small></div>
-                        <select id="importModeSelect" style="padding:5px 30px 5px 12px;border:1px solid var(--border);border-radius:var(--radius-full);font-size:13px;cursor:pointer;min-width:130px;">
-                            <option value="replace">替换（清空后导入）</option>
-                            <option value="merge">合并（按单号去重）</option>
-                        </select>
-                        <button class="btn-action import" id="importAllDataBtn">选择文件导入</button>
-                        <input type="file" id="importFileInput" accept=".xlsx" style="display:none;" />
-                    </div>
-                    <div class="data-row"><div class="info">清空所有数据<small>删除所有历史记录、模板和设置（不可恢复）</small></div><button class="btn-action clear" id="clearAllDataBtn">清空全部</button></div>
-                    <div class="data-row" style="background:#fff8f0;border-color:#f5d0b0;"><div class="info">重置为默认设置<small>恢复出厂默认值，不影响历史记录和模板</small></div><button class="btn-action danger" id="resetSettingsBtn">重置设置</button></div>
-                </div>
+                <div class="settings-note">账号与安全：密码保护 · 账号权限管理 · 重置密码 · 自动注销 · 操作审计日志（系统自动记录）。默认管理员账号 admin / 初始密码 admin123。</div>
             </div>
         </div>
         <div class="modal-foot">
@@ -1584,11 +1606,13 @@ select {
         <div class="login-logo" id="loginLogoBox">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
         </div>
-        <h2>赢景报价系统</h2>
-        <p>请输入登录密码以访问报价系统</p>
-        <div class="input-group"><label>密码</label><input type="password" id="loginPasswordInput" placeholder="输入密码" autofocus /></div>
+        <h2 id="loginTitle">赢景报价系统</h2>
+        <p>请输入账号密码以访问报价系统</p>
+        <div class="input-group"><label>账号</label><input type="text" id="loginUsernameInput" placeholder="输入账号" autocomplete="username" autofocus /></div>
+        <div class="input-group"><label>密码</label><div class="pw-wrap"><input type="password" id="loginPasswordInput" placeholder="输入密码" autocomplete="current-password" /><button type="button" class="pw-toggle" title="显示/隐藏密码" tabindex="-1"><span class="eye-on"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span><span class="eye-off"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></span></button></div></div>
         <button class="login-btn" id="loginBtn">登 录</button>
-        <div class="login-error" id="loginError">密码错误，请重试</div>
+        <div class="login-error" id="loginError">账号或密码错误，请重试</div>
+        <div class="login-tip" id="loginTip">默认管理员账号：admin</div>
     </div>
 </div>
 
@@ -1597,7 +1621,7 @@ select {
     <div class="password-modal-box">
         <h3>验证身份</h3>
         <p>请输入登录密码以确认此操作</p>
-        <input type="password" id="passwordModalInput" placeholder="请输入密码" />
+<div class="pw-wrap" style="width:100%;"><input type="password" id="passwordModalInput" placeholder="请输入密码" style="width:100%;" /><button type="button" class="pw-toggle" title="显示/隐藏密码" tabindex="-1"><span class="eye-on"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span><span class="eye-off"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></span></button></div>
         <div class="error-msg" id="passwordModalError">密码错误，请重试</div>
         <div class="actions">
             <button class="cancel-btn" id="passwordModalCancel">取消</button>
@@ -1717,6 +1741,72 @@ select {
     let isLoggedIn = false;
     let logoutTimer = null;
 
+    // ============================================================
+    // 账号管理（管理员 / 普通用户）
+    // ============================================================
+    const ACCOUNTS_KEY = 'quote_accounts_v1';
+    const CURRENT_USER_KEY = 'quote_current_user_v1';
+    let currentUser = null;
+
+    function getAccounts() {
+        try {
+            const raw = localStorage.getItem(ACCOUNTS_KEY);
+            if (raw) { const a = JSON.parse(raw); if (Array.isArray(a)) return a; }
+        } catch (e) { console.warn('加载账号失败:', e); }
+        return [];
+    }
+    function saveAccounts(list) {
+        try { localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(list)); } catch (e) { console.warn('保存账号失败:', e); }
+    }
+    function ensureDefaultAccount() {
+        let accs = getAccounts();
+        // 有系统原密码时，确保 admin 账号密码与原登录密码一致（修复历史密码错乱）
+        if (securityData.passwordHash) {
+            const adm = accs.find(a => a.role === 'admin' && a.username.toLowerCase() === 'admin');
+            if (adm) {
+                if (adm.passwordHash !== securityData.passwordHash) {
+                    adm.passwordHash = securityData.passwordHash;
+                    saveAccounts(accs);
+                }
+                return accs;
+            }
+        }
+        if (accs.length > 0) return accs;
+        const oldHash = securityData.passwordHash || '';
+        accs.push({
+            id: 'a' + Date.now(),
+            username: 'admin',
+            passwordHash: oldHash || hashPassword('admin123'),
+            role: 'admin',
+            createdAt: Date.now()
+        });
+        saveAccounts(accs);
+        return accs;
+    }
+    function findAccount(username) {
+        const u = (username || '').trim().toLowerCase();
+        return getAccounts().find(a => a.username.trim().toLowerCase() === u) || null;
+    }
+    function isAdmin() {
+        if (!currentUser) return true;   // 开放模式视为管理员
+        return currentUser.role === 'admin';
+    }
+    // 权限 UI：普通用户隐藏删除类操作与系统设置入口
+    function applyPermissionUI() {
+        const admin = isAdmin();
+        const controls = ['openSettingsBtn', 'clearHistoryBtn', 'clearAllDataBtn', 'accountsTabBtn',
+            'deleteCompanyTemplateBtn', 'deleteCustomerTemplateBtn', 'deletePartTemplateBtn'];
+        controls.forEach(function(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (!admin) { el.style.display = 'none'; return; }
+            if (id === 'deleteCompanyTemplateBtn') el.style.display = getCompanyTemplates().length > 0 ? 'inline-block' : 'none';
+            else if (id === 'deleteCustomerTemplateBtn') el.style.display = getCustomerTemplates().length > 0 ? 'inline-block' : 'none';
+            else if (id === 'deletePartTemplateBtn') el.style.display = getPartTemplates().length > 0 ? 'inline-block' : 'none';
+            else el.style.display = '';
+        });
+    }
+
     function addAuditLog(action, detail, status = 'success') {
         const entry = { time: new Date().toISOString(), action: action, detail: detail || '', status: status };
         securityData.auditLog.unshift(entry);
@@ -1728,10 +1818,14 @@ select {
         const overlay = $('loginOverlay');
         overlay.classList.add('active');
         const input = $('loginPasswordInput');
+        const userInput = $('loginUsernameInput');
         input.value = '';
+        if (userInput && !userInput.value) userInput.value = 'admin';
         const error = $('loginError');
         error.style.display = 'none';
-        input.focus();
+        const tip = $('loginTip');
+        if (tip) tip.textContent = securityData.passwordHash ? '默认管理员账号：admin（密码为原登录密码）' : '默认管理员账号：admin / 初始密码 admin123';
+        if (userInput) userInput.focus(); else input.focus();
     }
 
     function hideLogin() {
@@ -1882,8 +1976,12 @@ select {
         saveCurrentState();
         isLoggedIn = false;
         securityData.isLoggedIn = false;
+        currentUser = null;
+        try { localStorage.removeItem(CURRENT_USER_KEY); } catch (e) {}
         if (logoutTimer) { clearTimeout(logoutTimer); logoutTimer = null; }
         updateLockUI();
+        applyPermissionUI();
+        if (typeof renderHistory === 'function') renderHistory();
         addAuditLog('注销系统', '手动注销（已自动保存状态）');
         showLogin();
     }
@@ -1920,7 +2018,7 @@ select {
             }
         }
         if (statusPill) statusPill.classList.toggle('locked', !isLoggedIn);
-        if (statusText) statusText.textContent = isLoggedIn ? '已登录' : '未登录';
+        if (statusText) statusText.textContent = isLoggedIn ? ('已登录' + (currentUser ? (isAdmin() ? ' · 管理员' : ' · 普通用户') : '')) : '未登录';
         const statusDisplay = $('securityStatusDisplay');
         if (statusDisplay) {
             if (isLoggedIn) {
@@ -1960,7 +2058,9 @@ select {
 
     function requirePasswordForSensitiveAction(action) {
         return new Promise((resolve) => {
-            if (!securityData.passwordHash) { resolve(true); return; }
+            const acc = currentUser ? findAccount(currentUser.username) : null;
+            const storedHash = acc ? acc.passwordHash : securityData.passwordHash;
+            if (!storedHash) { resolve(true); return; }
             const overlay = $('passwordModalOverlay');
             const input = $('passwordModalInput');
             const error = $('passwordModalError');
@@ -1973,7 +2073,7 @@ select {
 
             const confirmHandler = () => {
                 const pw = input.value;
-                if (verifyPassword(pw, securityData.passwordHash)) {
+                if (verifyPassword(pw, storedHash)) {
                     cleanup();
                     addAuditLog('敏感操作验证成功', action || '未命名操作');
                     resolve(true);
@@ -2001,20 +2101,57 @@ select {
         });
     }
 
+    // 密码显示/隐藏小眼睛
+    document.querySelectorAll('.pw-toggle').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const input = this.parentElement.querySelector('input');
+            if (!input) return;
+            const show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            this.classList.toggle('visible', show);
+        });
+    });
+
+    // 隐藏式安全重置：连续点击登录标题5次，输入「重置」确认后清除登录保护（不对外显示入口）
+    let loginResetClicks = 0, loginResetTimer = null;
+    const loginTitle = $('loginTitle');
+    if (loginTitle) loginTitle.addEventListener('click', function() {
+        loginResetClicks++;
+        if (loginResetTimer) clearTimeout(loginResetTimer);
+        loginResetTimer = setTimeout(function() { loginResetClicks = 0; }, 1500);
+        if (loginResetClicks >= 5) {
+            loginResetClicks = 0;
+            const v = prompt('安全重置：请输入「重置」两个字确认清除登录保护（系统将进入开放模式）');
+            if (!v || v.trim() !== '重置') return;
+            if (!confirm('将清除所有账号与密码保护，系统进入开放模式（无需登录）。确定继续？')) return;
+            try { localStorage.removeItem(ACCOUNTS_KEY); localStorage.removeItem(CURRENT_USER_KEY); } catch (e) {}
+            securityData.passwordHash = '';
+            saveSecurityData(securityData);
+            location.reload();
+        }
+    });
+
     $('loginBtn').addEventListener('click', function() {
+        const userInput = $('loginUsernameInput');
         const input = $('loginPasswordInput');
         const error = $('loginError');
+        const username = userInput ? userInput.value.trim() : 'admin';
         const pw = input.value;
-        if (verifyPassword(pw, securityData.passwordHash)) {
+        const acc = findAccount(username);
+        if (acc && verifyPassword(pw, acc.passwordHash)) {
             error.style.display = 'none';
+            currentUser = { username: acc.username, role: acc.role, loginAt: Date.now() };
+            try { localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser)); } catch (e) {}
             hideLogin();
-            showToast('登录成功', 'success');
+            showToast('欢迎，' + acc.username + (acc.role === 'admin' ? '（管理员）' : '（普通用户）'), 'success');
+            applyPermissionUI();
+            if (typeof renderHistory === 'function') renderHistory();
             restoreSavedState();
             if (typeof calcAndRender === 'function') calcAndRender();
         } else {
             error.style.display = 'block';
             input.select();
-            addAuditLog('登录失败', '密码错误', 'fail');
+            addAuditLog('登录失败', '账号或密码错误', 'fail');
         }
     });
     $('loginPasswordInput').addEventListener('keydown', function(e) {
@@ -2047,6 +2184,7 @@ select {
     });
 
     function initSecurity() {
+        ensureDefaultAccount();
         const hasPw = securityData.passwordHash && securityData.passwordHash.length > 0;
         if (hasPw) {
             showLogin();
@@ -2057,7 +2195,7 @@ select {
         }
         updateLockUI();
         if (!hasPw) {
-            addAuditLog('系统启动', '无密码，以开放模式运行');
+            addAuditLog('系统启动', '开放模式运行（可到设置-账号管理启用登录保护）');
         } else {
             addAuditLog('系统启动', '安全模式，等待登录');
         }
@@ -3455,9 +3593,9 @@ select {
                         <button class="hist-action-btn excel-btn" data-idx="${idx}" title="导出 Excel">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.29 7 12 12 20.71 7"/></svg>
                         </button>
-                        <button class="hist-action-btn del-btn" data-idx="${idx}" title="删除记录" style="color:var(--danger);">
+                        ${isAdmin() ? `<button class="hist-action-btn del-btn" data-idx="${idx}" title="删除记录" style="color:var(--danger);">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                        </button>
+                        </button>` : ''}
                     </span>
                 </td>
             </tr>`;
@@ -3475,6 +3613,7 @@ select {
                 const record = filtered[idx];
                 if (!record) return;
                 if (this.classList.contains('del-btn')) {
+                    if (!isAdmin()) { showToast('普通用户无删除权限', 'warning'); return; }
                     handleDeleteHistory(record);
                 } else if (this.classList.contains('pdf-btn')) {
                     exportHistoryItemPdf(record);
@@ -4365,33 +4504,93 @@ select {
     // ============================================================
     // 密码管理
     // ============================================================
-    $('changePasswordBtn').addEventListener('click', function() {
-        const oldPw = $('oldPasswordInput').value;
-        const newPw = $('newPasswordInput').value;
-        const confirmPw = $('confirmPasswordInput').value;
-        if (!verifyPassword(oldPw, securityData.passwordHash)) { showToast('当前密码错误', 'error'); return; }
-        if (newPw.length < 6) { showToast('新密码至少 6 位', 'warning'); return; }
-        if (newPw !== confirmPw) { showToast('两次输入的新密码不一致', 'warning'); return; }
-        securityData.passwordHash = hashPassword(newPw);
-        saveSecurityData(securityData);
-        $('oldPasswordInput').value = '';
-        $('newPasswordInput').value = '';
-        $('confirmPasswordInput').value = '';
-        updateLockUI();
-        showToast('密码修改成功', 'success');
-        addAuditLog('修改密码', '密码已更新');
-    });
+    // ============================================================
+    // 账号管理：渲染 / 添加 / 重置密码 / 删除
+    // ============================================================
+    function renderAccounts() {
+        const tbody = $('accountsTableBody');
+        if (!tbody) return;
+        const accs = getAccounts();
+        tbody.innerHTML = '';
+        if (accs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-3);padding:12px;">暂无账号，开放模式运行中</td></tr>';
+            return;
+        }
+        accs.forEach(a => {
+            const tr = document.createElement('tr');
+            const time = a.createdAt ? new Date(a.createdAt).toLocaleDateString('zh-CN') : '—';
+            tr.innerHTML = '<td>' + (a.username || '') + (a.username === 'admin' ? ' <span style="color:var(--text-3);font-size:11px;">(默认)</span>' : '') + '</td>' +
+                '<td>' + (a.role === 'admin' ? '<span class="role-badge admin">管理员</span>' : '<span class="role-badge user">普通用户</span>') + '</td>' +
+                '<td>' + time + '</td>' +
+                '<td style="white-space:nowrap;">' +
+                '<button class="btn btn-sm btn-ghost reset-pw-btn" data-id="' + a.id + '">重置密码</button> ' +
+                '<button class="btn btn-sm btn-danger del-acc-btn" data-id="' + a.id + '">删除</button>' +
+                '</td>';
+            tbody.appendChild(tr);
+        });
+        tbody.querySelectorAll('.reset-pw-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const a = getAccounts().find(x => x.id === this.dataset.id);
+                if (!a) return;
+                const newPw = prompt('为账号「' + a.username + '」设置新密码（至少6位）：');
+                if (newPw === null) return;
+                if (newPw.length < 6) { showToast('新密码至少 6 位', 'warning'); return; }
+                const accs = getAccounts();
+                const target = accs.find(x => x.id === a.id);
+                target.passwordHash = hashPassword(newPw);
+                saveAccounts(accs);
+                if (a.username.toLowerCase() === 'admin') {
+                    securityData.passwordHash = target.passwordHash;
+                    saveSecurityData(securityData);
+                }
+                showToast('密码已重置', 'success');
+                addAuditLog('重置密码', a.username);
+            });
+        });
+        tbody.querySelectorAll('.del-acc-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const a = getAccounts().find(x => x.id === this.dataset.id);
+                if (!a) return;
+                if (currentUser && a.username.toLowerCase() === (currentUser.username || '').toLowerCase()) {
+                    showToast('不能删除当前登录账号', 'warning'); return;
+                }
+                const admins = getAccounts().filter(x => x.role === 'admin');
+                if (a.role === 'admin' && admins.length <= 1) {
+                    showToast('至少保留一个管理员账号', 'warning'); return;
+                }
+                if (!confirm('确定删除账号「' + a.username + '」吗？')) return;
+                const accs = getAccounts().filter(x => x.id !== a.id);
+                saveAccounts(accs);
+                renderAccounts();
+                showToast('账号已删除', 'success');
+                addAuditLog('删除账号', a.username);
+            });
+        });
+    }
 
-    $('deletePasswordBtn').addEventListener('click', function() {
-        const pw = $('deletePasswordInput').value;
-        if (!verifyPassword(pw, securityData.passwordHash)) { showToast('密码错误', 'error'); return; }
-        if (!confirm('确定删除密码保护吗？删除后将无需密码即可访问系统。')) return;
-        securityData.passwordHash = '';
-        saveSecurityData(securityData);
-        $('deletePasswordInput').value = '';
-        updateLockUI();
-        showToast('密码已删除，系统进入开放模式', 'success');
-        addAuditLog('删除密码', '取消密码保护');
+    $('addAccountBtn').addEventListener('click', function() {
+        const uname = ($('newAccountUsername').value || '').trim();
+        const pw = $('newAccountPassword').value;
+        const role = $('newAccountRole').value;
+        if (!uname) { showToast('请输入用户名', 'warning'); return; }
+        if (pw.length < 6) { showToast('密码至少 6 位', 'warning'); return; }
+        if (findAccount(uname)) { showToast('用户名已存在', 'error'); return; }
+        const accs = getAccounts();
+        accs.push({ id: 'a' + Date.now() + Math.floor(Math.random() * 999), username: uname, passwordHash: hashPassword(pw), role: role, createdAt: Date.now() });
+        saveAccounts(accs);
+        // 开放模式下添加账号 → 启用登录保护（以 admin 账号密码为准）
+        if (!securityData.passwordHash) {
+            const adm = accs.find(a => a.role === 'admin');
+            securityData.passwordHash = adm ? adm.passwordHash : hashPassword(pw);
+            saveSecurityData(securityData);
+            showToast('账号已添加，系统已启用登录保护（管理员 admin 登录）', 'success');
+        } else {
+            showToast('账号已添加', 'success');
+        }
+        addAuditLog('添加账号', uname + '（' + (role === 'admin' ? '管理员' : '普通用户') + '）');
+        $('newAccountUsername').value = '';
+        $('newAccountPassword').value = '';
+        renderAccounts();
     });
 
     // ============================================================
@@ -5038,6 +5237,8 @@ select {
 
     async function init() {
         initSecurity();
+        applyPermissionUI();
+        renderAccounts();
         initRipple();
         // 报价表单改动跟踪（未保存提醒）
         const DIRTY_FIELDS = ['companyName', 'companyAddress', 'companyPhone', 'companyContact', 'customerName', 'customerContact', 'customerPhone', 'customerAddress', 'productName', 'orderQty', 'markupRate', 'laborCost', 'overheadCost', 'freightCost', 'targetMargin', 'validity', 'payment', 'delivery', 'remarks', 'invoiceType', 'isTaxIncluded', 'settlementCurrency'];
