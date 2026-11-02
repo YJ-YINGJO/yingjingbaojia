@@ -696,6 +696,116 @@ select {
 .action-row { display: flex; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
 .action-row .btn { flex: 1; min-width: 140px; }
 
+/* ===== 报价模式切换（物料成本 / 手腕带价目表，互斥，避免两套口径重复） ===== */
+.mode-bar {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-m);
+    padding: 8px 14px; margin-bottom: 14px;
+}
+.mode-tabs { display: inline-flex; background: var(--bg); border-radius: var(--radius-full); padding: 3px; gap: 2px; }
+.mode-tab {
+    border: none; background: transparent; color: var(--text-2); font-family: inherit;
+    font-size: 13px; font-weight: 500; padding: 5px 16px; border-radius: var(--radius-full);
+    cursor: pointer; transition: all var(--transition); white-space: nowrap;
+}
+.mode-tab:hover { color: var(--primary); }
+.mode-tab.active { background: var(--card); color: var(--primary); font-weight: 600; box-shadow: var(--shadow-sm); }
+.mode-desc { font-size: 12px; color: var(--text-3); flex: 1; min-width: 200px; }
+/* 手腕带模式：隐藏与价目表口径重复的字段（总件数 / 加价率 / 人力 / 运营 / 运费 / BOM / 利润分析） */
+body[data-quote-mode="wristband"] .module-calc .param-qty,
+body[data-quote-mode="wristband"] .module-calc .param-markup,
+body[data-quote-mode="wristband"] .module-calc .param-labor,
+body[data-quote-mode="wristband"] .module-calc .param-overhead,
+body[data-quote-mode="wristband"] .module-calc .param-freight,
+body[data-quote-mode="wristband"] .module-calc .fixed-cost-hint,
+body[data-quote-mode="wristband"] .module-calc .profit-analysis,
+body[data-quote-mode="wristband"] .module-product .part-wrap { display: none !important; }
+/* 物料成本模式：隐藏手腕带报价模块 */
+body[data-quote-mode="bom"] .module-wb { display: none !important; }
+
+/* ===== 手腕带报价（价目表直算） ===== */
+.wb-panel { position: relative; }
+.wb-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.wb-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--text-1); flex-wrap: wrap; }
+.wb-ico { display: inline-flex; color: var(--primary); }
+.wb-tag {
+    font-size: 12px; font-weight: 600; color: var(--primary);
+    background: var(--primary-weak); border-radius: var(--radius-full); padding: 2px 10px;
+}
+.wb-state {
+    font-size: 11px; color: var(--text-3); background: var(--border-light);
+    border-radius: var(--radius-full); padding: 1px 8px; transition: all var(--transition);
+}
+.wb-state.on { color: var(--success); background: var(--success-weak); font-weight: 600; }
+.wb-link { background: none; border: none; padding: 2px 4px; color: var(--primary); font-size: 12px; cursor: pointer; }
+.wb-link:hover { text-decoration: underline; }
+.wb-form { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--grid-gap); }
+.wb-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.wb-field label { font-size: 12px; font-weight: 500; color: var(--text-2); }
+.wb-field input, .wb-field select {
+    width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-m);
+    font-size: calc(var(--font-base) + 1px); background-color: var(--card); color: var(--text-1);
+    font-family: inherit; box-sizing: border-box; transition: all var(--transition);
+    appearance: none; -webkit-appearance: none;
+}
+.wb-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2386909c' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; cursor: pointer;
+}
+.wb-field input:hover, .wb-field select:hover { border-color: var(--border-strong); }
+.wb-field input:focus, .wb-field select:focus {
+    outline: none; border-color: var(--primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 13%, transparent);
+}
+.wb-result { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 12px; }
+.wb-stat { min-width: 0; padding: 7px 10px; border-radius: var(--radius-s); background: var(--bg); border: 1px solid var(--border-light); }
+.wb-stat .k { display: block; font-size: 11px; color: var(--text-3); white-space: nowrap; }
+.wb-stat .v {
+    display: block; font-size: 14px; font-weight: 700; color: var(--text-1);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums;
+}
+.wb-stat.hl { background: var(--primary-weak); border-color: transparent; }
+.wb-stat.hl .v { color: var(--primary); font-size: 15px; }
+.wb-note { margin-top: 8px; font-size: 12px; color: var(--text-3); line-height: 1.5; }
+.wb-note .warn { color: var(--warning); }
+.wb-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.wb-hint { font-size: 12px; color: var(--text-3); }
+.wb-table-wrap {
+    margin-top: 12px; max-height: 340px; overflow: auto;
+    border: 1px solid var(--border-light); border-radius: var(--radius-s);
+}
+table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.wb-table th {
+    position: sticky; top: 0; z-index: 1; background: var(--primary-weak); color: var(--text-2);
+    font-weight: 600; padding: 8px 6px; text-align: center; white-space: nowrap;
+}
+.wb-table td {
+    padding: 6px; text-align: center; border-top: 1px solid var(--border-light);
+    color: var(--text-2); white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+.wb-table tr.on td { background: var(--primary-weak); color: var(--primary); font-weight: 700; }
+.wb-rules {
+    margin-top: 12px; padding: 8px 12px; border-radius: var(--radius-s);
+    background: var(--bg); border: 1px solid var(--border-light);
+    font-size: 12px; color: var(--text-2); line-height: 1.8;
+    display: flex; flex-wrap: wrap; gap: 0 16px;
+}
+.wb-rules-title { font-weight: 600; color: var(--text-1); }
+.wb-rules .wb-rule { color: var(--text-2); }
+@media (max-width: 980px) {
+    .wb-form { grid-template-columns: repeat(3, 1fr); }
+    .wb-result { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 720px) {
+    .wb-form { grid-template-columns: 1fr 1fr; }
+    .wb-result { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+    .wb-form, .wb-result { grid-template-columns: 1fr; }
+    .wb-rules { display: block; }
+    .wb-rules .wb-rule { display: block; }
+}
+
 /* ===== 交易条款 ===== */
 .terms-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--grid-gap); }
 .terms-item { display: flex; flex-direction: column; gap: 4px; }
@@ -963,7 +1073,7 @@ select {
 #quotation-template .part-detail-table { width: 100%; border-collapse: collapse; margin: 4px 0 10px; font-size: 9.5px; }
 #quotation-template .part-detail-table th { background: #f2f6ff; padding: 4px 4px; border: 1px solid #c9d9f2; text-align: center; font-weight: 700; color: #1d2129; }
 #quotation-template .part-detail-table td { padding: 4px 4px; border: 1px solid #e5e6eb; text-align: center; }
-#quotation-template .quote-table { width: 100%; border-collapse: collapse; margin: 10px 0 92px; }
+#quotation-template .quote-table { width: 100%; border-collapse: collapse; margin: 10px 0 14px; }
 #quotation-template .quote-table th { background: #f2f6ff; font-weight: 700; padding: 5px 5px; border: 1px solid #c9d9f2; text-align: center; font-size: 10px; color: #1d2129; }
 #quotation-template .quote-table td { padding: 5px 5px; border: 1px solid #e5e6eb; text-align: center; font-size: 10px; }
 #quotation-template .quote-table .total-row { font-weight: 700; background: #ffffff; }
@@ -976,20 +1086,28 @@ select {
     z-index: 10; transform: rotate(-45deg); pointer-events: none;
 }
 #quotation-template .quote-table .total-row .seal-container img { width: 100%; height: 100%; object-fit: contain; display: block; }
-#quotation-template .terms { font-size: 10px; margin-top: 2px; padding: 0; color: #1d2129; display: block; }
-#quotation-template .terms .line { display: block; padding-top: 0; border-top: none; line-height: 1.5; font-size: 10px; }
-#quotation-template .terms .line .label { font-weight: 700; white-space: nowrap; font-size: 10px; color: #4e5969; }
-#quotation-template .terms .line #pdfRemarks { font-size: 12.5px; color: #1d2129; }
-#quotation-template .pdf-meta { display: flex; align-items: center; gap: 6px; margin-top: 8px; flex-wrap: wrap; font-size: 10px; }
-#quotation-template .pdf-meta .label { font-weight: 700; color: #4e5969; white-space: nowrap; }
-#quotation-template .pdf-meta .value { font-weight: 400; font-size: 12px; color: #1d2129; }
+#quotation-template .terms { font-size: 11px; margin-top: 2px; padding: 0; color: #1d2129; display: block; }
+#quotation-template .terms .line { display: block; padding-top: 0; border-top: none; line-height: 1.5; font-size: 11px; }
+#quotation-template .terms .line .label { font-weight: 700; white-space: nowrap; font-size: 11px; color: #4e5969; }
+#quotation-template .terms .line #pdfRemarks { font-size: 11px; color: #1d2129; }
+#quotation-template .pdf-meta { display: flex; align-items: center; gap: 6px; margin-top: 8px; flex-wrap: wrap; font-size: 11px; }
+#quotation-template .pdf-meta .label { font-weight: 700; color: #4e5969; white-space: nowrap; font-size: 11px; }
+#quotation-template .pdf-meta .value { font-weight: 400; font-size: 11px; color: #1d2129; }
 #quotation-template .pdf-meta .sep { font-weight: 400; color: #c9cdd4; }
+#quotation-template .product-image-inline { margin: 14px 0; text-align: center; line-height: 0; }
+#quotation-template.has-seal .product-image-inline {
+    min-height: 92px; display: flex; align-items: center; justify-content: flex-start;
+    padding-left: 6px;
+}
+#quotation-template .product-image-inline img {
+    max-width: 190px; max-height: 130px; width: auto; height: auto;
+    display: inline-block; border-radius: 4px;
+}
 #quotation-template .footer {
     position: relative; margin-top: 20px; border-top: 1px solid #e5e6eb; padding-top: 8px;
     font-size: 9.5px; color: #86909c; text-align: center; clear: both; display: block;
 }
-#quotation-template .product-image-footer { position: absolute; bottom: calc(100% + 0.5mm); left: 50%; transform: translateX(-50%); text-align: center; line-height: 0; pointer-events: none; }
-#quotation-template .product-image-footer img { max-width: 120px; height: auto; display: inline-block; border-radius: 4px; }
+
 .template-visible {
     display: block !important; position: fixed; left: 0; top: 0;
     width: 210mm; min-height: 297mm; background: #fff;
@@ -1070,7 +1188,7 @@ select {
 </style>
 </head>
 
-<body>
+<body data-quote-mode="bom">
 
 <!-- ===== 顶部应用栏 ===== -->
 <header class="app-bar">
@@ -1190,6 +1308,15 @@ select {
         </div>
     </div>
 
+    <!-- ===== 报价模式（物料成本 / 手腕带价目表，二选一，避免两套口径并存） ===== -->
+    <div class="mode-bar" id="modeBar">
+        <div class="mode-tabs" role="group" aria-label="报价模式">
+            <button type="button" class="mode-tab active" data-mode="bom">按物料成本报价</button>
+            <button type="button" class="mode-tab" data-mode="wristband">按手腕带价目表报价</button>
+        </div>
+        <span class="mode-desc" id="modeDesc">BOM 物料成本 + 固定成本 + 加价率，适用于贴纸、卡片等常规产品</span>
+    </div>
+
     <!-- ===== 产品信息 ===== -->
     <div class="card module-product">
         <div class="card-head">
@@ -1197,7 +1324,7 @@ select {
                 <span class="head-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
                 产品信息
             </h3>
-            <span class="head-badge">BOM 物料清单</span>
+            <span class="head-badge" id="productBadge">BOM 物料清单</span>
         </div>
         <div class="card-body">
             <div class="product-grid">
@@ -1248,6 +1375,86 @@ select {
     </div>
 
 
+    <!-- ===== 手腕带报价（数据来源：手腕带报价表.xlsx） ===== -->
+    <div class="card module-wb">
+        <div class="card-head">
+            <h3>
+                <span class="head-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
+                手腕带报价
+            </h3>
+            <span class="head-badge">热转印价目表 · 手动利润率</span>
+        </div>
+        <div class="card-body">
+            <div class="wb-panel" id="wbPanel">
+                <div class="wb-head">
+                    <div class="wb-title">
+                        <span class="wb-tag" id="wbTag">15*350mm · 缎带</span>
+                    </div>
+                    <button type="button" class="wb-link" id="wbToggleTable">查看完整价目表</button>
+                </div>
+                <div class="wb-form">
+                    <div class="wb-field">
+                        <label>产品规格</label>
+                        <select id="wbSpec">
+                            <option value="15x350">15*350mm</option>
+                            <option value="20x350">20*350mm</option>
+                        </select>
+                    </div>
+                    <div class="wb-field">
+                        <label>材质</label>
+                        <select id="wbMaterial">
+                            <option value="缎带">缎带</option>
+                            <option value="涤纶">涤纶</option>
+                        </select>
+                    </div>
+                    <div class="wb-field">
+                        <label>数量（条）</label>
+                        <input type="number" id="wbQty" min="1" step="1" value="100" />
+                    </div>
+                    <div class="wb-field">
+                        <label>利润率（%）</label>
+                        <input type="number" id="wbMargin" min="0" max="100" step="1" value="15" title="手动输入利润率：报价单价 = 基价 ×（1 + 利润率）" />
+                    </div>
+                    <div class="wb-field">
+                        <label>印刷面</label>
+                        <select id="wbPrint">
+                            <option value="single">单面</option>
+                            <option value="double">双面</option>
+                        </select>
+                    </div>
+                    <div class="wb-field" id="wbWidthField">
+                        <label>缎带宽度</label>
+                        <select id="wbWidth">
+                            <option value="15">15mm（常规）</option>
+                            <option value="20">20mm（+0.05）</option>
+                            <option value="25">25mm（+0.10）</option>
+                            <option value="30">30mm（+0.15）</option>
+                        </select>
+                    </div>
+                    <div class="wb-field">
+                        <label>个性化印刷</label>
+                        <select id="wbPersonal">
+                            <option value="none">不另加印</option>
+                            <option value="name">印名字 +0.10/条</option>
+                            <option value="code">印编号 +0.05/条</option>
+                        </select>
+                    </div>
+                    <div class="wb-field">
+                        <label>加急费（整单 ¥）</label>
+                        <input type="number" id="wbRush" min="0" step="1" value="50" />
+                    </div>
+                </div>
+                <div class="wb-rules" id="wbRules"></div>
+                <div class="wb-result" id="wbResult"></div>
+                <div class="wb-note" id="wbNote"></div>
+                <div class="wb-actions">
+                    <span class="wb-hint">本模式下改任一选项即刻同步报价单：单价＝基价×（1+利润率）＋双面/加宽/印字加价，加急费整单另计</span>
+                </div>
+                <div class="wb-table-wrap" id="wbTableWrap" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- ===== 报价计算中心 ===== -->
     <div class="card module-calc">
         <div class="card-head">
@@ -1255,16 +1462,16 @@ select {
                 <span class="head-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="16" x2="12" y2="16"/></svg></span>
                 报价计算中心
             </h3>
-            <span class="head-badge">实时计算 · 智能建议</span>
+            <span class="head-badge" id="calcBadge">实时计算 · 智能建议</span>
         </div>
         <div class="card-body">
             <div class="calc-params">
                 <div class="param-grid">
-                    <div class="param-item"><label>总件数</label><input type="number" id="orderQty" value="100" step="1" min="1" /></div>
-                    <div class="param-item"><label>加价率 (%)</label><input type="number" id="markupRate" value="0.5" step="1" min="-100" title="可为负值：低于成本销售时显示亏损" /></div>
-                    <div class="param-item"><label>总人力成本 (¥)</label><input type="number" id="laborCost" value="5000" step="1" min="0" title="当前报价单的人力成本，默认值可在系统设置中修改" /></div>
-                    <div class="param-item"><label>总运营成本 (¥)</label><input type="number" id="overheadCost" value="2000" step="1" min="0" title="当前报价单的运营成本，默认值可在系统设置中修改" /></div>
-                    <div class="param-item"><label>运费/包装费 (¥)</label><input type="number" id="freightCost" value="0" step="1" min="0" title="当前报价单的运费与包装费，默认值可在系统设置中修改" /></div>
+                    <div class="param-item param-qty"><label>总件数</label><input type="number" id="orderQty" value="100" step="1" min="1" /></div>
+                    <div class="param-item param-markup"><label>加价率 (%)</label><input type="number" id="markupRate" value="0.5" step="1" min="-100" title="可为负值：低于成本销售时显示亏损" /></div>
+                    <div class="param-item param-labor"><label>总人力成本 (¥)</label><input type="number" id="laborCost" value="5000" step="1" min="0" title="当前报价单的人力成本，默认值可在系统设置中修改" /></div>
+                    <div class="param-item param-overhead"><label>总运营成本 (¥)</label><input type="number" id="overheadCost" value="2000" step="1" min="0" title="当前报价单的运营成本，默认值可在系统设置中修改" /></div>
+                    <div class="param-item param-freight"><label>运费/包装费 (¥)</label><input type="number" id="freightCost" value="0" step="1" min="0" title="当前报价单的运费与包装费，默认值可在系统设置中修改" /></div>
                     <div class="param-item"><label>报价含税</label><select id="isTaxIncluded"><option value="yes">是（含税价）</option><option value="no">否（不含税价）</option></select></div>
                     <div class="param-item span-2"><label>税率</label><select id="invoiceType" style="width:100%;"><option value="13">一般纳税人销售货物、劳务等（13%）</option><option value="9">一般纳税人交通运输、建筑等（9%）</option><option value="6">一般纳税人现代服务、生活服务等（6%）</option><option value="5">简易计税特定项目（5%）</option><option value="3">小规模纳税人（3%）</option><option value="1">小规模纳税人减征（1%）</option><option value="0">出口零税率（0%）</option></select></div>
                     <div class="param-item"><label>结算货币</label><select id="settlementCurrency" style="width:100%;"><option value="CNY" selected>人民币 (CNY ¥)</option><option value="USD">美元 (USD $)</option><option value="EUR">欧元 (EUR €)</option><option value="GBP">英镑 (GBP £)</option><option value="JPY">日元 (JPY ¥)</option><option value="HKD">港币 (HKD HK$)</option><option value="KRW">韩元 (KRW ₩)</option><option value="AUD">澳元 (AUD A$)</option><option value="CAD">加元 (CAD C$)</option></select></div>
@@ -1683,13 +1890,13 @@ select {
         <div class="item"><span class="label">公司地址：</span><span id="pdfCustomerAddress">—</span></div>
         <div class="item"><span class="label">联系电话：</span><span id="pdfCustomerPhone">—</span></div>
     </div>
-    <div class="pdf-block-title">BOM 物料明细</div>
+    <div class="pdf-block-title" id="pdfPartTitle">BOM 物料明细</div>
     <table class="part-detail-table" id="pdfPartTable"><thead><tr><th style="width:26%;">物料名称</th><th style="width:20%;">规格</th><th style="width:14%;">数量</th><th style="width:16%;">单价</th><th style="width:24%;">小计</th></tr></thead><tbody id="pdfPartBody"></tbody></table>
     <table class="quote-table" id="pdfQuoteTable"><thead id="pdfQuoteThead"></thead><tbody id="pdfQuoteTbody"></tbody><tfoot id="pdfQuoteTfoot"></tfoot></table>
+    <div class="product-image-inline" id="pdfProductImageContainer" style="display:none;"></div>
     <div class="pdf-meta"><span class="label">付款方式：</span><span class="value" id="pdfPayment">—</span><span class="sep">|</span><span class="label">交货期：</span><span class="value" id="pdfDelivery">—</span></div>
     <div class="terms"><div class="line"><span class="label">备注：</span><span id="pdfRemarks">—</span></div></div>
     <div class="footer">
-        <div class="product-image-footer" id="pdfProductImageContainer" style="display:none;"></div>
         本报价单为系统生成，最终解释权归 <span id="pdfCompanyNameFooter">赢景</span> 所有。
     </div>
 </div>
@@ -1882,6 +2089,7 @@ select {
             localStorage.setItem('quote_current_tax_included', taxIncluded);
             const taxRate = (typeof invoiceType !== 'undefined' && invoiceType) ? invoiceType.value || '13' : '13';
             localStorage.setItem('quote_current_tax_rate', taxRate);
+            if (typeof wbSaveState === 'function') wbSaveState();
         } catch (e) {
             console.warn('保存状态时出错:', e);
         }
@@ -3070,11 +3278,500 @@ select {
     });
 
     // ============================================================
+    // 手腕带报价（价目表直算）
+    // 数据来源：手腕带报价表.xlsx（2026-11 最新版，以此为准）
+    // 口径：报价单价 = 基价 ×（1 + 利润率）+ 双面 / 加宽 / 印字加价
+    //       加急费为整单固定费用，单独计入总额
+    // ============================================================
+    const WB_PRICE_TABLE = {
+        '15x350': {
+            label: '15*350mm',
+            material: '缎带',
+            materials: ['缎带', '涤纶'],
+            method: '热转印',
+            widths: [15, 20, 25, 30],   // 缎带常规 15mm，可加宽到 20 / 25 / 30
+            tiers: [
+                { label: '100条+',   min: 100,    base: 0.35,  ds: 0.05, lead: '下午6点前下单明天发', rush: 50 },
+                { label: '500条+',   min: 500,    base: 0.33,  ds: 0.03, lead: '下午6点前下单明天发', rush: 50 },
+                { label: '1500条+',  min: 1500,   base: 0.30,  ds: 0.02, lead: '下午6点前下单明天发', rush: 100 },
+                { label: '3000条+',  min: 3000,   base: 0.26,  ds: 0.02, lead: '下午6点前下单明天发', rush: 0 },
+                { label: '1万条+',   min: 10000,  base: 0.22,  ds: 0.02, lead: '2-3天', rush: 0 },
+                { label: '2万条+',   min: 20000,  base: 0.21,  ds: 0.02, lead: '2-3天', rush: 0 },
+                { label: '3万条+',   min: 30000,  base: 0.20,  ds: 0.02, lead: '2-3天', rush: 0 },
+                { label: '4万条+',   min: 40000,  base: 0.19,  ds: 0.02, lead: '3-4天', rush: 0 },
+                { label: '5万条+',   min: 50000,  base: 0.17,  ds: 0.02, lead: '3-4天', rush: 0 },
+                { label: '10万条+',  min: 100000, base: 0.165, ds: 0.02, lead: '6天', rush: 0 },
+                { label: '30万条+',  min: 300000, base: 0.16,  ds: 0.02, lead: '10天', rush: 0 },
+                { label: '40万条+',  min: 400000, base: 0.155, ds: 0.02, lead: '15天', rush: 0 },
+                { label: '50万条+',  min: 500000, base: 0.15,  ds: 0.02, lead: '18天', rush: 0 }
+            ]
+        },
+        '20x350': {
+            label: '20*350mm',
+            material: '加厚涤纶',
+            materials: ['加厚涤纶'],
+            method: '热转印',
+            widths: [20],               // 加厚涤纶常规 20mm，不支持加宽
+            tiers: [
+                { label: '1条+',     min: 1,      base: 0.42, ds: 0.05, lead: '下午6点前下单明天发', rush: 50 },
+                { label: '1000条+',  min: 1000,   base: 0.38, ds: 0.05, lead: '下午6点前下单明天发', rush: 50 },
+                { label: '3000条+',  min: 3000,   base: 0.34, ds: 0.05, lead: '2天', rush: 100 },
+                { label: '5000条+',  min: 5000,   base: 0.30, ds: 0.05, lead: '2-3天', rush: 0 },
+                { label: '1万条+',   min: 10000,  base: 0.27, ds: 0.04, lead: '2-3天', rush: 0 },
+                { label: '3万条+',   min: 30000,  base: 0.26, ds: 0.04, lead: '3-4天', rush: 0 },
+                { label: '6万条+',   min: 60000,  base: 0.25, ds: 0.04, lead: '5-6天', rush: 0 },
+                { label: '10万条+',  min: 100000, base: 0.24, ds: 0.04, lead: '7-8天', rush: 0 }
+            ]
+        }
+    };
+    // 个性化印刷：印名字 / 印编号，交期顺延 1 天
+    const WB_PERSONAL = {
+        none: { label: '',      add: 0,    delay: 0 },
+        name: { label: '印名字', add: 0.10, delay: 1 },
+        code: { label: '印编号', add: 0.05, delay: 1 }
+    };
+    const WB_WIDTH_STEP_ADD = 0.05;   // 缎带每加宽 5mm 的加价（元/条）
+    const WB_STATE_KEY = 'quote_wb_state_v2';
+    const QUOTE_MODE_KEY = 'quote_mode_v1';
+
+    // 报价模式：'bom' 物料成本报价 / 'wristband' 手腕带价目表报价（互斥）
+    let quoteMode = 'bom';
+    let wbActive = false;          // 等价于 quoteMode === 'wristband'（单价按价目表口径计算）
+    let wbAutoName = '';           // 自动生成的商品名称（用于判断是否被手动改过）
+    let wbAutoDelivery = '';       // 自动写入的交货期
+    let wbRushCustom = false;      // 加急费是否被手动改过（改过后不再随档位自动覆盖）
+
+    function wbMoney(n) {
+        return (Math.round((Number(n) || 0) * 100) / 100).toFixed(2);
+    }
+
+    // 单价显示：最多 3 位小数，去掉多余尾零
+    function wbPriceText(n) {
+        const s = (Math.round((Number(n) || 0) * 1000) / 1000).toFixed(3);
+        return s.replace(/(\.\d)0$/, '$1').replace(/(\.\d\d)0$/, '$1');
+    }
+
+    // 数量落在哪一档：取「下限 <= 数量」的最高档；小于最低档时按最低档
+    function wbMatchTier(tiers, qty) {
+        if (!tiers || !tiers.length) return null;
+        if (qty < tiers[0].min) return tiers[0];
+        let hit = tiers[0];
+        tiers.forEach(function(t) { if (qty >= t.min) hit = t; });
+        return hit;
+    }
+
+    // 读取面板并算出当前报价（不写任何全局状态）
+    function wbReadPanel() {
+        const specEl = $('wbSpec');
+        const qtyEl = $('wbQty');
+        if (!specEl || !qtyEl) return null;
+        const spec = WB_PRICE_TABLE[specEl.value];
+        if (!spec) return null;
+
+        const qty = Math.max(0, parseInt(qtyEl.value, 10) || 0);
+        const marginRaw = parseFloat($('wbMargin').value);
+        const margin = isNaN(marginRaw) ? 15 : Math.min(100, Math.max(0, marginRaw));
+        const print = $('wbPrint').value === 'double' ? 'double' : 'single';
+
+        // 加宽：只有多宽度的规格（15*350 缎带）可选
+        const baseWidth = spec.widths[0];
+        let width = baseWidth;
+        const widthEl = $('wbWidth');
+        if (spec.widths.length > 1 && widthEl) {
+            const w = parseInt(widthEl.value, 10);
+            if (spec.widths.indexOf(w) >= 0) width = w;
+        }
+        const widthExtra = width - baseWidth;
+
+        // 材质：15*350 可选缎带 / 涤纶，20*350 固定加厚涤纶
+        const matEl = $('wbMaterial');
+        const material = (matEl && matEl.value) ? matEl.value : spec.material;
+
+        const personKey = (WB_PERSONAL[$('wbPersonal').value] && $('wbPersonal').value) || 'none';
+        const person = WB_PERSONAL[personKey];
+
+        const rushFee = Math.max(0, Number($('wbRush').value) || 0);
+        const tier = wbMatchTier(spec.tiers, qty);
+
+        const basePrice = tier.base;
+        const marginPrice = Math.round(basePrice * (1 + margin / 100) * 1000 + 1e-6) / 1000;
+        const dsAdd = print === 'double' ? tier.ds : 0;
+        const widthAdd = Math.round((widthExtra / 5) * WB_WIDTH_STEP_ADD * 100) / 100;
+        const personAdd = person.add;
+        const addTotal = Math.round((dsAdd + widthAdd + personAdd) * 100) / 100;
+        const unitPrice = Math.round((marginPrice + addTotal) * 1000 + 1e-6) / 1000;
+        const leadText = tier.lead + (person.delay ? '（印字+1天）' : '');
+
+        return {
+            specKey: specEl.value,
+            specLabel: spec.label,
+            material: material,
+            method: spec.method,
+            baseWidth: baseWidth,
+            width: width,
+            widthExtra: widthExtra,
+            tierLabel: tier.label,
+            tierIndex: spec.tiers.indexOf(tier),
+            tierMin: tier.min,
+            qty: qty,
+            margin: margin,
+            print: print,
+            personKey: personKey,
+            personLabel: person.label,
+            personAdd: personAdd,
+            basePrice: basePrice,
+            marginPrice: marginPrice,
+            dsAdd: dsAdd,
+            widthAdd: widthAdd,
+            addTotal: addTotal,
+            unitPrice: unitPrice,
+            rushFee: rushFee,
+            leadTime: tier.lead,
+            leadText: leadText,
+            total: Math.round((unitPrice * qty + rushFee) * 100 + 1e-6) / 100
+        };
+    }
+
+    // 供 calcAndRender 调用：仅在「已应用」时返回价目表报价
+    function getWbQuote() {
+        if (!wbActive) return null;
+        const cur = wbReadPanel();
+        if (!cur) return null;
+        // 总件数跟随面板数量，避免两处数字不一致导致单价与数量错配
+        if (cur.qty > 0 && String(orderQty.value) !== String(cur.qty)) {
+            orderQty.value = cur.qty;
+        }
+        return cur;
+    }
+
+    // 加价明细文案，如「双面 +0.05、加宽 5mm +0.05、印名字 +0.10」
+    function wbAddText(cur) {
+        const parts = [];
+        if (cur.dsAdd > 0) parts.push('双面 +' + wbMoney(cur.dsAdd));
+        if (cur.widthAdd > 0) parts.push('加宽 ' + cur.widthExtra + 'mm +' + wbMoney(cur.widthAdd));
+        if (cur.personAdd > 0) parts.push(cur.personLabel + ' +' + wbMoney(cur.personAdd));
+        return parts.join('、');
+    }
+
+    function wbRenderTable() {
+        const wrap = $('wbTableWrap');
+        if (!wrap) return;
+        const spec = WB_PRICE_TABLE[$('wbSpec').value];
+        if (!spec) return;
+        const cur = wbReadPanel();
+        let html = '<table class="wb-table"><thead><tr><th>数量档</th><th>单面基价</th><th>双面加价</th><th>货期</th><th>加急费</th></tr></thead><tbody>';
+        spec.tiers.forEach(function(t, i) {
+            const on = (cur && i === cur.tierIndex) ? ' class="on"' : '';
+            html += '<tr' + on + '>' +
+                '<td>' + escapeHtml(t.label) + '</td>' +
+                '<td>' + wbMoney(t.base) + '</td>' +
+                '<td>+' + wbMoney(t.ds) + '</td>' +
+                '<td>' + escapeHtml(t.lead) + '</td>' +
+                '<td>' + (t.rush ? '当天发 +' + t.rush : '急单可谈') + '</td>' +
+                '</tr>';
+        });
+        html += '</tbody></table>';
+        wrap.innerHTML = html;
+    }
+
+    // 价目表口径说明（随规格变化）
+    function wbRenderRules() {
+        const el = $('wbRules');
+        if (!el) return;
+        const spec = WB_PRICE_TABLE[$('wbSpec').value];
+        if (!spec) { el.innerHTML = ''; return; }
+        const items = ['以上报价均不含税、不含运费'];
+        if (spec.widths.length > 1) {
+            items.push('缎带常规 15mm，可加宽至 ' + spec.widths.slice(1).join(' / ') + 'mm，每加宽 5mm 加 0.05 元/条');
+        } else {
+            items.push(spec.material + ' 常规 ' + spec.widths[0] + 'mm，不支持加宽');
+        }
+        items.push('印名字 / 印编号交期顺延 1 天，印名字 +0.10 元/条，印编号 +0.05 元/条');
+        el.innerHTML = '<span class="wb-rules-title">价格说明</span>' +
+            items.map(function(t, i) { return '<span class="wb-rule">' + (i + 1) + '. ' + escapeHtml(t) + '</span>'; }).join('');
+    }
+
+    function wbRender() {
+        const box = $('wbResult');
+        if (!box) return;
+        const cur = wbReadPanel();
+        const tagEl = $('wbTag');
+        if (tagEl && cur) tagEl.textContent = cur.specLabel + ' · ' + cur.material;
+        if (!cur) { box.innerHTML = ''; return; }
+
+        const stat = function(k, v, hl, title) {
+            return '<div class="wb-stat' + (hl ? ' hl' : '') + '"' + (title ? ' title="' + escapeHtml(title) + '"' : '') +
+                '><span class="k">' + k + '</span><span class="v">' + v + '</span></div>';
+        };
+        box.innerHTML =
+            stat('匹配档位', escapeHtml(cur.tierLabel), true) +
+            stat('基价（单面/条）', '¥ ' + wbPriceText(cur.basePrice)) +
+            stat('报价单价（不含税）', '¥ ' + wbPriceText(cur.unitPrice), true) +
+            stat('加价合计', cur.addTotal > 0 ? '+¥ ' + wbMoney(cur.addTotal) : '—', false, wbAddText(cur)) +
+            stat('加急费（整单）', '¥ ' + wbMoney(cur.rushFee)) +
+            stat('货期', escapeHtml(cur.leadText)) +
+            stat('合计（不含税）', '¥ ' + wbMoney(cur.total));
+
+        const notes = [];
+        if (cur.qty > 0 && cur.tierMin > 1 && cur.qty < cur.tierMin) {
+            notes.push('<span class="warn">数量低于最低档，按「' + escapeHtml(cur.tierLabel) + '」计价</span>');
+        }
+        if (cur.addTotal > 0) {
+            notes.push('加价明细：' + escapeHtml(wbAddText(cur)));
+        }
+        notes.push('报价单价 = ' + wbPriceText(cur.basePrice) + ' ×（1 + ' + cur.margin + '%）' +
+            (cur.addTotal > 0 ? ' + ' + wbMoney(cur.addTotal) : '') + ' = ' + wbPriceText(cur.unitPrice));
+        const noteEl = $('wbNote');
+        if (noteEl) noteEl.innerHTML = notes.join('　');
+        if ($('wbTableWrap') && $('wbTableWrap').style.display !== 'none') wbRenderTable();
+    }
+
+    function wbPushToQuote() {
+        if (!wbActive) return;
+        wbSyncToQuote();
+        scheduleCalc();
+    }
+
+    // 手腕带模式下把面板结果同步到报价单（商品名称 / 总件数 / 交货期）
+    function wbSyncToQuote(force) {
+        if (quoteMode !== 'wristband') return;
+        const cur = wbReadPanel();
+        if (!cur) return;
+        if (cur.qty > 0 && String(orderQty.value) !== String(cur.qty)) orderQty.value = cur.qty;
+        let name = '手腕带 ' + cur.specLabel + ' ' + cur.material + ' ' + (cur.print === 'double' ? '双面' : '单面');
+        if (cur.widthExtra > 0) name += ' 加宽' + cur.width + 'mm';
+        if (cur.personLabel) name += ' ' + cur.personLabel;
+        // 只在名称/交货期未被手动改过时自动覆盖
+        if (force || !productName.value || productName.value === wbAutoName) {
+            productName.value = name;
+            wbAutoName = name;
+        }
+        if (force || !delivery.value || delivery.value === wbAutoDelivery) {
+            delivery.value = cur.leadText;
+            wbAutoDelivery = cur.leadText;
+        }
+    }
+
+    // 切换报价模式：两套口径互斥，避免加价率/利润率、BOM/价目表重复
+    function applyQuoteMode(silent, skipSync, forceSync) {
+        document.body.setAttribute('data-quote-mode', quoteMode);
+        wbActive = (quoteMode === 'wristband');
+        document.querySelectorAll('.mode-tab').forEach(function(b) {
+            b.classList.toggle('active', b.dataset.mode === quoteMode);
+        });
+        const desc = $('modeDesc');
+        if (desc) {
+            desc.textContent = quoteMode === 'wristband'
+                ? '手腕带热转印价目表口径：单价 ＝ 基价 ×（1 + 利润率）+ 双面 / 加宽 / 印字加价，加急费整单另计'
+                : 'BOM 物料成本 + 固定成本 + 加价率，适用于贴纸、卡片等常规产品';
+        }
+        const pb = $('productBadge');
+        if (pb) pb.textContent = quoteMode === 'wristband' ? '商品名称 / 产品图' : 'BOM 物料清单';
+        const cb = $('calcBadge');
+        if (cb) cb.textContent = quoteMode === 'wristband' ? '价目表口径 · 实时计算' : '实时计算 · 智能建议';
+        if (quoteMode === 'wristband') {
+            wbRender();
+            if (!skipSync) wbSyncToQuote(!!forceSync);
+        }
+        try { localStorage.setItem(QUOTE_MODE_KEY, quoteMode); } catch (e) {}
+        if (!silent) {
+            markDirty();
+            calcAndRender();
+        }
+    }
+
+    function wbSetMode(mode) {
+        if (mode !== 'bom' && mode !== 'wristband') return;
+        if (quoteMode === mode) return;
+        quoteMode = mode;
+        if (mode === 'wristband') wbAutoName = '';   // 重新进入时刷新商品名称
+        applyQuoteMode(false, false, true);
+        showToast(mode === 'wristband' ? '已切换为「手腕带价目表」报价' : '已切换为「物料成本」报价', 'success');
+        addAuditLog('切换报价模式', mode === 'wristband' ? '手腕带价目表' : '物料成本');
+    }
+
+    // 用历史记录里的价目表参数回填面板（回填报价单时使用）
+    function wbApplyRecord(pl) {
+        if (!pl || !WB_PRICE_TABLE[pl.specKey]) { wbActive = false; wbRender(); return; }
+        $('wbSpec').value = pl.specKey;
+        $('wbMargin').value = String((pl.margin === 0 || pl.margin) ? pl.margin : 15);
+        $('wbPrint').value = pl.print === 'double' ? 'double' : 'single';
+        $('wbQty').value = pl.qty || 100;
+        $('wbRush').value = pl.rushFee || 0;
+        if (pl.width) $('wbWidth').value = String(pl.width);
+        if (pl.personKey && WB_PERSONAL[pl.personKey]) $('wbPersonal').value = pl.personKey;
+        wbRushCustom = true;
+        wbActive = true;
+        wbSyncWidthField();
+        wbSyncMaterialField();
+        if (pl.material) $('wbMaterial').value = pl.material;
+        wbRenderRules();
+        wbRender();
+    }
+
+    // 加宽选项只在多宽度规格下显示
+    function wbSyncWidthField() {
+        const spec = WB_PRICE_TABLE[$('wbSpec').value];
+        const field = $('wbWidthField');
+        if (!spec || !field) return;
+        const multi = spec.widths.length > 1;
+        field.style.display = multi ? '' : 'none';
+        const sel = $('wbWidth');
+        if (!multi) {
+            sel.value = String(spec.widths[0]);
+        } else if (sel.options.length !== spec.widths.length) {
+            sel.innerHTML = spec.widths.map(function(w) {
+                return '<option value="' + w + '">' + w + 'mm' + (w === spec.widths[0] ? '（常规）' : '（+' + wbMoney((w - spec.widths[0]) / 5 * WB_WIDTH_STEP_ADD) + '）') + '</option>';
+            }).join('');
+        }
+    }
+
+    // 材质选项随规格变化（15*350：缎带 / 涤纶；20*350：加厚涤纶）
+    function wbSyncMaterialField() {
+        const spec = WB_PRICE_TABLE[$('wbSpec').value];
+        const sel = $('wbMaterial');
+        if (!spec || !sel) return;
+        const list = spec.materials || [spec.material];
+        if (sel.options.length !== list.length) {
+            sel.innerHTML = list.map(function(m) {
+                return '<option value="' + escapeHtml(m) + '">' + escapeHtml(m) + '</option>';
+            }).join('');
+        }
+        if (list.indexOf(sel.value) < 0) sel.value = list[0];
+    }
+
+    function wbSaveState() {
+        try {
+            localStorage.setItem(WB_STATE_KEY, JSON.stringify({
+                spec: $('wbSpec') ? $('wbSpec').value : '15x350',
+                qty: $('wbQty') ? $('wbQty').value : 100,
+                margin: $('wbMargin') ? $('wbMargin').value : 15,
+                print: $('wbPrint') ? $('wbPrint').value : 'single',
+                width: $('wbWidth') ? $('wbWidth').value : 15,
+                material: $('wbMaterial') ? $('wbMaterial').value : '',
+                personal: $('wbPersonal') ? $('wbPersonal').value : 'none',
+                rush: $('wbRush') ? $('wbRush').value : 50,
+                rushCustom: wbRushCustom
+            }));
+        } catch (e) { console.warn('保存手腕带价目表状态失败:', e); }
+    }
+
+    function wbInit() {
+        const specEl = $('wbSpec');
+        if (!specEl) return;
+
+        // 恢复上次的面板参数
+        let savedMaterial = '';
+        try {
+            const raw = localStorage.getItem(WB_STATE_KEY);
+            if (raw) {
+                const s = JSON.parse(raw);
+                if (s.spec && WB_PRICE_TABLE[s.spec]) specEl.value = s.spec;
+                if (s.qty) $('wbQty').value = s.qty;
+                if (s.margin) $('wbMargin').value = String(s.margin);
+                if (s.print) $('wbPrint').value = s.print;
+                if (s.width) $('wbWidth').value = s.width;
+                if (s.material) savedMaterial = s.material;
+                if (s.personal && WB_PERSONAL[s.personal]) $('wbPersonal').value = s.personal;
+                if (s.rush !== undefined && s.rush !== null && s.rush !== '') $('wbRush').value = s.rush;
+                wbRushCustom = !!s.rushCustom;
+            }
+        } catch (e) { console.warn('恢复手腕带价目表状态失败:', e); }
+
+        wbSyncWidthField();
+        wbSyncMaterialField();
+        if (savedMaterial) $('wbMaterial').value = savedMaterial;
+        wbRenderRules();
+
+        // 切换规格：宽度/材质选项联动、按新档位刷新默认加急费
+        specEl.addEventListener('change', function() {
+            wbSyncWidthField();
+            wbSyncMaterialField();
+            wbRenderRules();
+            const spec = WB_PRICE_TABLE[specEl.value];
+            if (spec && !wbRushCustom) {
+                const tier = wbMatchTier(spec.tiers, parseInt($('wbQty').value, 10) || 0);
+                if (tier) $('wbRush').value = tier.rush || 0;
+            }
+            wbRender();
+            if (wbActive) wbPushToQuote();
+        });
+
+        // 数量变化：跨档时同步默认加急费，并联动报价单
+        $('wbQty').addEventListener('input', function() {
+            if (wbActive) wbPushToQuote(); else wbRender();
+        });
+        $('wbQty').addEventListener('change', function() {
+            const spec = WB_PRICE_TABLE[specEl.value];
+            if (spec && !wbRushCustom) {
+                const tier = wbMatchTier(spec.tiers, parseInt($('wbQty').value, 10) || 0);
+                if (tier) $('wbRush').value = tier.rush || 0;
+            }
+            wbRender();
+            if (wbActive) wbPushToQuote();
+        });
+
+        // 利润率手动输入：边输入边算
+        $('wbMargin').addEventListener('input', function() {
+            wbRender();
+            if (wbActive) wbPushToQuote();
+        });
+        $('wbMargin').addEventListener('change', function() {
+            wbRender();
+            if (wbActive) wbPushToQuote();
+        });
+
+        ['wbPrint', 'wbWidth', 'wbPersonal'].forEach(function(id) {
+            const el = $(id);
+            if (!el) return;
+            el.addEventListener('change', function() {
+                wbRender();
+                if (wbActive) wbPushToQuote();
+            });
+        });
+
+        $('wbRush').addEventListener('input', function() {
+            wbRushCustom = true;
+            wbRender();
+            if (wbActive) wbPushToQuote();
+        });
+
+        // 主表单的总件数被改动时，反向同步面板数量
+        orderQty.addEventListener('input', function() {
+            if (!wbActive) return;
+            const q = $('wbQty');
+            if (q && String(q.value) !== String(orderQty.value)) { q.value = orderQty.value; wbRender(); }
+        });
+
+        // 模式切换
+        document.querySelectorAll('.mode-tab').forEach(function(b) {
+            b.addEventListener('click', function() { wbSetMode(b.dataset.mode); });
+        });
+        $('wbToggleTable').addEventListener('click', function() {
+            const wrap = $('wbTableWrap');
+            const open = wrap.style.display !== 'none';
+            wrap.style.display = open ? 'none' : 'block';
+            this.textContent = open ? '查看完整价目表' : '收起价目表';
+            if (!open) wbRenderTable();
+        });
+
+        // 恢复上次的报价模式
+        try {
+            quoteMode = localStorage.getItem(QUOTE_MODE_KEY) === 'wristband' ? 'wristband' : 'bom';
+        } catch (e) { quoteMode = 'bom'; }
+        wbRender();
+        applyQuoteMode(true, false, true);
+        if (wbActive) scheduleCalc();
+    }
+
+    // ============================================================
     // ★★★ 核心计算 ★★★
     // ============================================================
     function calcAndRender() {
         resetLogoutTimer();
 
+        // 价目表模式会先把面板数量同步到总件数，保证单价与数量同源
+        const wbQuote = getWbQuote();               // 手腕带价目表报价（未应用时为 null）
         const mat = getMaterialData();
         const unitPrice = mat.unitPrice;
         const totalMaterialCost = mat.totalMaterialCost;
@@ -3094,15 +3791,17 @@ select {
         let settleSymbol = curInfo.symbol;
 
         const fixedTotal = labor + overhead + freight;
-        const fixedPerUnit = totalQty > 0 ? fixedTotal / totalQty : 0;
+        const fixedPerUnit = (!wbQuote && totalQty > 0) ? fixedTotal / totalQty : 0;
         const unitTotalCost = unitPrice + fixedPerUnit;
 
         if (fixedCostHint) {
-            fixedCostHint.textContent = '固定成本合计：¥ ' + fmtMoney(fixedTotal) +
-                '（人力 ' + fmtMoney(labor) + ' + 运营 ' + fmtMoney(overhead) + ' + 运费/包装 ' + fmtMoney(freight) + '），单件分摊 ' + fmtMoney(fixedPerUnit) + ' ¥';
+            fixedCostHint.textContent = wbQuote
+                ? '手腕带价目表模式：单价 = 基价 ×（1+利润率）+ 双面/加宽/印字加价，人力 / 运营 / 运费共 ¥ ' + fmtMoney(fixedTotal) + ' 不参与分摊'
+                : '固定成本合计：¥ ' + fmtMoney(fixedTotal) +
+                    '（人力 ' + fmtMoney(labor) + ' + 运营 ' + fmtMoney(overhead) + ' + 运费/包装 ' + fmtMoney(freight) + '），单件分摊 ' + fmtMoney(fixedPerUnit) + ' ¥';
         }
 
-        if (unitPrice <= 0 || totalQty <= 0) {
+        if ((!wbQuote && unitPrice <= 0) || totalQty <= 0) {
             const dash = '—';
             heroPriceNoTax.innerHTML = dash;
             heroPriceWithTax.innerHTML = dash;
@@ -3115,16 +3814,24 @@ select {
             return null;
         }
 
-        const priceNoTaxCNY = unitTotalCost * (1 + markup / 100);
-        const totalSalesNoTaxCNY = priceNoTaxCNY * totalQty;
+        // 价目表模式：单价 = 价目表价（不含税）；加急费为整单固定费用，单独计入总额
+        const priceNoTaxCNY = wbQuote ? wbQuote.unitPrice : unitTotalCost * (1 + markup / 100);
+        const rushFeeCNY = wbQuote ? wbQuote.rushFee : 0;
+        const totalSalesNoTaxCNY = wbQuote
+            ? priceNoTaxCNY * totalQty + rushFeeCNY
+            : priceNoTaxCNY * totalQty;
         const taxAmountCNY = priceNoTaxCNY * (taxRate / 100);
         const priceWithTaxCNY = priceNoTaxCNY + taxAmountCNY;
-        const totalSalesWithTaxCNY = totalSalesNoTaxCNY + taxAmountCNY * totalQty;
+        const totalSalesWithTaxCNY = wbQuote
+            ? totalSalesNoTaxCNY * (1 + taxRate / 100)
+            : totalSalesNoTaxCNY + taxAmountCNY * totalQty;
 
-        const totalCostCNY = totalMaterialCost + fixedTotal;
+        // 价目表模式的成本＝基价合计 + 加急费（加急费按成本口径转嫁，不计毛利）
+        const wbCostCNY = wbQuote ? (wbQuote.basePrice * totalQty + rushFeeCNY) : 0;
+        const totalCostCNY = wbQuote ? wbCostCNY : totalMaterialCost + fixedTotal;
         const totalProfitCNY = totalSalesNoTaxCNY - totalCostCNY;
-        const unitProfitCNY = totalProfitCNY / totalQty;
-        const marginRate = (totalProfitCNY / totalSalesNoTaxCNY) * 100;
+        const unitProfitCNY = totalQty > 0 ? totalProfitCNY / totalQty : 0;
+        const marginRate = totalSalesNoTaxCNY > 0 ? (totalProfitCNY / totalSalesNoTaxCNY) * 100 : 0;
 
         let exchangeRate = 1;
         if (settleCur !== 'CNY') {
@@ -3191,9 +3898,14 @@ select {
         // 盈亏分析数值过长时自动缩小字号，保证单行完整显示
         [paMarginRate, paUnitProfit, paUnitCost, paTotalCost, paTotalProfit, paTotalSales].forEach(el => fitStatNumber(el, 15));
 
-        // 建议报价：基于目标毛利率
+        // 建议报价：基于目标毛利率（价目表模式下单价已定，不参与成本加价建议）
         const target = parseFloat(targetMargin.value);
-        if (!isNaN(target) && target > 0 && target < 100 && unitTotalCost > 0) {
+        if (wbQuote) {
+            suggestPrice.textContent = '—';
+            suggestPrice.removeAttribute('data-suggest');
+            suggestMarkup.textContent = '';
+            suggestNote.textContent = '（价目表模式：单价按档位确定，不走成本加价建议）';
+        } else if (!isNaN(target) && target > 0 && target < 100 && unitTotalCost > 0) {
             const suggestedNoTaxCNY = unitTotalCost / (1 - target / 100);
             let suggestedDisplayCNY;
             if (taxIncluded) {
@@ -3241,14 +3953,14 @@ select {
             productName: productName.value || '未命名商品',
             parts: mat.parts,
             unitPrice,
-            totalMaterialCost,
+            totalMaterialCost: wbQuote ? wbCostCNY : totalMaterialCost,
             totalQty,
             markup,
             labor,
             overhead,
             freight,
             fixedTotal,
-            unitTotalCost,
+            unitTotalCost: wbQuote ? wbQuote.basePrice : unitTotalCost,
             totalCostCNY,
             taxRate,
             priceNoTaxCNY,
@@ -3280,7 +3992,27 @@ select {
             remarks: remarks.value || '',
             logoData: currentLogoData || null,
             sealData: currentSealData || null,
-            imageData: currentImageData || null
+            imageData: currentImageData || null,
+            rushFee: wbQuote ? rushFeeCNY : 0,
+            priceList: wbQuote ? {
+                specKey: wbQuote.specKey,
+                specLabel: wbQuote.specLabel,
+                material: wbQuote.material,
+                method: wbQuote.method,
+                tierLabel: wbQuote.tierLabel,
+                margin: wbQuote.margin,
+                print: wbQuote.print,
+                width: wbQuote.width,
+                widthExtra: wbQuote.widthExtra,
+                personKey: wbQuote.personKey,
+                personLabel: wbQuote.personLabel,
+                basePrice: wbQuote.basePrice,
+                unitPrice: wbQuote.unitPrice,
+                addTotal: wbQuote.addTotal,
+                rushFee: rushFeeCNY,
+                leadTime: wbQuote.leadText,
+                qty: totalQty
+            } : null
         };
         return result;
     }
@@ -3361,6 +4093,9 @@ select {
             remarks: data.remarks,
             // 注：历史记录不冗余保存 Logo/印章（由导出时以当前设置兜底）；产品图存缩略图以节省浏览器存储空间
             imageData: currentImageThumb || data.imageData || null,
+            // 手腕带价目表参数（仅价目表模式存在，用于回填与导出说明）
+            priceList: data.priceList || null,
+            rushFee: data.rushFee || 0,
             // 兼容 V3 旧字段名（均为 CNY 值）
             totalCost: data.totalCostCNY,
             priceNoTax: data.priceNoTaxCNY,
@@ -3696,6 +4431,21 @@ select {
         remarks.value = record.remarks || '';
         targetMargin.value = 15;
 
+        // 回填时按记录类型切换报价模式，避免两套口径混用
+        const hasWbPrice = !!(record.priceList && record.priceList.specKey && WB_PRICE_TABLE[record.priceList.specKey]);
+        quoteMode = hasWbPrice ? 'wristband' : 'bom';
+        wbAutoName = record.productName || '';
+        wbAutoDelivery = record.delivery || '';
+        applyQuoteMode(true, true);
+
+        // 手腕带价目表记录：同步回填面板参数，保持单价口径一致
+        if (hasWbPrice) {
+            wbApplyRecord(record.priceList);
+        } else {
+            wbActive = false;
+            wbRender();
+        }
+
         if (record.imageData) {
             currentImageData = record.imageData;
             productImagePreview.src = record.imageData;
@@ -3755,6 +4505,16 @@ select {
         }
         pdfPartBody.innerHTML = partHtml;
 
+        // 手腕带报价不使用 BOM：整块隐藏，避免残留物料与商品名称重复、也避免出现“无明细”
+        // 另：BOM 只有一行且物料名与商品名完全相同时也视为重复，隐藏该表
+        const singleSame = parts.length === 1 &&
+            String(parts[0].name || '').trim() === String(record.productName || '').trim();
+        const hideBom = !!record.priceList || singleSame;
+        const partTitleEl = document.getElementById('pdfPartTitle');
+        if (partTitleEl) partTitleEl.style.display = hideBom ? 'none' : '';
+        const partTableEl = document.getElementById('pdfPartTable');
+        if (partTableEl) partTableEl.style.display = hideBom ? 'none' : '';
+
         // 主报价表（按含税/不含税动态列；税额按总额显示；不含税时不显示税率相关信息）
         const taxIncluded = !!record.taxIncluded;
         const taxRate = parseFloat(record.taxRate) || 0;
@@ -3773,7 +4533,7 @@ select {
                 '<td>' + symbol + ' ' + fmtMoney(priceWithTax) + '</td>' +
                 '<td>' + taxRate + '%</td>' +
                 '<td>' + symbol + ' ' + fmtMoney(taxAmount * totalQty) + '</td>' +
-                '<td>' + symbol + ' ' + fmtMoney(totalWithTax) + '</td>';
+                '<td>' + symbol + ' ' + fmtMoney(priceWithTax * totalQty) + '</td>';
             totalLabel = '合计（含税）';
             totalValue = totalWithTax;
         } else {
@@ -3781,12 +4541,29 @@ select {
             bodyHtml = '<td style="text-align:center;">' + escapeHtml(record.productName || '未命名商品') + '</td>' +
                 '<td>' + totalQty + '</td>' +
                 '<td>' + symbol + ' ' + fmtMoney(priceNoTax) + '</td>' +
-                '<td>' + symbol + ' ' + fmtMoney(totalNoTax) + '</td>';
+                '<td>' + symbol + ' ' + fmtMoney(priceNoTax * totalQty) + '</td>';
             totalLabel = '合计（不含税）';
             totalValue = totalNoTax;
         }
         pdfQuoteThead.innerHTML = '<tr>' + theadHtml + '</tr>';
-        pdfQuoteTbody.innerHTML = '<tr>' + bodyHtml + '</tr>';
+        // 价目表模式：加急费为整单固定费用，单独列一行，保证「单价×数量 + 加急费 = 合计」
+        const priceListInfo = record.priceList || null;
+        const rushFee = parseFloat(record.rushFee) || (priceListInfo ? (parseFloat(priceListInfo.rushFee) || 0) : 0);
+        let quoteRows = '<tr>' + bodyHtml + '</tr>';
+        if (rushFee > 0) {
+            if (taxIncluded) {
+                const rushTax = rushFee * (taxRate / 100) * rate;
+                const rushTotal = rushFee * (1 + taxRate / 100) * rate;
+                quoteRows += '<tr><td style="text-align:center;">加急费（整单）</td><td>1</td><td>' + symbol + ' ' + fmtMoney(rushTotal) +
+                    '</td><td>' + taxRate + '%</td><td>' + symbol + ' ' + fmtMoney(rushTax) +
+                    '</td><td>' + symbol + ' ' + fmtMoney(rushTotal) + '</td></tr>';
+            } else {
+                const rushTotal = rushFee * rate;
+                quoteRows += '<tr><td style="text-align:center;">加急费（整单）</td><td>1</td><td>' + symbol + ' ' + fmtMoney(rushTotal) +
+                    '</td><td>' + symbol + ' ' + fmtMoney(rushTotal) + '</td></tr>';
+            }
+        }
+        pdfQuoteTbody.innerHTML = quoteRows;
         pdfQuoteTfoot.innerHTML = '';
 
         const sealHtml = (record.sealData || currentSealData)
@@ -3799,6 +4576,8 @@ select {
             '<span style="font-weight:700;font-size:13px;color:#1d2129;margin-left:4px;">' + symbol + ' ' + fmtMoney(totalValue) + '</span>' +
             sealHtml + '</td></tr>';
         pdfQuoteTfoot.innerHTML = totalRow;
+        const tplEl = document.getElementById('quotation-template');
+        if (tplEl) tplEl.classList.toggle('has-seal', !!sealHtml);
 
         // 条款
         pdfPayment.textContent = record.payment || '';
@@ -3820,9 +4599,11 @@ select {
             img.src = record.imageData;
             img.alt = '产品图';
             pdfProductImageContainer.appendChild(img);
-            pdfProductImageContainer.style.display = 'block';
+            // 不写死 display，交给 CSS 决定（有印章时用 flex 垂直居中）
+            pdfProductImageContainer.style.display = '';
         } else {
-            pdfProductImageContainer.style.display = 'none';
+            // 没有产品图但盖了印章时，保留一块空白给印章，避免压住付款方式
+            pdfProductImageContainer.style.display = sealHtml ? '' : 'none';
         }
 
         return true;
@@ -3900,7 +4681,7 @@ select {
     // ============================================================
     async function exportCurrentExcel() {
         const data = calcAndRender();
-        if (!data || data.unitPrice <= 0 || data.totalQty <= 0) { showToast('请先填写完整信息并计算报价！', 'warning'); return; }
+        if (!data || (data.unitPrice <= 0 && !data.priceList) || data.totalQty <= 0) { showToast('请先填写完整信息并计算报价！', 'warning'); return; }
         if (!requireLogin()) return;
         if (typeof ExcelJS === 'undefined') { showToast('Excel库加载失败，请检查网络连接', 'error'); return; }
         const workbook = new ExcelJS.Workbook();
@@ -5266,6 +6047,7 @@ select {
         restoreSavedState();
         renderAppLogo();
         initParts();
+        wbInit();
         initCompanyAddressTemplates();
         renderCustomerTemplates();
         renderPartTemplates();
