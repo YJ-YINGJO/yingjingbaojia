@@ -5595,6 +5595,16 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
     }
 
     function printQuote(record) {
+        const ua = (navigator && navigator.userAgent) || '';
+        // 微信 / 支付宝等内置浏览器没有打印能力，直接给指引
+        if (/MicroMessenger|AlipayClient|Weibo/i.test(ua)) {
+            showToast('当前是微信/微博内置浏览器，不支持打印。请点右上角「…」→「在浏览器中打开」后再打印', 'warning');
+            return;
+        }
+        if (typeof window.print !== 'function') {
+            showToast('当前浏览器不支持打印，请用系统浏览器（Safari / Chrome）打开后再试', 'warning');
+            return;
+        }
         const target = record || calcAndRender();
         if (!target) { showToast('请先完善报价参数', 'warning'); return; }
         buildPdfFromRecord(target);
@@ -5615,10 +5625,17 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             window.removeEventListener('afterprint', cleanup);
         };
         window.addEventListener('afterprint', cleanup);
-        setTimeout(function() {
+        // 强制一次重排，保证打印前样式已应用
+        void document.body.offsetHeight;
+        // 必须在点击手势内同步调用：移动端（iOS Safari）放到 setTimeout 里会被拦截
+        try {
             window.print();
-            setTimeout(cleanup, 500);
-        }, 60);
+        } catch (e) {
+            showToast('调用打印失败：' + (e.message || '请用系统浏览器打开后再试'), 'warning');
+        }
+        // 桌面端打印对话框关闭时会触发 afterprint 立即清理；
+        // 移动端部分浏览器不触发 afterprint，给一个较长的兜底，避免提前撤掉打印样式
+        setTimeout(cleanup, 30000);
     }
 
     function exportHistoryItemPdf(record) {
