@@ -1936,7 +1936,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                 <div class="pl-block">
                     <h4>通用加价</h4>
                     <div class="setting-row">
-                        <div class="setting-group"><label>每加宽 5mm 加价（元/条）</label><input type="number" id="plWidthStep" step="0.01" min="0" /></div>
+                        <div class="setting-group"><label>每加宽 5mm 加价（元/条）<span class="hint">标准值 0.05</span></label><input type="number" id="plWidthStep" step="0.01" min="0" max="0.5" /></div>
                         <div class="setting-group"><label>印名字（元/条）</label><input type="number" id="plNameAdd" step="0.01" min="0" /></div>
                         <div class="setting-group"><label>印编号（元/条）</label><input type="number" id="plCodeAdd" step="0.01" min="0" /></div>
                     </div>
@@ -3799,7 +3799,9 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
     // 把保存的配置套用到内置价目表（只改内容，不换对象）
     function wbApplyPricelist(cfg) {
         if (!cfg || typeof cfg !== 'object') return false;
-        if (typeof cfg.widthStep === 'number' && cfg.widthStep >= 0) WB_WIDTH_STEP_ADD = cfg.widthStep;
+        if (typeof cfg.widthStep === 'number' && cfg.widthStep >= 0) {
+            WB_WIDTH_STEP_ADD = (cfg.widthStep > 0.5) ? WB_WIDTH_STEP_DEFAULT : cfg.widthStep;
+        }
         if (cfg.personal) {
             if (typeof cfg.personal.name === 'number' && cfg.personal.name >= 0) WB_PERSONAL.name.add = cfg.personal.name;
             if (typeof cfg.personal.code === 'number' && cfg.personal.code >= 0) WB_PERSONAL.code.add = cfg.personal.code;
@@ -3844,6 +3846,21 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         });
         wbRegisterCustomSpecs();
         return true;
+    }
+
+    function wbMigrateWidthStep() {
+        try {
+            if (localStorage.getItem('quote_wb_widthfix_v2')) return;
+            const raw = localStorage.getItem(WB_PRICELIST_KEY);
+            if (raw) {
+                const cfg = JSON.parse(raw);
+                if (cfg && typeof cfg === 'object') {
+                    cfg.widthStep = WB_WIDTH_STEP_DEFAULT;
+                    localStorage.setItem(WB_PRICELIST_KEY, JSON.stringify(cfg));
+                }
+            }
+            localStorage.setItem('quote_wb_widthfix_v2', '1');
+        } catch (e) { console.warn('加宽单价修正失败:', e); }
     }
 
     function wbLoadPricelist() {
@@ -4225,7 +4242,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                 const k = String(row.getCell(1).value || '').trim();
                 const v = parseFloat(row.getCell(2).value);
                 if (!isFinite(v) || v < 0) return;
-                if (k.indexOf('加宽') >= 0) widthStep = v;
+                if (k.indexOf('加宽') >= 0) widthStep = (v > 0.5 ? 0.05 : v);
                 else if (k.indexOf('印名字') >= 0) nameAdd = v;
                 else if (k.indexOf('印编号') >= 0) codeAdd = v;
             });
@@ -4277,6 +4294,10 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         $('plSaveBtn').addEventListener('click', function() {
             try {
                 const cfg = wbCollectPricelist();
+                if (cfg.widthStep > 0.5) {
+                    showToast('「每加宽 5mm」不能大于 0.5 元，标准值是 0.05，请修改后再保存', 'warning');
+                    return;
+                }
                 localStorage.setItem(WB_PRICELIST_KEY, JSON.stringify(cfg));
                 wbApplyPricelist(cfg);
                 wbRefreshAfterPricelist();
@@ -4435,7 +4456,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         const margin = isNaN(marginRaw) ? 15 : Math.min(100, Math.max(0, marginRaw));
         const print = $('wbPrint').value === 'double' ? 'double' : 'single';
         // 毛利率 = 加价率 /（1 + 加价率），便于和财务口径对齐
-        const grossMargin = margin > 0 ? Math.round((margin / (100 + margin)) * 10000) / 100 : 0;
+        let grossMargin = 0;
 
         const personKey = (WB_PERSONAL[$('wbPersonal').value] && $('wbPersonal').value) || 'none';
         const person = WB_PERSONAL[personKey];
@@ -4454,6 +4475,8 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         const personAdd = person.add;
         const addTotal = Math.round((dsAdd + widthAdd + personAdd) * 100) / 100;
         const unitPrice = Math.round((marginPrice + addTotal) * 1000 + 1e-6) / 1000;
+        // 毛利率按实际成交价与成本算：加宽/双面/印字/卡片的加价都体现在利润里
+        grossMargin = unitPrice > 0 ? Math.round(((unitPrice - basePrice) / unitPrice) * 10000) / 100 : 0;
         // 收了加急费即当天发货（加急优先，不再受印字顺延影响）；无加急费按档位货期，印字顺延一天
         const hasRush = rushFee > 0;
         const leadText = hasRush ? '当天发货' : (person.delay ? wbAddOneDay(tier.lead) : tier.lead);
@@ -4556,9 +4579,17 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             out.removeAttribute('data-markup');
             return;
         }
-        const markup = (t / (100 - t)) * 100;
-        out.textContent = markup.toFixed(2) + '%';
-        out.setAttribute('data-markup', String(markup));
+        // 目标毛利率要扣掉加价项（加宽/双面/印字/卡片）已经带来的利润
+        const cur = wbReadPanel();
+        let markup = (t / (100 - t)) * 100;
+        if (cur && cur.basePrice > 0) {
+            const targetPrice = cur.basePrice / (1 - t / 100);
+            markup = ((targetPrice - (cur.addTotal || 0) - cur.basePrice) / cur.basePrice) * 100;
+        }
+        if (!isFinite(markup)) markup = 0;
+        const shown = Math.max(0, markup);
+        out.textContent = shown.toFixed(2) + '%' + (markup < 0 ? '（加价已覆盖）' : '');
+        out.setAttribute('data-markup', String(shown));
     }
 
     // 与 wbReadPanel 同一口径，供型号对比使用
@@ -4689,7 +4720,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             const t = WB_PRICE_TABLE[prod.table];
             items.push((t && t.label ? t.label : '该规格') + ' 使用独立价目表，价格按档位直接计算，不另加宽度费用');
         } else if (prod.material === '缎带') {
-            items.push('缎带常规 15*350，可选 20 / 25 / 30*350，每加宽 5mm 加 0.05 元/条');
+            items.push('缎带常规 15*350，可选 20 / 25 / 30*350，每加宽 5mm 加 ' + WB_WIDTH_STEP_ADD + ' 元/条');
         } else if (prod.material === '涤纶') {
             items.push('涤纶常规 15*350；20mm 宽为加厚款，请选「加厚涤纶 20*350」');
         } else {
@@ -4727,7 +4758,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         const belowMin = minMargin > 0 && hasQty && cur.grossMargin < minMargin;
         box.innerHTML =
             stat('匹配档位', escapeHtml(cur.tierLabel), 'hl') +
-            stat('基价（不含税/条）', '¥ ' + wbPriceText(cur.basePrice)) +
+            stat('基价（不含税/' + (cur.unit || '条') + '）', '¥ ' + wbPriceText(cur.basePrice)) +
             stat('报价单价（' + taxWord + '）', '¥ ' + wbPriceText(unitShown), 'hl') +
             stat('毛利率', cur.grossMargin.toFixed(2) + '%', belowMin ? 'bad' : '',
                 '毛利率 = 加价率 ÷（1+加价率）') +
@@ -4773,6 +4804,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         if ($('wbTableWrap') && $('wbTableWrap').style.display !== 'none') wbRenderTable();
         if ($('wbCmpWrap') && $('wbCmpWrap').style.display !== 'none') wbRenderCompare();
         if ($('wbSuggestMarginBtn')) $('wbSuggestMarginBtn').textContent = '推荐 ' + wbRecommendMargin() + '%';
+        wbUpdateSuggestMarkup();
     }
 
     // 手腕带模式下把面板结果同步到报价单（商品名称 / 总件数 / 交货期）
@@ -4971,6 +5003,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             }
         } catch (e) { console.warn('恢复手腕带价目表状态失败:', e); }
 
+        wbMigrateWidthStep();
         wbLoadPricelist();
         wbBuildProductOptions(savedProduct);
         wbBuildCardOptions();
@@ -5173,7 +5206,9 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         const totalCostCNY = wbQuote ? wbCostCNY : totalMaterialCost + fixedTotal;
         const totalProfitCNY = totalSalesNoTaxCNY - totalCostCNY;
         const unitProfitCNY = totalQty > 0 ? totalProfitCNY / totalQty : 0;
-        const marginRate = totalSalesNoTaxCNY > 0 ? (totalProfitCNY / totalSalesNoTaxCNY) * 100 : 0;
+        const marginRate = wbQuote
+            ? (priceNoTaxCNY > 0 ? ((priceNoTaxCNY - wbQuote.basePrice) / priceNoTaxCNY) * 100 : 0)
+            : (totalSalesNoTaxCNY > 0 ? (totalProfitCNY / totalSalesNoTaxCNY) * 100 : 0);
 
         let exchangeRate = 1;
         if (settleCur !== 'CNY') {
