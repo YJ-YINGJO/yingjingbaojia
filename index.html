@@ -207,13 +207,13 @@ html[data-theme="dark"] #pdfLogoContainer, html[data-theme="dark"] .logo-wrap { 
 .app-bar-inner {
     max-width: calc(1200px - 32px); margin: 0 auto;
     display: flex; align-items: center; justify-content: space-between;
-    gap: 10px; padding: 6px 14px; flex-wrap: wrap;
+    gap: 10px; padding: 6px 14px; flex-wrap: nowrap;
     background: var(--card);
     border: 1px solid var(--border-light);
     border-radius: 14px;
     box-shadow: var(--shadow-md);
 }
-.app-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.app-brand { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 0 1 auto; overflow: hidden; }
 .brand-mark {
     position: relative;
     height: 44px; flex-shrink: 0;
@@ -306,14 +306,61 @@ html[data-motion="off"] .modal-overlay.active .modal-card,
 html[data-motion="off"] .settings-panel.active { animation: none; }
 html[data-motion="off"] .card,
 html[data-motion="off"] .stat-card { animation: none !important; }
-.brand-text { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.brand-text { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; min-width: 0; overflow: hidden; }
 .brand-text h1 { font-size: 15px; font-weight: 700; letter-spacing: -.2px; color: var(--text-1); }
 .ver-badge {
     font-size: 11px; font-weight: 600; color: var(--primary);
     background: var(--primary-weak); padding: 1px 10px; border-radius: var(--radius-full);
 }
-.brand-sub { font-size: 12px; color: var(--text-3); flex-basis: 100%; margin-top: -2px; }
+.brand-sub {
+    font-size: 12px; color: var(--text-3); flex-basis: 100%; margin-top: -2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+}
 .app-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+/* 头部世界时钟 */
+.app-clock {
+    position: relative; display: flex; align-items: center; gap: 14px; flex-shrink: 0;
+    padding: 2px 4px; background: #ffffff; border: none;
+    cursor: pointer; user-select: none;
+}
+.clock-time { font-size: 17px; font-weight: 700; color: var(--text-1); font-variant-numeric: tabular-nums; letter-spacing: .5px; white-space: nowrap; }
+.clock-date { font-size: 13px; color: var(--text-2); white-space: nowrap; }
+.clock-zone {
+    font-size: 12px; color: var(--primary); background: transparent;
+    padding: 0; white-space: nowrap; font-weight: 600;
+}
+.app-clock:hover .clock-zone { text-decoration: underline; }
+.clock-menu {
+    position: absolute; top: calc(100% + 6px); left: 0; z-index: 80;
+    min-width: 200px; max-height: 320px; overflow: auto;
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    box-shadow: var(--shadow-md); padding: 6px;
+}
+.clock-menu button {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    width: 100%; padding: 7px 10px; border: none; background: none;
+    color: var(--text-1); font-size: 13px; font-family: inherit; border-radius: 6px; cursor: pointer;
+}
+.clock-menu button:hover { background: var(--primary-weak); }
+.clock-menu button.active { color: var(--primary); font-weight: 600; }
+.clock-menu .tz-off { font-size: 11px; color: var(--text-3); }
+@media (max-width: 1280px) {
+    .brand-sub { display: none; }
+}
+@media (max-width: 820px) {
+    .clock-date { display: none; }
+}
+/* 手机上时钟单独占一行，避免把设置按钮挤走 */
+@media (max-width: 760px) {
+    .app-bar-inner { flex-wrap: wrap; }
+    .app-clock { order: 3; width: 100%; justify-content: center; padding-top: 4px; }
+}
+@media (max-width: 600px) {
+    .app-clock { gap: 8px; padding: 0; }
+    .clock-time { font-size: 14px; }
+    .clock-zone { font-size: 11px; }
+}
 .login-pill {
     display: inline-flex; align-items: center; gap: 6px;
     font-size: 12px; font-weight: 500;
@@ -708,13 +755,22 @@ select {
 .head-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 .tpl-hint {
     display: inline-flex; align-items: center; gap: 6px;
-    font-size: 12px; color: var(--text-2); padding: 4px 10px;
+    padding: 2px 8px 2px 10px;
     border: 1px dashed var(--border); border-radius: var(--radius-full);
     background: var(--bg); white-space: nowrap;
 }
 .tpl-hint::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
 .tpl-hint[data-tpl="simple"]::before { background: var(--text-3); }
 .tpl-hint[data-tpl="payment"]::before { background: var(--success); }
+.tpl-select {
+    appearance: none; -webkit-appearance: none; border: none;
+    background-color: transparent; color: var(--text-2);
+    font-size: 12px; font-family: inherit; cursor: pointer;
+    padding: 3px 16px 3px 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2386909c' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 2px center;
+}
+.tpl-select:focus { outline: none; }
 .action-row .btn { flex: 1; min-width: 140px; }
 
 /* ===== 手腕带价目表维护（设置页） ===== */
@@ -754,6 +810,22 @@ select {
 }
 .pl-table .pl-del:hover { color: var(--danger); border-color: var(--danger); }
 .pl-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+.pl-spec { border: 1px solid var(--border-light); border-radius: var(--radius-s); padding: 10px; margin-bottom: 10px; background: var(--card); }
+.pl-spec-head { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+.pl-spec-head input {
+    flex: 1 1 160px; padding: 6px 8px; font-size: 13px; font-family: inherit;
+    border: 1px solid var(--border); border-radius: var(--radius-s);
+    background: var(--card); color: var(--text-1);
+}
+.pl-spec-del {
+    padding: 4px 12px; font-size: 12px; font-family: inherit; border-radius: var(--radius-full);
+    border: 1px solid var(--danger); color: var(--danger); background: var(--card); cursor: pointer;
+}
+.pl-spec-foot { display: flex; justify-content: flex-end; margin-top: 6px; }
+.pl-add-tier {
+    padding: 3px 12px; font-size: 12px; font-family: inherit; border-radius: var(--radius-full);
+    border: 1px dashed var(--border); background: var(--card); color: var(--primary); cursor: pointer;
+}
 
 /* ===== 报价模式切换（物料成本 / 手腕带价目表，互斥，避免两套口径重复） ===== */
 .mode-bar {
@@ -826,7 +898,7 @@ body[data-quote-mode="bom"] .module-wb { display: none !important; }
     outline: none; border-color: var(--primary);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 13%, transparent);
 }
-.wb-result { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 2fr 1fr; gap: 8px; margin-top: 12px; }
+.wb-result { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 2fr; gap: 8px; margin-top: 12px; }
 .wb-stat { min-width: 0; padding: 7px 10px; border-radius: var(--radius-s); background: var(--bg); border: 1px solid var(--border-light); }
 .wb-stat .k { display: block; font-size: 11px; color: var(--text-3); white-space: nowrap; }
 .wb-stat .v {
@@ -837,7 +909,6 @@ body[data-quote-mode="bom"] .module-wb { display: none !important; }
 .wb-stat.hl .v { color: var(--primary); font-size: 15px; }
 .wb-stat.acc { border-color: var(--primary); background: var(--card); }
 .wb-stat.acc .v { color: var(--primary); }
-.wb-stat .v .sub2 { display: block; font-size: 10.5px; font-weight: 600; color: var(--text-3); margin-top: 1px; }
 .wb-stat.bad { border-color: var(--danger); }
 .wb-stat.bad .v { color: var(--danger); }
 .wb-note { margin-top: 8px; font-size: 12px; color: var(--text-3); line-height: 1.5; }
@@ -1336,6 +1407,12 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                 <span class="brand-sub">材料明细 · 固定成本自动分摊 · 目标毛利率智能建议 · 结算货币自动换算 · 登录安全保护</span>
             </div>
         </div>
+        <div class="app-clock" id="appClock" title="点击切换时区">
+            <span class="clock-time" id="clockTime">--:--:--</span>
+            <span class="clock-date" id="clockDate">----</span>
+            <span class="clock-zone" id="clockZone">中国 · 北京</span>
+            <div class="clock-menu" id="clockMenu" style="display:none;"></div>
+        </div>
         <div class="app-actions">
             <span class="login-pill" id="loginStatusPill">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
@@ -1440,13 +1517,13 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         </div>
     </div>
 
-    <!-- ===== 报价模式（物料成本 / 手腕带价目表，二选一，避免两套口径并存） ===== -->
+    <!-- ===== 报价模式（通用产品 / 手腕带，二选一，避免两套口径并存） ===== -->
     <div class="mode-bar" id="modeBar">
         <div class="mode-tabs" role="group" aria-label="报价模式">
-            <button type="button" class="mode-tab active" data-mode="bom">按物料成本报价</button>
-            <button type="button" class="mode-tab" data-mode="wristband">按手腕带价目表报价</button>
+            <button type="button" class="mode-tab active" data-mode="bom">通用产品报价</button>
+            <button type="button" class="mode-tab" data-mode="wristband">手腕带产品报价</button>
         </div>
-        <span class="mode-desc" id="modeDesc">BOM 物料成本 + 固定成本 + 加价率，适用于贴纸、卡片等常规产品</span>
+        <span class="mode-desc" id="modeDesc">BOM 物料成本 + 固定成本 + 加价率，适用于滴胶贴纸、号码扣等常规产品</span>
     </div>
 
     <!-- ===== 产品信息 ===== -->
@@ -1514,20 +1591,20 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                 <span class="head-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
                 手腕带报价
             </h3>
-            <span class="head-badge">热转印价目表 · 手动加价率</span>
+            <span class="head-badge">依据系统设置价目表自动报价</span>
         </div>
         <div class="card-body">
             <div class="wb-panel" id="wbPanel">
                 <div class="wb-head">
                     <div class="wb-head-actions">
-                        <button type="button" class="wb-link" id="wbCmpBtn">型号对比</button>
-                        <button type="button" class="wb-link" id="wbCopyBtn">复制摘要</button>
+                        <button type="button" class="wb-link" id="wbCmpBtn">不同挡位价格对比</button>
+                        <button type="button" class="wb-link" id="wbCopyBtn">复制报价信息</button>
                         <button type="button" class="wb-link" id="wbToggleTable">查看完整价目表</button>
                     </div>
                 </div>
                 <div class="wb-form">
                     <div class="wb-field" id="wbSpecField">
-                        <label>产品型号（材质 · 尺寸）</label>
+                        <label>产品规格</label>
                         <select id="wbSpec">
                             <option value="r15">缎带 15*350</option>
                         </select>
@@ -1555,7 +1632,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                         </select>
                     </div>
                     <div class="wb-field">
-                        <label>个性化印刷</label>
+                        <label>加印</label>
                         <select id="wbPersonal">
                             <option value="none">不另加印</option>
                             <option value="name">印名字 +0.10/条</option>
@@ -1592,7 +1669,13 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             </h3>
             <div class="head-tools">
                 <span class="head-badge" id="calcBadge">实时计算 · 智能建议</span>
-                <span class="tpl-hint" id="tplHint" title="在「设置 → 默认数据 → 报价单样式」中切换">报价单样式：标准版</span>
+                <span class="tpl-hint" id="tplHintWrap" title="切换报价单样式，只影响导出/打印">
+                    <select class="tpl-select" id="tplHint">
+                        <option value="standard">报价单样式：标准版</option>
+                        <option value="simple">报价单样式：简洁版</option>
+                        <option value="payment">报价单样式：收款版</option>
+                    </select>
+                </span>
             </div>
         </div>
         <div class="card-body">
@@ -1659,10 +1742,6 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                         导出 Excel 数据
                     </button>
                 </div>
-                <div class="print-tip">
-                    打印时顶部日期/商品名、底部网址属于<b>浏览器自己加的页眉页脚</b>，网页无法控制。<br>
-                    在打印对话框的「更多设置」里取消勾选『<b>页眉和页脚</b>』，并把页边距设为「默认」或「无」，Chrome / Edge 会记住这个设置，只需设置一次。
-                </div>
             </div>
         </div>
     </div>
@@ -1680,7 +1759,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             <div class="terms-grid">
                 <div class="terms-item"><label>报价有效期</label><input type="text" id="validity" value="7个工作日" /></div>
                 <div class="terms-item"><label>付款方式</label><input type="text" id="payment" value="款到发货" /></div>
-                <div class="terms-item"><label>交货期</label><input type="text" id="delivery" value="5-7个工作日" /></div>
+                <div class="terms-item"><label>交货期</label><input type="text" id="delivery" value="7个工作日" /></div>
                 <div class="terms-item" style="grid-column:1/-1;"><label>备注</label><textarea id="remarks" rows="2" style="resize:vertical;min-height:62px;">以上报价不含运费，质保期为12个月。</textarea></div>
             </div>
         </div>
@@ -1732,13 +1811,14 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                             <th class="align-center">单件利润</th>
                             <th class="align-center">数量</th>
                             <th class="align-center">总额</th>
+                            <th class="align-center">总利润</th>
                             <th class="align-left">联系人</th>
                             <th class="align-left">电话</th>
                             <th class="align-center" style="width:150px;">操作</th>
                         </tr>
                     </thead>
                     <tbody id="historyBody">
-                        <tr><td colspan="14" class="empty-history">暂无报价记录</td></tr>
+                        <tr><td colspan="15" class="empty-history">暂无报价记录</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -1816,7 +1896,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                     <div class="setting-group"><label>默认付款方式</label><input type="text" id="setDefaultPayment" value="款到发货" /></div>
                 </div>
                 <div class="setting-row">
-                    <div class="setting-group"><label>默认交货期</label><input type="text" id="setDefaultDelivery" value="5-7个工作日" /></div>
+                    <div class="setting-group"><label>默认交货期</label><input type="text" id="setDefaultDelivery" value="7个工作日" /></div>
                     <div class="setting-group"><label>默认加价率 (%)</label><input type="number" id="setDefaultMarkupRate" value="0.5" step="1" min="-100" /></div>
                 </div>
                 <div class="setting-row">
@@ -1882,6 +1962,13 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                         <button type="button" class="pl-add" id="plAddCardSize">+ 添加规格</button>
                     </h4>
                     <div class="pl-table-wrap"><table class="pl-table" id="plCardTable"></table></div>
+                </div>
+
+                <div class="pl-block">
+                    <h4>自定义规格价目表 <span class="pl-tag">每组一张完整价目表，结构同 15*350</span>
+                        <button type="button" class="pl-add" id="plAddSpec">+ 添加规格</button>
+                    </h4>
+                    <div id="plSpecHost"></div>
                 </div>
 
                 <div class="pl-actions">
@@ -2392,7 +2479,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             const savedImage = localStorage.getItem('quote_image_data_saved');
             if (savedImage && typeof currentImageData !== 'undefined') {
                 currentImageData = savedImage;
-                try { currentImageThumb = await compressBase64(savedImage, 240, 0.72); } catch (e) { currentImageThumb = null; }
+                try { currentImageThumb = await compressBase64(savedImage, 640, 0.85); } catch (e) { currentImageThumb = null; }
                 if (typeof productImagePreview !== 'undefined' && productImagePreview) {
                     productImagePreview.src = savedImage;
                     productImagePreview.style.display = 'block';
@@ -2653,7 +2740,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             defaultTaxIncluded: 'yes',
             defaultValidity: '7个工作日',
             defaultPayment: '款到发货',
-            defaultDelivery: '5-7个工作日',
+            defaultDelivery: '7个工作日',
             defaultMarkupRate: 0.5,
             defaultTargetMargin: 15,
             minMargin: 5,
@@ -2680,6 +2767,8 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                 for (const key in def) {
                     if (!(key in saved)) saved[key] = def[key];
                 }
+                // 通用产品默认货期统一为 7 个工作日（旧默认值自动迁移）
+                if (saved.defaultDelivery === '5-7个工作日') saved.defaultDelivery = '7个工作日';
                 const OLD_THEMES = ['doubao', 'green', 'orange', 'purple', 'red', 'cyan', 'pink', 'navy'];
                 if (OLD_THEMES.indexOf(saved.designTheme) >= 0) saved.designTheme = 'light';
                 return saved;
@@ -2999,9 +3088,9 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         const history = getHistory();
         let changed = false;
         for (const r of history) {
-            if (r.imageData && r.imageData.length > 30000) {
+            if (r.imageData && r.imageData.length > 900000) {
                 try {
-                    const small = await compressBase64(r.imageData, 240, 0.72);
+                    const small = await compressBase64(r.imageData, 640, 0.85);
                     if (small && small.length < r.imageData.length) { r.imageData = small; changed = true; }
                 } catch (e) { /* 单张失败跳过 */ }
             }
@@ -3519,7 +3608,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         try {
             const compressed = await compressImage(file, 460, 0.76);
             currentImageData = compressed;
-            try { currentImageThumb = await compressBase64(compressed, 240, 0.72); } catch (e) { currentImageThumb = null; }
+            try { currentImageThumb = await compressBase64(compressed, 640, 0.85); } catch (e) { currentImageThumb = null; }
             productImagePreview.src = compressed;
             productImagePreview.style.display = 'block';
             removeImageBtn.style.display = 'inline-block';
@@ -3630,7 +3719,42 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         { key: 'p15', material: '涤纶',     width: 15, table: '15x350', label: '涤纶 15*350' },
         { key: 'p20', material: '加厚涤纶', width: 20, table: '20x350', label: '加厚涤纶 20*350' }
     ];
-    // 个性化印刷：印名字 / 印编号，交期顺延 1 天
+    // 自定义规格价目表：每组 = 规格名 + 材质 + 一张完整档位表，可加多组
+    let WB_CUSTOM_SPECS = [];
+    const WB_CUSTOM_PREFIX = 'cs_';
+
+    function wbCustomTableKey(spec) { return WB_CUSTOM_PREFIX + spec.key; }
+
+    // 把自定义规格注册成价目表，供 calcAndRender / wbReadPanel 使用
+    function wbRegisterCustomSpecs() {
+        Object.keys(WB_PRICE_TABLE).forEach(function(k) {
+            if (k.indexOf(WB_CUSTOM_PREFIX) === 0) delete WB_PRICE_TABLE[k];
+        });
+        WB_CUSTOM_SPECS.forEach(function(sp) {
+            WB_PRICE_TABLE[wbCustomTableKey(sp)] = {
+                label: sp.label,
+                method: '自定义',
+                unit: sp.unit || '条',
+                tiers: sp.tiers
+            };
+        });
+    }
+
+    function wbAllProducts() {
+        const list = WB_PRODUCTS.slice();
+        WB_CUSTOM_SPECS.forEach(function(sp) {
+            list.push({
+                key: 'p_' + sp.key,
+                material: sp.material,
+                width: 0,
+                table: wbCustomTableKey(sp),
+                noWidthAdd: true
+            });
+        });
+        return list;
+    }
+
+    // 加印：印名字 / 印编号，交期顺延 1 天
     const WB_PERSONAL = {
         none: { label: '',      add: 0,    delay: 0 },
         name: { label: '印名字', add: 0.10, delay: 1 },
@@ -3680,6 +3804,30 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             if (typeof cfg.personal.name === 'number' && cfg.personal.name >= 0) WB_PERSONAL.name.add = cfg.personal.name;
             if (typeof cfg.personal.code === 'number' && cfg.personal.code >= 0) WB_PERSONAL.code.add = cfg.personal.code;
         }
+        if (Array.isArray(cfg.specs)) {
+            WB_CUSTOM_SPECS = cfg.specs.map(function(x, i) {
+                const tiers = Array.isArray(x.tiers) ? x.tiers.filter(function(t) {
+                    return t && isFinite(t.min) && isFinite(t.base);
+                }).map(function(t) {
+                    return {
+                        label: t.label || ((t.min >= 10000) ? (t.min / 10000) + '万档' : t.min + '档'),
+                        min: Math.max(0, Math.floor(t.min)),
+                        base: Number(t.base) || 0,
+                        ds: Number(t.ds) || 0,
+                        lead: t.lead || '协商出货时间',
+                        rush: Number(t.rush) || 0
+                    };
+                }).sort(function(a, b) { return a.min - b.min; }) : [];
+                return {
+                    key: x.key || ('s' + Date.now().toString(36) + i),
+                    label: String(x.label || '').trim() || ('规格' + (i + 1)),
+                    material: String(x.material || '').trim() || '缎带',
+                    unit: x.unit || '条',
+                    tiers: tiers
+                };
+            }).filter(function(x) { return x.tiers.length > 0; });
+            wbRegisterCustomSpecs();
+        }
         if (Array.isArray(cfg.cards) && cfg.cards.length) {
             const clean = cfg.cards.filter(function(c) { return c && String(c.size).trim(); })
                 .map(function(c) { return { size: String(c.size).trim(), price: (c.price === null || c.price === undefined) ? '' : String(c.price) }; });
@@ -3694,6 +3842,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             if (!clean.length) return;
             WB_PRICE_TABLE[k].tiers = wbNormalizeTiers(clean);
         });
+        wbRegisterCustomSpecs();
         return true;
     }
 
@@ -3714,6 +3863,8 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         WB_PERSONAL.name.add = WB_PERSONAL_DEFAULT.name.add;
         WB_PERSONAL.code.add = WB_PERSONAL_DEFAULT.code.add;
         WB_CARD_LIST = JSON.parse(JSON.stringify(WB_CARD_DEFAULT));
+        WB_CUSTOM_SPECS = [];
+        wbRegisterCustomSpecs();
         Object.keys(WB_TIERS_DEFAULT).forEach(function(k) {
             if (WB_PRICE_TABLE[k]) WB_PRICE_TABLE[k].tiers = JSON.parse(JSON.stringify(WB_TIERS_DEFAULT[k].tiers));
         });
@@ -3728,9 +3879,41 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
 
     // 型号名称按「材质 + 尺寸 + 加价」动态生成，改加宽单价后自动跟着变
     function wbProductLabel(p) {
+        if (p.noWidthAdd) {
+            const t = WB_PRICE_TABLE[p.table];
+            return p.material + ' ' + ((t && t.label) || '');
+        }
         const base = (p.table === '20x350') ? 20 : 15;
         const extra = Math.round(((p.width - base) / 5) * WB_WIDTH_STEP_ADD * 100) / 100;
         return p.material + ' ' + p.width + '*350' + (extra > 0 ? '（+' + wbMoney(extra) + '）' : '');
+    }
+
+    // 自定义规格卡片
+    function wbSpecCardHtml(sp) {
+        const tiers = (sp && sp.tiers && sp.tiers.length) ? sp.tiers : [{ min: 100, base: 0.35, ds: 0, lead: '3-5天', rush: 0 }];
+        let rows = '';
+        tiers.forEach(function(t) {
+            rows += '<tr>' +
+                '<td><input type="number" class="pl-min" min="0" step="1" value="' + t.min + '"></td>' +
+                '<td><input type="number" class="pl-base" min="0" step="0.001" value="' + t.base + '"></td>' +
+                '<td><input type="number" class="pl-ds" min="0" step="0.01" value="' + (t.ds || 0) + '"></td>' +
+                '<td><input type="text" class="pl-lead" value="' + escapeHtml(t.lead || '') + '"></td>' +
+                '<td><input type="number" class="pl-rush" min="0" step="1" value="' + (t.rush || 0) + '"></td>' +
+                '<td><button type="button" class="pl-del" title="删除该档">×</button></td>' +
+                '</tr>';
+        });
+        return '<div class="pl-spec" data-key="' + (sp ? escapeHtml(sp.key) : '') + '">' +
+            '<div class="pl-spec-head">' +
+                '<input type="text" class="pl-slabel" placeholder="规格名，如 25*350" value="' + (sp ? escapeHtml(sp.label) : '') + '">' +
+                '<input type="text" class="pl-smat" placeholder="材质，如 缎带" value="' + (sp ? escapeHtml(sp.material) : '') + '">' +
+                '<button type="button" class="pl-spec-del">删除规格</button>' +
+            '</div>' +
+            '<table class="pl-table"><thead><tr>' +
+                '<th style="width:20%;">数量下限（条）</th><th style="width:16%;">单面基价</th><th style="width:14%;">双面加价</th>' +
+                '<th>货期</th><th style="width:12%;">加急费</th><th style="width:40px;"></th>' +
+            '</tr></thead><tbody>' + rows + '</tbody></table>' +
+            '<div class="pl-spec-foot"><button type="button" class="pl-add-tier">+ 添加档位</button></div>' +
+            '</div>';
     }
 
     // 渲染设置页里的价目表编辑器
@@ -3766,6 +3949,11 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             html += '</tbody>';
             table.innerHTML = html;
         });
+
+        const specHost = $('plSpecHost');
+        if (specHost) {
+            specHost.innerHTML = WB_CUSTOM_SPECS.map(function(sp) { return wbSpecCardHtml(sp); }).join('');
+        }
 
         const cardTable = $('plCardTable');
         if (cardTable) {
@@ -3819,6 +4007,41 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             });
             return list.length ? list : JSON.parse(JSON.stringify(WB_CARD_DEFAULT));
         };
+        const readSpecs = function() {
+            const host = document.getElementById('plSpecHost');
+            if (!host) return [];
+            const out = [];
+            Array.prototype.forEach.call(host.querySelectorAll('.pl-spec'), function(card, i) {
+                const label = (card.querySelector('.pl-slabel').value || '').trim();
+                const material = (card.querySelector('.pl-smat').value || '').trim();
+                if (!label || !material) return;
+                const tiers = [];
+                Array.prototype.forEach.call(card.querySelectorAll('tbody tr'), function(tr) {
+                    const min = parseInt(tr.querySelector('.pl-min').value, 10);
+                    const base = parseFloat(tr.querySelector('.pl-base').value);
+                    if (!isFinite(min) || !isFinite(base)) return;
+                    const ds = parseFloat(tr.querySelector('.pl-ds').value);
+                    const lead = (tr.querySelector('.pl-lead').value || '').trim();
+                    const rush = parseFloat(tr.querySelector('.pl-rush').value);
+                    tiers.push({
+                        min: min, base: base,
+                        ds: isFinite(ds) && ds >= 0 ? ds : 0,
+                        lead: lead || '协商出货时间',
+                        rush: isFinite(rush) && rush >= 0 ? rush : 0
+                    });
+                });
+                if (!tiers.length) return;
+                tiers.sort(function(a, b) { return a.min - b.min; });
+                for (let k = 1; k < tiers.length; k++) {
+                    if (tiers[k].min <= tiers[k - 1].min) throw new Error('「' + label + '」的数量下限必须从小到大递增');
+                }
+                out.push({
+                    key: card.getAttribute('data-key') || ('s' + Date.now().toString(36) + i),
+                    label: label, material: material, unit: '条', tiers: tiers
+                });
+            });
+            return out;
+        };
         const step = parseFloat($('plWidthStep').value);
         const nameAdd = parseFloat($('plNameAdd').value);
         const codeAdd = parseFloat($('plCodeAdd').value);
@@ -3830,7 +4053,8 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             },
             '15x350': readTable('plTable15'),
             '20x350': readTable('plTable20'),
-            cards: readCards()
+            cards: readCards(),
+            specs: readSpecs()
         };
     }
 
@@ -3864,6 +4088,190 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         wbRenderPricelistEditor();
     }
 
+    // 把价目表写进「导出所有数据」的工作簿
+    function wbAddPricelistSheets(workbook) {
+        const ws = workbook.addWorksheet('价目表');
+        ws.columns = [
+            { header: '规格', key: 'spec', width: 12 },
+            { header: '数量下限', key: 'min', width: 12 },
+            { header: '档位', key: 'label', width: 14 },
+            { header: '单面基价', key: 'base', width: 12 },
+            { header: '双面加价', key: 'ds', width: 12 },
+            { header: '货期', key: 'lead', width: 28 },
+            { header: '加急费', key: 'rush', width: 10 }
+        ];
+        Object.keys(WB_PRICE_TABLE).forEach(function(k) {
+            if (k.indexOf(WB_CUSTOM_PREFIX) === 0) return;   // 自定义规格走单独的「自定义规格」表
+            WB_PRICE_TABLE[k].tiers.forEach(function(t) {
+                ws.addRow({ spec: k, min: t.min, label: t.label, base: t.base, ds: t.ds, lead: t.lead, rush: t.rush });
+            });
+        });
+        styleHeaderRow(ws.getRow(1));
+
+        const ws2 = workbook.addWorksheet('卡片规格');
+        ws2.columns = [
+            { header: '尺寸', key: 'size', width: 18 },
+            { header: '单价(元/套，留空=按数量档)', key: 'price', width: 30 }
+        ];
+        WB_CARD_LIST.forEach(function(c) {
+            const pv = String(c.price).trim();
+            ws2.addRow({ size: c.size, price: pv === '' ? '' : Number(pv) });
+        });
+        styleHeaderRow(ws2.getRow(1));
+
+        const ws3 = workbook.addWorksheet('通用加价');
+        ws3.columns = [
+            { header: '项目', key: 'k', width: 20 },
+            { header: '数值(元)', key: 'v', width: 14 }
+        ];
+        ws3.addRow({ k: '每加宽5mm', v: WB_WIDTH_STEP_ADD });
+        ws3.addRow({ k: '印名字', v: WB_PERSONAL.name.add });
+        ws3.addRow({ k: '印编号', v: WB_PERSONAL.code.add });
+        styleHeaderRow(ws3.getRow(1));
+
+        const ws4 = workbook.addWorksheet('自定义规格');
+        ws4.columns = [
+            { header: '规格', key: 'label', width: 14 },
+            { header: '材质', key: 'material', width: 12 },
+            { header: '数量下限', key: 'min', width: 12 },
+            { header: '单面基价', key: 'base', width: 12 },
+            { header: '双面加价', key: 'ds', width: 12 },
+            { header: '货期', key: 'lead', width: 26 },
+            { header: '加急费', key: 'rush', width: 10 },
+            { header: '标识', key: 'key', width: 14 }
+        ];
+        WB_CUSTOM_SPECS.forEach(function(sp) {
+            sp.tiers.forEach(function(t) {
+                ws4.addRow({ label: sp.label, material: sp.material, min: t.min, base: t.base, ds: t.ds, lead: t.lead, rush: t.rush, key: sp.key });
+            });
+        });
+        styleHeaderRow(ws4.getRow(1));
+    }
+
+    // 规格名宽松识别：15*350 / 15×350 / 15X350 / 15*350mm 都归一到 15x350
+    function wbNormalizeSpec(raw) {
+        const t = String(raw || '')
+            .replace(/mm/gi, '')
+            .replace(/[×Xx＊*]/g, 'x')
+            .replace(/\s+/g, '')
+            .toLowerCase();
+        const m = t.match(/^(\d{2,3})x(\d{2,4})$/);
+        if (!m) return '';
+        const key = m[1] + 'x' + m[2];
+        return WB_PRICE_TABLE[key] ? key : '';
+    }
+
+    // 从「导入所有数据」的工作簿里读取价目表，返回配置；没有相关表则返回 null
+    function wbReadPricelistSheets(workbook) {
+        let ws = workbook.getWorksheet('价目表') || workbook.getWorksheet('价格表') || workbook.getWorksheet('手腕带价目表');
+        if (!ws) return null;
+        const tiers = {};
+        const skipped = [];
+        let lastSpec = '';
+        ws.eachRow(function(row, n) {
+            if (n === 1) return;
+            const cellVal = function(c) { const v = row.getCell(c).value; return v === null || v === undefined ? '' : v; };
+            let rawSpec = String(cellVal(1)).trim();
+            // 规格列留空时，沿用上一行的规格（插入行后忘了填也能导入）
+            if (!rawSpec && lastSpec) rawSpec = lastSpec;
+            if (!rawSpec) return;
+            const spec = wbNormalizeSpec(rawSpec);
+            if (!spec) {
+                const tip = '第' + n + '行「' + rawSpec + '」';
+                if (skipped.indexOf(tip) < 0) skipped.push(tip);
+                return;
+            }
+            lastSpec = spec;
+            const min = parseFloat(cellVal(2));
+            const base = parseFloat(cellVal(4));
+            if (!isFinite(min) || !isFinite(base) || base < 0) return;
+            (tiers[spec] = tiers[spec] || []).push({
+                min: Math.max(0, Math.floor(min)),
+                base: base,
+                ds: parseFloat(cellVal(5)) || 0,
+                lead: String(cellVal(6)).trim() || '协商出货时间',
+                rush: parseFloat(cellVal(7)) || 0
+            });
+        });
+        const keys = Object.keys(tiers);
+        if (!keys.length) return null;
+        keys.forEach(function(k) {
+            tiers[k].sort(function(a, b) { return a.min - b.min; });
+            for (let i = 1; i < tiers[k].length; i++) {
+                if (tiers[k][i].min <= tiers[k][i - 1].min) throw new Error(k + ' 的数量下限必须从小到大递增');
+            }
+        });
+
+        const cardsWs = workbook.getWorksheet('卡片规格');
+        const cards = [];
+        if (cardsWs) {
+            cardsWs.eachRow(function(row, n) {
+                if (n === 1) return;
+                const size = String(row.getCell(1).value || '').trim();
+                if (!size) return;
+                const raw = row.getCell(2).value;
+                cards.push({
+                    size: size,
+                    price: (raw === null || raw === undefined || String(raw).trim() === '') ? '' : String(parseFloat(raw) || 0)
+                });
+            });
+        }
+
+        const genWs = workbook.getWorksheet('通用加价');
+        let widthStep = WB_WIDTH_STEP_ADD, nameAdd = WB_PERSONAL.name.add, codeAdd = WB_PERSONAL.code.add;
+        if (genWs) {
+            genWs.eachRow(function(row, n) {
+                if (n === 1) return;
+                const k = String(row.getCell(1).value || '').trim();
+                const v = parseFloat(row.getCell(2).value);
+                if (!isFinite(v) || v < 0) return;
+                if (k.indexOf('加宽') >= 0) widthStep = v;
+                else if (k.indexOf('印名字') >= 0) nameAdd = v;
+                else if (k.indexOf('印编号') >= 0) codeAdd = v;
+            });
+        }
+
+        const specWs = workbook.getWorksheet('自定义规格');
+        let specs = null;
+        if (specWs) {
+            const map = {};
+            const order = [];
+            specWs.eachRow(function(row, n) {
+                if (n === 1) return;
+                const label = String(row.getCell(1).value || '').trim();
+                const material = String(row.getCell(2).value || '').trim();
+                const min = parseFloat(row.getCell(3).value);
+                const base = parseFloat(row.getCell(4).value);
+                if (!label || !material || !isFinite(min) || !isFinite(base)) return;
+                const gk = label + '|' + material;
+                if (!map[gk]) {
+                    map[gk] = { key: String(row.getCell(8).value || '').trim(), label: label, material: material, unit: '条', tiers: [] };
+                    order.push(gk);
+                }
+                map[gk].tiers.push({
+                    min: Math.max(0, Math.floor(min)),
+                    base: base,
+                    ds: parseFloat(row.getCell(5).value) || 0,
+                    lead: String(row.getCell(6).value || '').trim() || '协商出货时间',
+                    rush: parseFloat(row.getCell(7).value) || 0
+                });
+            });
+            specs = order.map(function(k) { return map[k]; });
+        }
+
+        const cfgOut = {
+            widthStep: widthStep,
+            personal: { name: nameAdd, code: codeAdd },
+            '15x350': tiers['15x350'] || WB_PRICE_TABLE['15x350'].tiers,
+            '20x350': tiers['20x350'] || WB_PRICE_TABLE['20x350'].tiers,
+            cards: cards.length ? cards : WB_CARD_LIST,
+            _skipped: skipped
+        };
+        // 有「自定义规格」表才覆盖，老文件不动现有规格
+        if (specs) cfgOut.specs = specs;
+        return cfgOut;
+    }
+
     function wbInitPricelistUI() {
         if (!$('plSaveBtn')) return;
         $('plSaveBtn').addEventListener('click', function() {
@@ -3887,6 +4295,47 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         });
         $('plAdd15').addEventListener('click', function() { wbAddTierRow('15'); });
         $('plAdd20').addEventListener('click', function() { wbAddTierRow('20'); });
+        if ($('plAddSpec') && $('plSpecHost')) {
+            $('plAddSpec').addEventListener('click', function() {
+                const host = $('plSpecHost');
+                const tmp = document.createElement('div');
+                tmp.innerHTML = wbSpecCardHtml(null);
+                if (tmp.firstChild) host.appendChild(tmp.firstChild);
+            });
+            $('plSpecHost').addEventListener('click', function(e) {
+                const t = e.target;
+                if (!t || !t.classList) return;
+                if (t.classList.contains('pl-spec-del')) {
+                    const card = t.closest('.pl-spec');
+                    if (card) card.remove();
+                    return;
+                }
+                if (t.classList.contains('pl-add-tier')) {
+                    const card = t.closest('.pl-spec');
+                    const tbody = card && card.querySelector('tbody');
+                    if (!tbody) return;
+                    const rows = tbody.querySelectorAll('tr');
+                    let min = 100;
+                    if (rows.length) {
+                        const last = rows[rows.length - 1].querySelector('.pl-min');
+                        min = (parseInt(last.value, 10) || 0) + 1000;
+                    }
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = '<td><input type="number" class="pl-min" min="0" step="1" value="' + min + '"></td>' +
+                        '<td><input type="number" class="pl-base" min="0" step="0.001" value="0.3"></td>' +
+                        '<td><input type="number" class="pl-ds" min="0" step="0.01" value="0.02"></td>' +
+                        '<td><input type="text" class="pl-lead" value="2-3天"></td>' +
+                        '<td><input type="number" class="pl-rush" min="0" step="1" value="0"></td>' +
+                        '<td><button type="button" class="pl-del" title="删除该档">×</button></td>';
+                    tbody.appendChild(tr);
+                    return;
+                }
+                if (t.classList.contains('pl-del')) {
+                    const tr = t.closest('tr');
+                    if (tr && tr.parentNode && tr.parentNode.tagName === 'TBODY') tr.remove();
+                }
+            });
+        }
         if ($('plAddCardSize')) {
             $('plAddCardSize').addEventListener('click', function() {
                 const tbody = document.querySelector('#plCardTable tbody');
@@ -3945,12 +4394,14 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
     }
 
     function wbFindProduct(key) {
-        const hit = WB_PRODUCTS.filter(function(p) { return p.key === key; })[0];
-        return hit || WB_PRODUCTS[0];
+        const list = wbAllProducts();
+        const hit = list.filter(function(p) { return p.key === key; })[0];
+        return hit || list[0];
     }
 
     // 某个型号的常规带宽（加宽计算的基准）
     function wbBaseWidthOf(prod) {
+        if (prod.noWidthAdd) return prod.width || 0;   // 自定义规格自带价格表，不加宽加价
         return (prod.table === '20x350') ? 20 : 15;
     }
 
@@ -3958,11 +4409,12 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
     function wbBuildProductOptions(selectedKey) {
         const sel = $('wbSpec');
         if (!sel) return;
-        sel.innerHTML = WB_PRODUCTS.map(function(p) {
+        sel.innerHTML = wbAllProducts().map(function(p) {
             return '<option value="' + p.key + '">' + escapeHtml(wbProductLabel(p)) + '</option>';
         }).join('');
-        const hit = WB_PRODUCTS.filter(function(p) { return p.key === selectedKey; })[0];
-        sel.value = hit ? hit.key : WB_PRODUCTS[0].key;
+        const list = wbAllProducts();
+        const hit = list.filter(function(p) { return p.key === selectedKey; })[0];
+        sel.value = hit ? hit.key : list[0].key;
     }
 
     // 读取面板并算出当前报价（不写任何全局状态）
@@ -4005,12 +4457,12 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         // 收了加急费即当天发货（加急优先，不再受印字顺延影响）；无加急费按档位货期，印字顺延一天
         const hasRush = rushFee > 0;
         const leadText = hasRush ? '当天发货' : (person.delay ? wbAddOneDay(tier.lead) : tier.lead);
-        const sizeLabel = width + '*350mm';
+        const sizeLabel = (prod.noWidthAdd && spec.label) ? spec.label : (width + '*350mm');
 
         // 税额跟随报价计算中心的税率，合计同时给出不含税 / 含税两个口径
         const taxEl = $('invoiceType');
         const taxRate = taxEl ? (parseFloat(taxEl.value) || 0) : 0;
-        const total = Math.round((unitPrice * qty + rushFee) * 100 + 1e-6) / 100;
+        const total = qty > 0 ? (Math.round((unitPrice * qty + rushFee) * 100 + 1e-6) / 100) : 0;
         const unitWithTax = Math.round(unitPrice * (1 + taxRate / 100) * 1000 + 1e-6) / 1000;
         const totalWithTax = Math.round((total * (1 + taxRate / 100)) * 100 + 1e-6) / 100;
         const taxIncludedNow = $('isTaxIncluded') ? $('isTaxIncluded').value === 'yes' : true;
@@ -4124,7 +4576,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         const person = WB_PERSONAL[personKey] || WB_PERSONAL.none;
         const addTotal = Math.round((dsAdd + widthAdd + person.add) * 100) / 100;
         const unitPrice = Math.round((marginPrice + addTotal) * 1000 + 1e-6) / 1000;
-        const total = Math.round((unitPrice * qty + rushFee) * 100 + 1e-6) / 100;
+        const total = qty > 0 ? (Math.round((unitPrice * qty + rushFee) * 100 + 1e-6) / 100) : 0;
         const leadText = (rushFee > 0) ? '当天发货' : (person.delay ? wbAddOneDay(tier.lead) : tier.lead);
         return { tierLabel: tier.label, basePrice: baseAll, unitPrice: unitPrice, total: total, leadText: leadText };
     }
@@ -4151,7 +4603,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         const push = function(name, ok, actual, expected) {
             rows.push({ '项目': name, '结果': ok ? 'PASS' : 'FAIL', '实际': actual, '期望': expected });
         };
-        const prod = function(k) { return WB_PRODUCTS.filter(function(p) { return p.key === k; })[0]; };
+        const prod = function(k) { return wbAllProducts().filter(function(p) { return p.key === k; })[0]; };
         const near = function(a, b) { return Math.abs(a - b) < 1e-9; };
         const r15 = prod('r15'), r20 = prod('r20'), p20 = prod('p20');
 
@@ -4190,7 +4642,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         const factor = cur.taxIncludedNow ? (1 + taxRate / 100) : 1;
         const word = cur.taxIncludedNow ? '含税' : '不含税';
         let html = '<table class="wb-table"><thead><tr><th>型号</th><th>档位</th><th>单价（' + word + '）</th><th>合计（' + word + '）</th><th>货期</th></tr></thead><tbody>';
-        WB_PRODUCTS.forEach(function(p) {
+        wbAllProducts().forEach(function(p) {
             const c = wbCompute(p, cur.qty, cur.margin, cur.print, cur.personKey, cur.rushFee, cur.cardOn);
             if (!c) return;
             html += '<tr>' +
@@ -4233,7 +4685,10 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         if (!el) return;
         const prod = wbFindProduct($('wbSpec').value);
         const items = ['以上报价均不含税、不含运费'];
-        if (prod.material === '缎带') {
+        if (prod.noWidthAdd) {
+            const t = WB_PRICE_TABLE[prod.table];
+            items.push((t && t.label ? t.label : '该规格') + ' 使用独立价目表，价格按档位直接计算，不另加宽度费用');
+        } else if (prod.material === '缎带') {
             items.push('缎带常规 15*350，可选 20 / 25 / 30*350，每加宽 5mm 加 0.05 元/条');
         } else if (prod.material === '涤纶') {
             items.push('涤纶常规 15*350；20mm 宽为加厚款，请选「加厚涤纶 20*350」');
@@ -4274,15 +4729,14 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             stat('匹配档位', escapeHtml(cur.tierLabel), 'hl') +
             stat('基价（不含税/条）', '¥ ' + wbPriceText(cur.basePrice)) +
             stat('报价单价（' + taxWord + '）', '¥ ' + wbPriceText(unitShown), 'hl') +
-            stat('毛利率 / 毛利',
-                cur.grossMargin.toFixed(2) + '%<span class="sub2">整单 ¥' + wbMoney(cur.grossProfit) + '</span>',
-                belowMin ? 'bad' : '',
-                '毛利率 = 加价率 ÷（1+加价率）；毛利 =（单价 − 基价）× 数量，不含加急费') +
-            stat('加急费（整单）', '¥ ' + wbMoney(cur.rushFee)) +
-            stat('货期', escapeHtml(cur.leadText)) +
+            stat('毛利率', cur.grossMargin.toFixed(2) + '%', belowMin ? 'bad' : '',
+                '毛利率 = 加价率 ÷（1+加价率）') +
+            stat('整单利润', '¥ ' + wbMoney(cur.grossProfit), '',
+                '毛利 =（单价 − 基价）× 数量，不含加急费') +
             stat('合计（' + taxWord + '）', totalShown === null ? '—' : '¥ ' + wbMoney(totalShown),
                 (cur.taxIncludedNow ? 'acc' : '') + (belowMin ? ' bad' : ''),
-                cur.taxIncludedNow ? '按税率 ' + cur.taxRate + '% 计算' : '不含税口径');
+                cur.taxIncludedNow ? '按税率 ' + cur.taxRate + '% 计算' : '不含税口径') +
+            stat('货期', escapeHtml(cur.leadText));
 
         const notes = [];
         if (cur.qty > 0 && cur.tierMin > 1 && cur.qty < cur.tierMin) {
@@ -4373,17 +4827,20 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
     function wbCopySummary() {
         const cur = wbReadPanel();
         if (!cur) return;
+        if (cur.qty <= 0) { showToast('请先填写数量再复制', 'warning'); return; }
         const word = cur.taxIncludedNow ? '含税' : '不含税';
         const unitShown = cur.taxIncludedNow ? cur.unitWithTax : cur.unitPrice;
         const totalShown = cur.taxIncludedNow ? cur.totalWithTax : cur.total;
+        const unitWord = cur.unit || '条';
         const lines = [
-            '【赢景报价】手腕带 ' + cur.sizeLabel + ' ' + cur.material,
-            '数量：' + cur.qty + ' ' + (cur.unit || '条'),
-            '单价：' + wbPriceText(unitShown) + ' 元/条（' + word + '）',
-            '加急费：¥' + wbMoney(cur.rushFee) + '（整单）',
-            '合计：¥' + wbMoney(totalShown) + '（' + word + (cur.taxIncludedNow ? ' ' + cur.taxRate + '%' : '') + '）',
-            '货期：' + cur.leadText
+            '【赢景报价】手腕带 ' + cur.sizeLabel + ' ' + cur.material + (cur.cardOn ? ' 带卡片' : ''),
+            '数量：' + cur.qty + ' ' + unitWord,
+            '单价：' + wbPriceText(unitShown) + ' 元/' + unitWord + '（' + word + '）'
         ];
+        // 加急费为 0 时不复制这一行
+        if (cur.rushFee > 0) lines.push('加急费：¥' + wbMoney(cur.rushFee) + '（整单）');
+        lines.push('合计：¥' + wbMoney(totalShown) + '（' + word + (cur.taxIncludedNow ? ' ' + cur.taxRate + '%' : '') + '）');
+        lines.push('货期：' + cur.leadText);
         wbCopyText(lines.join('\n'));
     }
 
@@ -4404,13 +4861,13 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         const desc = $('modeDesc');
         if (desc) {
             desc.textContent = quoteMode === 'wristband'
-                ? '手腕带热转印价目表口径：单价 ＝ 基价 ×（1 + 加价率）+ 双面 / 加宽 / 印字加价，加急费整单另计'
-                : 'BOM 物料成本 + 固定成本 + 加价率，适用于贴纸、卡片等常规产品';
+                ? '单价 ＝ 基价 ×（1 + 加价率）+ 双面 / 加宽 / 印字加价，加急费整单另计'
+                : 'BOM 物料成本 + 固定成本 + 加价率，适用于滴胶贴纸、号码扣等常规产品';
         }
         const pb = $('productBadge');
         if (pb) pb.textContent = quoteMode === 'wristband' ? '商品名称 / 产品图' : 'BOM 物料清单';
         const cb = $('calcBadge');
-        if (cb) cb.textContent = quoteMode === 'wristband' ? '价目表口径 · 实时计算' : '实时计算 · 智能建议';
+        if (cb) cb.textContent = quoteMode === 'wristband' ? '手腕带报价 · 实时计算' : '实时计算 · 智能建议';
         if (quoteMode === 'wristband') {
             wbRender();
             if (!skipSync) wbSyncToQuote(!!forceSync);
@@ -4431,14 +4888,16 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             if (delivery.value) bomDeliveryCache = delivery.value;
         } else {
             if (bomNameCache) productName.value = bomNameCache;
+            // 切回通用产品：恢复原货期；没有缓存则回到默认 7 个工作日，避免残留“当天发货”
             if (bomDeliveryCache) delivery.value = bomDeliveryCache;
+            else delivery.value = loadSettings().defaultDelivery || '7个工作日';
             wbAutoName = '';
             wbAutoDelivery = '';
         }
         quoteMode = mode;
         if (mode === 'wristband') wbAutoName = '';   // 重新进入时刷新商品名称
         applyQuoteMode(false, false, true);
-        showToast(mode === 'wristband' ? '已切换为「手腕带价目表」报价' : '已切换为「物料成本」报价', 'success');
+        showToast(mode === 'wristband' ? '已切换为「手腕带产品」报价' : '已切换为「通用产品」报价', 'success');
         addAuditLog('切换报价模式', mode === 'wristband' ? '手腕带价目表' : '物料成本');
     }
 
@@ -4447,8 +4906,16 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         if (!pl || !pl.specKey) { wbActive = false; wbRender(); return; }
         const material = pl.material || ((pl.specKey === '20x350') ? '加厚涤纶' : '缎带');
         const width = parseInt(pl.width, 10) || ((pl.specKey === '20x350') ? 20 : 15);
-        let prod = WB_PRODUCTS.filter(function(p) { return p.material === material && p.width === width; })[0];
-        if (!prod) prod = WB_PRODUCTS.filter(function(p) { return p.material === material; })[0] || WB_PRODUCTS[0];
+        const allProds = wbAllProducts();
+        let prod = null;
+        if (pl.specKey) {
+            const byTable = allProds.filter(function(p) { return p.table === pl.specKey; });
+            // 自定义规格：一张表对应一个型号；内置表：同表多型号，需再按材质+宽度区分
+            if (byTable.length === 1) prod = byTable[0];
+            else prod = byTable.filter(function(p) { return p.material === material && p.width === width; })[0];
+        }
+        if (!prod) prod = allProds.filter(function(p) { return p.material === material && p.width === width; })[0];
+        if (!prod) prod = allProds.filter(function(p) { return p.material === material; })[0] || allProds[0];
         $('wbSpec').value = prod.key;
         $('wbMargin').value = String((pl.margin === 0 || pl.margin) ? pl.margin : 15);
         $('wbPrint').value = pl.print === 'double' ? 'double' : 'single';
@@ -4492,7 +4959,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             const raw = localStorage.getItem(WB_STATE_KEY);
             if (raw) {
                 const s = JSON.parse(raw);
-                if (s.product && WB_PRODUCTS.some(function(p) { return p.key === s.product; })) savedProduct = s.product;
+                if (s.product && wbAllProducts().some(function(p) { return p.key === s.product; })) savedProduct = s.product;
                 if (s.qty) $('wbQty').value = s.qty;
                 if (s.margin) $('wbMargin').value = String(s.margin);
                 if (s.print) $('wbPrint').value = s.print;
@@ -4583,7 +5050,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             const wrap = $('wbCmpWrap');
             const open = wrap.style.display !== 'none';
             wrap.style.display = open ? 'none' : 'block';
-            this.textContent = open ? '型号对比' : '收起对比';
+            this.textContent = open ? '不同挡位价格对比' : '收起对比';
             if (!open) wbRenderCompare();
         });
         if ($('wbTargetMargin')) {
@@ -4865,7 +5332,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             taxIncluded,
             validity: validity.value || '7个工作日',
             payment: payment.value || '款到发货',
-            delivery: delivery.value || '5-7个工作日',
+            delivery: delivery.value || '7个工作日',
             remarks: remarks.value || '',
             logoData: currentLogoData || null,
             sealData: currentSealData || null,
@@ -4903,8 +5370,15 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
     // ============================================================
     function generateQuoteNo() {
         const now = new Date();
+        // 单号日期统一按北京时间，避免跨时区设备生成前后不一致
+        let y = now.getFullYear(), m = now.getMonth() + 1, d = now.getDate();
+        try {
+            const bj = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
+            const parts = bj.split('-');
+            y = parseInt(parts[0], 10); m = parseInt(parts[1], 10); d = parseInt(parts[2], 10);
+        } catch (e) {}
         const pad = n => String(n).padStart(2, '0');
-        const dateStr = String(now.getFullYear()).slice(2) + pad(now.getMonth() + 1) + pad(now.getDate());
+        const dateStr = String(y).slice(2) + pad(m) + pad(d);
         const prefix = (loadSettings().quoteNoPrefix || 'QYJ').trim() || 'QYJ';
         const esc = prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const history = getHistory();
@@ -5169,7 +5643,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         historyCount.textContent = totalFiltered + ' 条' + (totalFiltered !== history.length ? '（共 ' + history.length + ' 条）' : '');
 
         if (totalFiltered === 0) {
-            historyBody.innerHTML = '<tr><td colspan="14" class="empty-history">' +
+            historyBody.innerHTML = '<tr><td colspan="15" class="empty-history">' +
                 (keyword ? '没有符合条件的报价记录' : '暂无报价记录，先保存一份报价吧') + '</td></tr>';
             return;
         }
@@ -5185,6 +5659,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             const unitQuote = (item.displayPrice !== undefined && item.displayPrice !== null ? item.displayPrice : (item.priceWithTaxCNY || item.priceNoTaxCNY || 0)) * rate;
             const unitProfit = (item.unitProfit !== undefined && item.unitProfit !== null ? item.unitProfit : 0) * rate;
             const totalSales = (item.displayTotal !== undefined && item.displayTotal !== null ? item.displayTotal : (item.totalSalesWithTaxCNY || item.totalSalesNoTaxCNY || 0)) * rate;
+            const totalProfit = profitCNY(item) * rate;
 
             const curHtml = '<span class="currency-name">' + escapeHtml(curName) + '</span>';
 
@@ -5217,6 +5692,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                 <td class="align-center" style="white-space:nowrap;max-width:96px;overflow:hidden;text-overflow:ellipsis;color:${(unitProfit || 0) > 0 ? 'var(--success)' : (unitProfit || 0) < 0 ? 'var(--danger)' : 'var(--warning)'};">${symbol} ${fmtMoney(unitProfit)}</td>
                 <td class="align-center">${item.totalQty || 0}</td>
                 <td class="align-center" style="font-weight:600;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${symbol} ${fmtMoney(totalSales)}">${symbol} ${fmtMoney(totalSales)}</td>
+                <td class="align-center" style="font-weight:600;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:${(totalProfit || 0) > 0 ? 'var(--success)' : (totalProfit || 0) < 0 ? 'var(--danger)' : 'var(--warning)'};" title="总利润 ${symbol} ${fmtMoney(totalProfit)}">${symbol} ${fmtMoney(totalProfit)}</td>
                 <td class="align-left" style="white-space:nowrap;max-width:84px;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(item.customerContact || '')}">${escapeHtml(item.customerContact || '—')}</td>
                 <td class="align-left" style="white-space:nowrap;max-width:104px;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(item.customerPhone || '')}">${escapeHtml(item.customerPhone || '—')}</td>
                 <td class="align-center">
@@ -5329,7 +5805,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         settlementCurrency.value = record.settleCurrency || 'CNY';
         validity.value = record.validity || '7个工作日';
         payment.value = record.payment || '款到发货';
-        delivery.value = record.delivery || '5-7个工作日';
+        delivery.value = record.delivery || '7个工作日';
         remarks.value = record.remarks || '';
         targetMargin.value = 15;
 
@@ -5377,7 +5853,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         pdfCompanyPhone.textContent = record.companyPhone || '';
         pdfValidity.textContent = record.validity || '7个工作日';
         const dt = new Date(record.timestamp || Date.now());
-        pdfDate.textContent = dt.toLocaleDateString('zh-CN');
+        pdfDate.textContent = beijingDateText(record.timestamp || Date.now());
         pdfQuoteNo.textContent = record.quoteNo || generateQuoteNo();
         pdfCompanyNameFooter.textContent = record.companyName || '赢景';
 
@@ -5590,8 +6066,10 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         const el = $('tplHint');
         if (!el) return;
         const key = loadSettings().quoteTemplate || 'standard';
-        el.textContent = '报价单样式：' + tplName();
-        el.setAttribute('data-tpl', key);
+        if (el.tagName === 'SELECT') el.value = key;
+        else el.textContent = '报价单样式：' + tplName();
+        const wrap = $('tplHintWrap');
+        if (wrap) wrap.setAttribute('data-tpl', key);
     }
 
     function printQuote(record) {
@@ -5698,7 +6176,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                 if (ext === 'jpg') ext = 'jpeg';
                 const imageId = workbook.addImage({ buffer: imageBuffer, extension: ext });
                 worksheet.getRow(2).height = 80;
-                worksheet.addImage(imageId, { tl: { col: 4, row: 1 }, ext: { width: 80, height: 60 } });
+                worksheet.addImage(imageId, { tl: { col: 4, row: 1 }, ext: { width: 150, height: 110 } });
             } catch (e) { console.warn('图片嵌入失败:', e); }
         }
         const buffer = await workbook.xlsx.writeBuffer();
@@ -5725,7 +6203,9 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             { header: '总数量', key: 'qty', width: 10 },
             { header: '总销售额(不含税,¥)', key: 'totalSales', width: 18 },
             { header: '客户联系人', key: 'contact', width: 14 },
-            { header: '电话', key: 'phone', width: 16 }
+            { header: '电话', key: 'phone', width: 16 },
+            { header: '图片数据', key: 'imageB64', width: 10, hidden: true },
+            { header: '总利润(¥)', key: 'totalProfit', width: 14 }
         ];
         const headerRow = worksheet.getRow(1);
         styleHeaderRow(headerRow);
@@ -5742,7 +6222,9 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             qty: record.totalQty || 0,
             totalSales: safeNum(record.displayTotal !== undefined ? record.displayTotal : record.totalSalesWithTax, 0),
             contact: record.customerContact || '',
-            phone: record.customerPhone || ''
+            phone: record.customerPhone || '',
+            imageB64: (record.imageData && record.imageData.length > 100) ? record.imageData : '',
+            totalProfit: safeNum(record.totalProfitCNY, 0)
         });
         row.alignment = { horizontal: 'center', vertical: 'middle' };
         if (record.imageData && record.imageData.length > 100) {
@@ -5754,7 +6236,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                 if (ext === 'jpg') ext = 'jpeg';
                 const imageId = workbook.addImage({ buffer: imageBuffer, extension: ext });
                 worksheet.getRow(2).height = 80;
-                worksheet.addImage(imageId, { tl: { col: 3, row: 1 }, ext: { width: 80, height: 60 } });
+                worksheet.addImage(imageId, { tl: { col: 3, row: 1 }, ext: { width: 150, height: 110 } });
             } catch (e) { console.warn('图片嵌入失败:', e); }
         }
         const buffer = await workbook.xlsx.writeBuffer();
@@ -5784,7 +6266,9 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             { header: '总数量', key: 'qty', width: 10 },
             { header: '总销售额(不含税,¥)', key: 'totalSales', width: 18 },
             { header: '客户联系人', key: 'contact', width: 14 },
-            { header: '电话', key: 'phone', width: 16 }
+            { header: '电话', key: 'phone', width: 16 },
+            { header: '图片数据', key: 'imageB64', width: 10, hidden: true },
+            { header: '总利润(¥)', key: 'totalProfit', width: 14 }
         ];
         const headerRow = worksheet.getRow(1);
         styleHeaderRow(headerRow);
@@ -5803,7 +6287,9 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                 qty: item.totalQty || 0,
                 totalSales: safeNum(item.displayTotal !== undefined ? item.displayTotal : item.totalSalesWithTax, 0),
                 contact: item.customerContact || '',
-                phone: item.customerPhone || ''
+                phone: item.customerPhone || '',
+                imageB64: (item.imageData && item.imageData.length > 100) ? item.imageData : '',
+                totalProfit: safeNum(item.totalProfitCNY, 0)
             });
             row.alignment = { horizontal: 'center', vertical: 'middle' };
             if (item.imageData && item.imageData.length > 100) {
@@ -5816,7 +6302,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                     const imageId = workbook.addImage({ buffer: imageBuffer, extension: ext });
                     const rowIndex = row.number;
                     worksheet.getRow(rowIndex).height = 80;
-                    worksheet.addImage(imageId, { tl: { col: 3, row: rowIndex - 1 }, ext: { width: 80, height: 60 } });
+                    worksheet.addImage(imageId, { tl: { col: 3, row: rowIndex - 1 }, ext: { width: 150, height: 110 } });
                 } catch (e) { console.warn('图片嵌入失败:', e); }
             }
         }
@@ -6145,7 +6631,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         s.defaultTaxIncluded = $('setDefaultTaxIncluded').value || 'yes';
         s.defaultValidity = $('setDefaultValidity').value || '7个工作日';
         s.defaultPayment = $('setDefaultPayment').value || '款到发货';
-        s.defaultDelivery = $('setDefaultDelivery').value || '5-7个工作日';
+        s.defaultDelivery = $('setDefaultDelivery').value || '7个工作日';
         s.defaultMarkupRate = safeNum($('setDefaultMarkupRate').value, 0.5);
         s.defaultTargetMargin = safeNum($('setDefaultTargetMargin').value, 15);
         s.minMargin = safeNum($('setMinMargin').value, 5);
@@ -6186,7 +6672,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         companyContact.value = s.companyContact || '';
         validity.value = s.defaultValidity || '7个工作日';
         payment.value = s.defaultPayment || '款到发货';
-        delivery.value = s.defaultDelivery || '5-7个工作日';
+        delivery.value = s.defaultDelivery || '7个工作日';
         markupRate.value = safeNum(s.defaultMarkupRate, 0.5);
         invoiceType.value = String(s.defaultTaxRate || '13');
         isTaxIncluded.value = s.defaultTaxIncluded || 'yes';
@@ -6641,7 +7127,9 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             { header: '总数量', key: 'qty', width: 10 },
             { header: '总销售额(不含税,¥)', key: 'totalSales', width: 18 },
             { header: '客户联系人', key: 'contact', width: 14 },
-            { header: '电话', key: 'phone', width: 16 }
+            { header: '电话', key: 'phone', width: 16 },
+            { header: '图片数据', key: 'imageB64', width: 10, hidden: true },
+            { header: '总利润(¥)', key: 'totalProfit', width: 14 }
         ];
         const hRow = wsHistory.getRow(1);
         styleHeaderRow(hRow);
@@ -6660,7 +7148,9 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                 qty: item.totalQty || 0,
                 totalSales: safeNum(item.displayTotal !== undefined ? item.displayTotal : item.totalSalesWithTax, 0),
                 contact: item.customerContact || '',
-                phone: item.customerPhone || ''
+                phone: item.customerPhone || '',
+                imageB64: (item.imageData && item.imageData.length > 100) ? item.imageData : '',
+                totalProfit: safeNum(item.totalProfitCNY, 0)
             });
             row.alignment = { horizontal: 'center', vertical: 'middle' };
             if (item.imageData && item.imageData.length > 100) {
@@ -6673,7 +7163,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                     const imageId = workbook.addImage({ buffer: imageBuffer, extension: ext });
                     const rowIndex = row.number;
                     wsHistory.getRow(rowIndex).height = 80;
-                    wsHistory.addImage(imageId, { tl: { col: 3, row: rowIndex - 1 }, ext: { width: 80, height: 60 } });
+                    wsHistory.addImage(imageId, { tl: { col: 3, row: rowIndex - 1 }, ext: { width: 150, height: 110 } });
                 } catch (e) { console.warn('图片嵌入失败:', e); }
             }
         }
@@ -6751,10 +7241,13 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
             });
         });
 
+        // ---- 价目表（手腕带价格 / 卡片规格 / 通用加价） ----
+        wbAddPricelistSheets(workbook);
+
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         saveAs(blob, '赢景报价系统_全部数据_' + new Date().toISOString().slice(0, 10) + '.xlsx');
-        showToast('全部数据已导出（含历史、客户、产品明细、公司模板）', 'success');
+        showToast('全部数据已导出（含历史、客户、产品明细、公司模板、价目表）', 'success');
         addAuditLog('导出全部数据', 'Excel（含历史/客户/产品明细/公司模板）');
     });
 
@@ -6809,11 +7302,47 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                             unitProfit: parseFloat(vals[7]) || 0,
                             totalQty: parseFloat(vals[8]) || 0,
                             displayTotal: parseFloat(vals[9]) || 0,
+                            // 补齐统计/导 PDF 需要的字段
+                            unitTotalCost: parseFloat(vals[5]) || 0,
+                            totalCostCNY: (parseFloat(vals[5]) || 0) * (parseFloat(vals[8]) || 0),
+                            totalSalesNoTaxCNY: parseFloat(vals[9]) || 0,
+                            totalSalesWithTaxCNY: parseFloat(vals[9]) || 0,
+                            totalProfitCNY: (parseFloat(vals[9]) || 0) - (parseFloat(vals[5]) || 0) * (parseFloat(vals[8]) || 0),
+                            unitProfitCNY: (parseFloat(vals[8]) || 0) ? ((parseFloat(vals[9]) || 0) - (parseFloat(vals[5]) || 0) * (parseFloat(vals[8]) || 0)) / (parseFloat(vals[8]) || 1) : 0,
+                            taxIncluded: false,
+                            taxRate: 13,
+                            settleCurrency: 'CNY',
+                            settleSymbol: '¥',
+                            currencyName: '人民币',
+                            exchangeRate: 1,
+                            status: 'won',
                             customerContact: cellText(vals[10]),
                             customerPhone: cellText(vals[11]),
                             parts: [], logoData: null, sealData: null,
                             imageData: (vals[12] && String(vals[12]).length > 100) ? cellText(vals[12]) : null
                         });
+                        // 手腕带参数：导出的第 14 列起，存在则还原为价目表记录
+                        (function() {
+                            const rec = newHistory[newHistory.length - 1];
+                            const specKey = cellText(vals[13]);
+                            if (!rec || !specKey || !WB_PRICE_TABLE[specKey]) return;
+                            const marginV = parseFloat(String(vals[15] || '').replace('%', ''));
+                            const rushV = parseFloat(vals[18]) || 0;
+                            const personText = cellText(vals[17]);
+                            rec.priceList = {
+                                specKey: specKey,
+                                material: cellText(vals[14]) || '',
+                                margin: isFinite(marginV) ? marginV : 0,
+                                print: cellText(vals[16]).indexOf('双面') >= 0 ? 'double' : 'single',
+                                personKey: personText.indexOf('印名字') >= 0 ? 'name' : (personText.indexOf('印编号') >= 0 ? 'code' : 'none'),
+                                personLabel: personText,
+                                rushFee: rushV,
+                                card: cellText(vals[19]) || 'none',
+                                leadTime: cellText(vals[20]) || '',
+                                qty: parseFloat(vals[8]) || 0
+                            };
+                            rec.rushFee = rushV;
+                        })();
                     } else {
                         if (!vals[1] && !vals[2] && !vals[3]) return;
                         let ts = Date.now();
@@ -6834,6 +7363,28 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                             parts: [], logoData: null, sealData: null,
                             imageData: (vals[12] && String(vals[12]).length > 100) ? cellText(vals[12]) : null
                         });
+                        // 手腕带参数：导出的第 14 列起，存在则还原为价目表记录
+                        (function() {
+                            const rec = newHistory[newHistory.length - 1];
+                            const specKey = cellText(vals[13]);
+                            if (!rec || !specKey || !WB_PRICE_TABLE[specKey]) return;
+                            const marginV = parseFloat(String(vals[15] || '').replace('%', ''));
+                            const rushV = parseFloat(vals[18]) || 0;
+                            const personText = cellText(vals[17]);
+                            rec.priceList = {
+                                specKey: specKey,
+                                material: cellText(vals[14]) || '',
+                                margin: isFinite(marginV) ? marginV : 0,
+                                print: cellText(vals[16]).indexOf('双面') >= 0 ? 'double' : 'single',
+                                personKey: personText.indexOf('印名字') >= 0 ? 'name' : (personText.indexOf('印编号') >= 0 ? 'code' : 'none'),
+                                personLabel: personText,
+                                rushFee: rushV,
+                                card: cellText(vals[19]) || 'none',
+                                leadTime: cellText(vals[20]) || '',
+                                qty: parseFloat(vals[8]) || 0
+                            };
+                            rec.rushFee = rushV;
+                        })();
                     }
                 });
             }
@@ -6861,8 +7412,16 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                     const grouped = {};
                     sheetToRows(partSheetV3).forEach(vals => {
                         if (!vals[1] && !vals[3]) return;
-                        const pid = cellText(vals[0]) || 'p' + Date.now();
-                        if (!grouped[pid]) grouped[pid] = { id: pid, name: cellText(vals[1]), productName: cellText(vals[1]), parts: [], createdAt: Date.now() };
+                        const rawId = cellText(vals[0]).trim();
+                        const pname = cellText(vals[1]);
+                        // 模板ID 留空时按商品名称分组，方便在表格里直接新增商品
+                        const pid = rawId || ('auto:' + pname.trim());
+                        if (!grouped[pid]) {
+                            grouped[pid] = {
+                                id: rawId || ('p' + Date.now() + Math.floor(Math.random() * 1000)),
+                                name: pname, productName: pname, parts: [], createdAt: Date.now()
+                            };
+                        }
                         grouped[pid].parts.push({
                             name: cellText(vals[3]), spec: cellText(vals[4]),
                             qty: 1,
@@ -6956,6 +7515,25 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
                 }
             }
 
+            // 价目表（若文件里有对应工作表）
+            try {
+                const plCfg = wbReadPricelistSheets(wb);
+                if (plCfg) {
+                    try { localStorage.setItem(WB_PRICELIST_KEY, JSON.stringify(plCfg)); } catch (e) {}
+                    wbApplyPricelist(plCfg);
+                    try { wbRefreshAfterPricelist(); } catch (e) { console.warn(e); }
+                    if (plCfg._skipped && plCfg._skipped.length) {
+                        showToast('价目表已更新，但这些行没识别到：' + plCfg._skipped.slice(0, 4).join('、') +
+                            (plCfg._skipped.length > 4 ? ' 等' : '') + '；规格列只能写 15x350 或 20x350', 'warning');
+                    }
+                    if (plCfg.widthStep > 0.5) {
+                        showToast('注意：每加宽5mm 现在是 ' + plCfg.widthStep + ' 元，正常应为 0.05，请检查「通用加价」表', 'warning');
+                    }
+                }
+            } catch (e) {
+                console.warn('价目表导入失败:', e);
+                showToast('价目表未能导入：' + (e.message || '格式不符'), 'warning');
+            }
             showToast('数据导入成功（' + mode + '）', 'success');
             addAuditLog('导入Excel数据', mode + ' 模式');
             renderHistory(); updateStats();
@@ -7036,6 +7614,18 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
     $('exportHistoryBtn').addEventListener('click', function() { exportHistoryExcel(); });
     $('searchHistoryInput').addEventListener('input', function() { renderHistory(); });
     $('statsPeriod').addEventListener('change', function() { updateStats(); });
+    // 主界面直接切换报价单样式
+    if ($('tplHint') && $('tplHint').tagName === 'SELECT') {
+        $('tplHint').addEventListener('change', function() {
+            const st = loadSettings();
+            st.quoteTemplate = this.value;
+            saveSettingsToStorage(st);
+            renderTemplateHint();
+            const opt = this.options[this.selectedIndex];
+            showToast('已切换：' + (opt ? opt.text : this.value), 'success');
+        });
+    }
+
     if ($('setQuoteTemplate')) {
         $('setQuoteTemplate').addEventListener('change', function() {
             const st = loadSettings();
@@ -7112,6 +7702,105 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         });
     }
 
+    // ============================================================
+    // 头部世界时钟（默认北京，可切换时区）
+    // ============================================================
+    const CLOCK_TZ_KEY = 'quote_clock_tz';
+    const CLOCK_ZONES = [
+        { tz: 'Asia/Shanghai',       country: '中国',     name: '北京',   off: 'UTC+8' },
+        { tz: 'Asia/Hong_Kong',      country: '中国',     name: '香港',   off: 'UTC+8' },
+        { tz: 'Asia/Taipei',         country: '中国',     name: '台北',   off: 'UTC+8' },
+        { tz: 'Asia/Singapore',      country: '新加坡',   name: '新加坡', off: 'UTC+8' },
+        { tz: 'Asia/Tokyo',          country: '日本',     name: '东京',   off: 'UTC+9' },
+        { tz: 'Asia/Seoul',          country: '韩国',     name: '首尔',   off: 'UTC+9' },
+        { tz: 'Asia/Bangkok',        country: '泰国',     name: '曼谷',   off: 'UTC+7' },
+        { tz: 'Asia/Kolkata',        country: '印度',     name: '孟买',   off: 'UTC+5:30' },
+        { tz: 'Asia/Dubai',          country: '阿联酋',   name: '迪拜',   off: 'UTC+4' },
+        { tz: 'Europe/Moscow',       country: '俄罗斯',   name: '莫斯科', off: 'UTC+3' },
+        { tz: 'Europe/Paris',        country: '法国',     name: '巴黎',   off: 'UTC+1' },
+        { tz: 'Europe/London',       country: '英国',     name: '伦敦',   off: 'UTC+0' },
+        { tz: 'America/New_York',    country: '美国',     name: '纽约',   off: 'UTC-5' },
+        { tz: 'America/Chicago',     country: '美国',     name: '芝加哥', off: 'UTC-6' },
+        { tz: 'America/Los_Angeles', country: '美国',     name: '洛杉矶', off: 'UTC-8' },
+        { tz: 'Australia/Sydney',    country: '澳大利亚', name: '悉尼',   off: 'UTC+11' },
+        { tz: 'Pacific/Auckland',    country: '新西兰',   name: '奥克兰', off: 'UTC+13' }
+    ];
+
+    function clockZoneLabel(z) { return z.country + ' · ' + z.name; }
+    let clockTimer = null;
+
+    function clockZoneById(tz) {
+        return CLOCK_ZONES.filter(function(z) { return z.tz === tz; })[0] || CLOCK_ZONES[0];
+    }
+
+    function clockFormat(tz, opts) {
+        try {
+            return new Intl.DateTimeFormat('zh-CN', Object.assign({ timeZone: tz }, opts)).format(new Date());
+        } catch (e) {
+            return new Intl.DateTimeFormat('zh-CN', opts).format(new Date());
+        }
+    }
+
+    // 报价单日期固定按北京时间
+    function beijingDateText(ts) {
+        const d = new Date(ts || Date.now());
+        try {
+            return new Intl.DateTimeFormat('zh-CN', {
+                timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit'
+            }).format(d);
+        } catch (e) {
+            return d.toLocaleDateString('zh-CN');
+        }
+    }
+
+    function renderClockMenu(current) {
+        const menu = $('clockMenu');
+        if (!menu) return;
+        menu.innerHTML = CLOCK_ZONES.map(function(z) {
+            return '<button type="button" data-tz="' + z.tz + '" class="' + (z.tz === current ? 'active' : '') + '">' +
+                '<span>' + clockZoneLabel(z) + '</span><span class="tz-off">' + z.off + '</span></button>';
+        }).join('');
+    }
+
+    function updateClock() {
+        const tz = localStorage.getItem(CLOCK_TZ_KEY) || 'Asia/Shanghai';
+        const zone = clockZoneById(tz);
+        const t = $('clockTime'), d = $('clockDate'), z = $('clockZone');
+        if (t) t.textContent = clockFormat(tz, { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        if (d) d.textContent = clockFormat(tz, { year: 'numeric', month: '2-digit', day: '2-digit' }) + ' ' + clockFormat(tz, { weekday: 'short' });
+        if (z) z.textContent = clockZoneLabel(zone);
+    }
+
+    function initClock() {
+        if (!$('appClock')) return;
+        updateClock();
+        if (clockTimer) clearInterval(clockTimer);
+        clockTimer = setInterval(updateClock, 1000);
+
+        $('appClock').addEventListener('click', function(e) {
+            const btn = e.target.closest ? e.target.closest('button[data-tz]') : null;
+            if (btn) {
+                try { localStorage.setItem(CLOCK_TZ_KEY, btn.dataset.tz); } catch (err) {}
+                renderClockMenu(btn.dataset.tz);
+                updateClock();
+                $('clockMenu').style.display = 'none';
+                showToast('时钟已切换：' + clockZoneLabel(clockZoneById(btn.dataset.tz)), 'success');
+                e.stopPropagation();
+                return;
+            }
+            const menu = $('clockMenu');
+            const open = menu.style.display !== 'none';
+            if (!open) renderClockMenu(localStorage.getItem(CLOCK_TZ_KEY) || 'Asia/Shanghai');
+            menu.style.display = open ? 'none' : 'block';
+            e.stopPropagation();
+        });
+
+        document.addEventListener('click', function() {
+            const menu = $('clockMenu');
+            if (menu) menu.style.display = 'none';
+        });
+    }
+
     async function init() {
         initSecurity();
         applyPermissionUI();
@@ -7159,6 +7848,7 @@ table.wb-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         if (!hasRates && settlementCurrency.value !== 'CNY') {
             showToast('汇率获取失败，当前仅支持人民币显示。可稍后重试。', 'warning');
         }
+        initClock();
         if (isLoggedIn) calcAndRender();
         renderTemplateHint();
         if (location.hash === '#selftest') setTimeout(function() { try { runSelfTest(); } catch (e) { console.warn(e); } }, 800);
